@@ -35,6 +35,9 @@ AVAILABLE_MODELS = [
     # Claude 系列
     "bedrock/us.anthropic.claude-sonnet-4-5-20250929-v1:0",
     "bedrock/us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    # OpenAI GPT-5 系列
+    "gpt-5-mini",
+    "gpt-5-nano",
     # Qwen 系列
     "dashscope/qwen3-max",
     "dashscope/qwen-max",
@@ -60,6 +63,8 @@ EVALUATOR_MODEL = "bedrock/us.anthropic.claude-opus-4-5-20251101-v1:0"
 MODEL_SHORT_NAMES = {
     "bedrock/us.anthropic.claude-sonnet-4-5-20250929-v1:0": "Claude Sonnet 4.5",
     "bedrock/us.anthropic.claude-haiku-4-5-20251001-v1:0": "Claude Haiku 4.5",
+    "gpt-5-mini": "GPT-5 Mini",
+    "gpt-5-nano": "GPT-5 Nano",
     "dashscope/qwen3-max": "Qwen3-Max",
     "dashscope/qwen-max": "Qwen-Max",
     "dashscope/qwen-plus": "Qwen-Plus",

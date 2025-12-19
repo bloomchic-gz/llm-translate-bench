@@ -138,9 +138,11 @@ def _call_llm(
     payload = {
         "model": model,
         "messages": [{"role": "user", "content": prompt}],
-        "temperature": temperature,
         "max_tokens": max_tokens,
     }
+    # gpt-5 系列不支持 temperature 参数，只能用默认值
+    if not model.startswith("gpt-5"):
+        payload["temperature"] = temperature
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {API_KEY}",
