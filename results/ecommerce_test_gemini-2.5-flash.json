@@ -1,0 +1,83 @@
+{
+  "model": "gemini-2.5-flash",
+  "summary": {
+    "total": 10,
+    "success": 10,
+    "avg_latency_ms": 8054.815408284776,
+    "avg_score": 8.997142857142858
+  },
+  "details": {
+    "商品标题": [
+      {
+        "text": "Ditsy Floral Frill Trim Tie Knot Dress",
+        "success": true,
+        "latency_ms": 8983.839875087142,
+        "tokens": 1637,
+        "score": 8.657142857142857
+      },
+      {
+        "text": "Geometric Patchwork Square Neck Pocket Dress",
+        "success": true,
+        "latency_ms": 8266.382416943088,
+        "tokens": 1835,
+        "score": 8.8
+      },
+      {
+        "text": "Paisley Print Patchwork V Neck Blouse",
+        "success": true,
+        "latency_ms": 6972.310166922398,
+        "tokens": 1296,
+        "score": 9.214285714285714
+      },
+      {
+        "text": "Colorblock Brush Print Cami Top",
+        "success": true,
+        "latency_ms": 9508.045582915656,
+        "tokens": 1668,
+        "score": 8.27142857142857
+      },
+      {
+        "text": "Floral Print Pull-On Wide-Leg Pants",
+        "success": true,
+        "latency_ms": 7080.794708919711,
+        "tokens": 1681,
+        "score": 9.085714285714285
+      },
+      {
+        "text": "Supersoft Hearts Back Cut-Out Drawstring Midi Dres...",
+        "success": true,
+        "latency_ms": 7844.331083004363,
+        "tokens": 1385,
+        "score": 9.214285714285714
+      },
+      {
+        "text": "Cotton Embroidered Hem Wide-Leg Solid Shorts",
+        "success": true,
+        "latency_ms": 8267.905000015162,
+        "tokens": 1740,
+        "score": 9.157142857142858
+      },
+      {
+        "text": "Rhinestone Decor Tassel Trim Split Hem Leggings",
+        "success": true,
+        "latency_ms": 8424.534333054908,
+        "tokens": 1544,
+        "score": 8.971428571428572
+      },
+      {
+        "text": "Houndstooth V Neck Lantern Sleeve Pocket Belted Ru...",
+        "success": true,
+        "latency_ms": 9773.623833083548,
+        "tokens": 1819,
+        "score": 9.3
+      },
+      {
+        "text": "Supersoft Geometric Pattern Pockets Button Knit Ca...",
+        "success": true,
+        "latency_ms": 5426.387082901783,
+        "tokens": 1352,
+        "score": 9.3
+      }
+    ]
+  }
+}

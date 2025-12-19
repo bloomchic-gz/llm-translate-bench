@@ -1,0 +1,25 @@
+{
+  "source_text": "The European Union promotes cooperation among its member states in various fields including trade, security, and environmental protection.",
+  "source_lang": "en",
+  "translations": {
+    "es": "La Unión Europea promueve la cooperación entre sus estados miembros en varios campos incluyendo comercio, seguridad y protección del medio ambiente.",
+    "de": "Die Europäische Union fördert die Zusammenarbeit zwischen ihren Mitgliedstaaten in verschiedenen Bereichen, einschließlich Handel, Sicherheit und Umweltschutz.",
+    "it": "L'Unione Europea promuove la cooperazione tra i suoi stati membri in vari campi tra cui il commercio, la sicurezza e la protezione ambientale.",
+    "pt": "A União Europeia promove a cooperação entre seus estados membros em vários campos, incluindo comércio, segurança e proteção ambiental.",
+    "fr": "L'Union européenne encourage la coopération entre ses États membres dans divers domaines, notamment le commerce, la sécurité et la protection de l'environnement.",
+    "pl": "Unia Europejska promuje współpracę między swoimi państwami członkowskimi w różnych dziedzinach, w tym handlu, bezpieczeństwie i ochronie środowiska.",
+    "nl": "De Europese Unie bevordert de samenwerking tussen haar lidstaten op verschillende gebieden, waaronder handel, veiligheid en milieubescherming."
+  },
+  "latencies": {
+    "es": 1463.4235840057954,
+    "de": 1464.1813749913126,
+    "it": 1463.5218330658972,
+    "pt": 1515.695458976552,
+    "fr": 1579.643625067547,
+    "pl": 1523.6453328980133,
+    "nl": 5016.398792038672
+  },
+  "model": "bedrock/us.amazon.nova-pro-v1:0",
+  "total_time_ms": 6524.24012508709,
+  "errors": {}
+}

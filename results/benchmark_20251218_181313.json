@@ -1,0 +1,279 @@
+{
+  "timestamp": "2025-12-18T18:13:13.753359",
+  "summary": [
+    {
+      "model": "claude-sonnet-4-5-20250929",
+      "total_cases": 6,
+      "success_count": 6,
+      "avg_bleu": 88.22285281006917,
+      "avg_latency_ms": 3186.317763834571,
+      "p95_latency_ms": 5975.842833053321,
+      "total_tokens": 954,
+      "avg_llm_overall": 0,
+      "stats_by_lang_pair": {
+        "zh->en": {
+          "count": 6,
+          "bleu_sum": 529.337116860415,
+          "latency_sum": 19117.906583007425,
+          "avg_bleu": 88.22285281006917,
+          "avg_latency_ms": 3186.317763834571
+        }
+      },
+      "stats_by_category": {
+        "日常对话": {
+          "count": 1,
+          "bleu_sum": 100.00000000000004,
+          "avg_bleu": 100.00000000000004
+        },
+        "技术文档": {
+          "count": 2,
+          "bleu_sum": 191.76120616018392,
+          "avg_bleu": 95.88060308009196
+        },
+        "商务": {
+          "count": 1,
+          "bleu_sum": 72.54204378043244,
+          "avg_bleu": 72.54204378043244
+        },
+        "文学": {
+          "count": 1,
+          "bleu_sum": 65.03386691979853,
+          "avg_bleu": 65.03386691979853
+        },
+        "新闻": {
+          "count": 1,
+          "bleu_sum": 100.00000000000004,
+          "avg_bleu": 100.00000000000004
+        }
+      }
+    },
+    {
+      "model": "gemini-2.5-pro",
+      "total_cases": 6,
+      "success_count": 6,
+      "avg_bleu": 58.06003541305014,
+      "avg_latency_ms": 17610.493965175312,
+      "p95_latency_ms": 20417.228209087625,
+      "total_tokens": 11764,
+      "avg_llm_overall": 0,
+      "stats_by_lang_pair": {
+        "zh->en": {
+          "count": 6,
+          "bleu_sum": 348.36021247830087,
+          "latency_sum": 105662.96379105188,
+          "avg_bleu": 58.060035413050144,
+          "avg_latency_ms": 17610.493965175312
+        }
+      },
+      "stats_by_category": {
+        "日常对话": {
+          "count": 1,
+          "bleu_sum": 81.53551038173119,
+          "avg_bleu": 81.53551038173119
+        },
+        "技术文档": {
+          "count": 2,
+          "bleu_sum": 122.06572029094217,
+          "avg_bleu": 61.03286014547108
+        },
+        "商务": {
+          "count": 1,
+          "bleu_sum": 29.149762382472904,
+          "avg_bleu": 29.149762382472904
+        },
+        "文学": {
+          "count": 1,
+          "bleu_sum": 34.365395712064895,
+          "avg_bleu": 34.365395712064895
+        },
+        "新闻": {
+          "count": 1,
+          "bleu_sum": 81.24382371108968,
+          "avg_bleu": 81.24382371108968
+        }
+      }
+    }
+  ],
+  "results": [
+    {
+      "test_case_id": "zh_en_001",
+      "model": "claude-sonnet-4-5-20250929",
+      "source_lang": "zh",
+      "target_lang": "en",
+      "category": "日常对话",
+      "source_text": "今天天气真好，我们去公园散步吧。",
+      "translated_text": "The weather is really nice today, let's go for a walk in the park.",
+      "reference_text": "The weather is really nice today, let's go for a walk in the park.",
+      "bleu_score": 100.00000000000004,
+      "latency_ms": 3264.2360409954563,
+      "total_tokens": 102,
+      "llm_overall": 0.0,
+      "success": true
+    },
+    {
+      "test_case_id": "zh_en_002",
+      "model": "claude-sonnet-4-5-20250929",
+      "source_lang": "zh",
+      "target_lang": "en",
+      "category": "技术文档",
+      "source_text": "机器学习是人工智能的一个分支，它使计算机能够从数据中学习并做出决策，而无需明确编程。",
+      "translated_text": "Machine learning is a branch of artificial intelligence that enables computers to learn from data and make decisions without being explicitly programmed.",
+      "reference_text": "Machine learning is a branch of artificial intelligence that enables computers to learn from data and make decisions without being explicitly programmed.",
+      "bleu_score": 100.00000000000004,
+      "latency_ms": 5975.842833053321,
+      "total_tokens": 134,
+      "llm_overall": 0.0,
+      "success": true
+    },
+    {
+      "test_case_id": "zh_en_003",
+      "model": "claude-sonnet-4-5-20250929",
+      "source_lang": "zh",
+      "target_lang": "en",
+      "category": "商务",
+      "source_text": "感谢您的来信。关于贵公司提出的合作方案，我们已经进行了内部讨论，并对此表示浓厚的兴趣。",
+      "translated_text": "Thank you for your letter. Regarding the cooperation proposal put forward by your company, we have conducted internal discussions and express strong interest in it.",
+      "reference_text": "Thank you for your letter. Regarding the cooperation proposal from your company, we have conducted internal discussions and expressed strong interest in it.",
+      "bleu_score": 72.54204378043244,
+      "latency_ms": 2290.3992499923334,
+      "total_tokens": 147,
+      "llm_overall": 0.0,
+      "success": true
+    },
+    {
+      "test_case_id": "zh_en_004",
+      "model": "claude-sonnet-4-5-20250929",
+      "source_lang": "zh",
+      "target_lang": "en",
+      "category": "文学",
+      "source_text": "夕阳西下，断肠人在天涯。",
+      "translated_text": "The sun sets in the west, while the heartbroken wanderer remains at the edge of the world.",
+      "reference_text": "The sun sets in the west, a heartbroken wanderer stands at the edge of the world.",
+      "bleu_score": 65.03386691979853,
+      "latency_ms": 2164.9160420056432,
+      "total_tokens": 106,
+      "llm_overall": 0.0,
+      "success": true
+    },
+    {
+      "test_case_id": "zh_en_005",
+      "model": "claude-sonnet-4-5-20250929",
+      "source_lang": "zh",
+      "target_lang": "en",
+      "category": "新闻",
+      "source_text": "据报道，全球气候变化正在加速，各国政府需要采取更加积极的措施来应对这一挑战。",
+      "translated_text": "According to reports, global climate change is accelerating, and governments around the world need to take more proactive measures to address this challenge.",
+      "reference_text": "According to reports, global climate change is accelerating, and governments around the world need to take more proactive measures to address this challenge.",
+      "bleu_score": 100.00000000000004,
+      "latency_ms": 2160.354624968022,
+      "total_tokens": 135,
+      "llm_overall": 0.0,
+      "success": true
+    },
+    {
+      "test_case_id": "zh_en_long_001",
+      "model": "claude-sonnet-4-5-20250929",
+      "source_lang": "zh",
+      "target_lang": "en",
+      "category": "技术文档",
+      "source_text": "大型语言模型（LLM）是一种基于深度学习的人工智能系统，它通过在海量文本数据上进行训练，学习语言的模式和结构。\n这些模型能够理解和生成人类语言，执行各种自然语言处理任务，包括文本生成、翻译、摘要、问答等。\n近年来，随着模型规模的不断扩大和训练技术的改进，LLM展现出了惊人的能力，在某些任务上甚至超越了人类的表现。",
+      "translated_text": "Large Language Models (LLMs) are artificial intelligence systems based on deep learning that learn language patterns and structures by training on massive amounts of text data.\nThese models can understand and generate human language, performing various natural language processing tasks, including text generation, translation, summarization, question answering, and more.\nIn recent years, with the continuous expansion of model scale and improvements in training techniques, LLMs have demonstrated remarkable capabilities, even surpassing human performance on certain tasks.",
+      "reference_text": "Large Language Models (LLMs) are artificial intelligence systems based on deep learning that learn the patterns and structures of language by training on massive amounts of text data.\nThese models can understand and generate human language, performing various natural language processing tasks including text generation, translation, summarization, question answering, and more.\nIn recent years, with the continuous expansion of model scale and improvements in training techniques, LLMs have demonstrated remarkable capabilities, even surpassing human performance on certain tasks.",
+      "bleu_score": 91.76120616018386,
+      "latency_ms": 3262.1577919926494,
+      "total_tokens": 330,
+      "llm_overall": 0.0,
+      "success": true
+    },
+    {
+      "test_case_id": "zh_en_001",
+      "model": "gemini-2.5-pro",
+      "source_lang": "zh",
+      "target_lang": "en",
+      "category": "日常对话",
+      "source_text": "今天天气真好，我们去公园散步吧。",
+      "translated_text": "The weather is so nice today, let's go for a walk in the park.",
+      "reference_text": "The weather is really nice today, let's go for a walk in the park.",
+      "bleu_score": 81.53551038173119,
+      "latency_ms": 11417.023165966384,
+      "total_tokens": 1366,
+      "llm_overall": 0.0,
+      "success": true
+    },
+    {
+      "test_case_id": "zh_en_002",
+      "model": "gemini-2.5-pro",
+      "source_lang": "zh",
+      "target_lang": "en",
+      "category": "技术文档",
+      "source_text": "机器学习是人工智能的一个分支，它使计算机能够从数据中学习并做出决策，而无需明确编程。",
+      "translated_text": "Machine Learning is a branch of Artificial Intelligence that enables computers to learn from data and make decisions without being explicitly programmed.",
+      "reference_text": "Machine learning is a branch of artificial intelligence that enables computers to learn from data and make decisions without being explicitly programmed.",
+      "bleu_score": 74.73575569817642,
+      "latency_ms": 19813.108708010986,
+      "total_tokens": 2040,
+      "llm_overall": 0.0,
+      "success": true
+    },
+    {
+      "test_case_id": "zh_en_003",
+      "model": "gemini-2.5-pro",
+      "source_lang": "zh",
+      "target_lang": "en",
+      "category": "商务",
+      "source_text": "感谢您的来信。关于贵公司提出的合作方案，我们已经进行了内部讨论，并对此表示浓厚的兴趣。",
+      "translated_text": "Thank you for your letter. We have discussed the partnership proposal from your company internally and are very interested.",
+      "reference_text": "Thank you for your letter. Regarding the cooperation proposal from your company, we have conducted internal discussions and expressed strong interest in it.",
+      "bleu_score": 29.149762382472904,
+      "latency_ms": 17154.36833293643,
+      "total_tokens": 2060,
+      "llm_overall": 0.0,
+      "success": true
+    },
+    {
+      "test_case_id": "zh_en_004",
+      "model": "gemini-2.5-pro",
+      "source_lang": "zh",
+      "target_lang": "en",
+      "category": "文学",
+      "source_text": "夕阳西下，断肠人在天涯。",
+      "translated_text": "The sun sets in the west; the heartbroken are at the ends of the earth.",
+      "reference_text": "The sun sets in the west, a heartbroken wanderer stands at the edge of the world.",
+      "bleu_score": 34.365395712064895,
+      "latency_ms": 20417.228209087625,
+      "total_tokens": 2043,
+      "llm_overall": 0.0,
+      "success": true
+    },
+    {
+      "test_case_id": "zh_en_005",
+      "model": "gemini-2.5-pro",
+      "source_lang": "zh",
+      "target_lang": "en",
+      "category": "新闻",
+      "source_text": "据报道，全球气候变化正在加速，各国政府需要采取更加积极的措施来应对这一挑战。",
+      "translated_text": "According to reports, global climate change is accelerating, and governments need to take more proactive measures to address this challenge.",
+      "reference_text": "According to reports, global climate change is accelerating, and governments around the world need to take more proactive measures to address this challenge.",
+      "bleu_score": 81.24382371108968,
+      "latency_ms": 19874.4142500218,
+      "total_tokens": 2062,
+      "llm_overall": 0.0,
+      "success": true
+    },
+    {
+      "test_case_id": "zh_en_long_001",
+      "model": "gemini-2.5-pro",
+      "source_lang": "zh",
+      "target_lang": "en",
+      "category": "技术文档",
+      "source_text": "大型语言模型（LLM）是一种基于深度学习的人工智能系统，它通过在海量文本数据上进行训练，学习语言的模式和结构。\n这些模型能够理解和生成人类语言，执行各种自然语言处理任务，包括文本生成、翻译、摘要、问答等。\n近年来，随着模型规模的不断扩大和训练技术的改进，LLM展现出了惊人的能力，在某些任务上甚至超越了人类的表现。",
+      "translated_text": "A Large Language Model (LLM) is an artificial intelligence system based on deep learning that learns the patterns and structures of language by being trained on massive amounts of text data.\nThese models are able to understand and generate human language, performing various natural language processing tasks, including text generation, translation, summarization, and question answering.\nIn recent years, with the continuous expansion",
+      "reference_text": "Large Language Models (LLMs) are artificial intelligence systems based on deep learning that learn the patterns and structures of language by training on massive amounts of text data.\nThese models can understand and generate human language, performing various natural language processing tasks including text generation, translation, summarization, question answering, and more.\nIn recent years, with the continuous expansion of model scale and improvements in training techniques, LLMs have demonstrated remarkable capabilities, even surpassing human performance on certain tasks.",
+      "bleu_score": 47.32996459276575,
+      "latency_ms": 16986.821125028655,
+      "total_tokens": 2193,
+      "llm_overall": 0.0,
+      "success": true
+    }
+  ]
+}

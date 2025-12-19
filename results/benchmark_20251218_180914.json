@@ -1,0 +1,109 @@
+{
+  "timestamp": "2025-12-18T18:09:14.805010",
+  "summary": [
+    {
+      "model": "gpt-4.1",
+      "total_cases": 6,
+      "success_count": 0,
+      "avg_bleu": 0,
+      "avg_latency_ms": 0,
+      "p95_latency_ms": 0.0,
+      "total_tokens": 0,
+      "avg_llm_overall": 0,
+      "stats_by_lang_pair": {},
+      "stats_by_category": {}
+    }
+  ],
+  "results": [
+    {
+      "test_case_id": "zh_en_001",
+      "model": "gpt-4.1",
+      "source_lang": "zh",
+      "target_lang": "en",
+      "category": "日常对话",
+      "source_text": "今天天气真好，我们去公园散步吧。",
+      "translated_text": "",
+      "reference_text": "The weather is really nice today, let's go for a walk in the park.",
+      "bleu_score": 0.0,
+      "latency_ms": 991.7279999936,
+      "total_tokens": 0,
+      "llm_overall": 0.0,
+      "success": false
+    },
+    {
+      "test_case_id": "zh_en_002",
+      "model": "gpt-4.1",
+      "source_lang": "zh",
+      "target_lang": "en",
+      "category": "技术文档",
+      "source_text": "机器学习是人工智能的一个分支，它使计算机能够从数据中学习并做出决策，而无需明确编程。",
+      "translated_text": "",
+      "reference_text": "Machine learning is a branch of artificial intelligence that enables computers to learn from data and make decisions without being explicitly programmed.",
+      "bleu_score": 0.0,
+      "latency_ms": 350.1971249934286,
+      "total_tokens": 0,
+      "llm_overall": 0.0,
+      "success": false
+    },
+    {
+      "test_case_id": "zh_en_003",
+      "model": "gpt-4.1",
+      "source_lang": "zh",
+      "target_lang": "en",
+      "category": "商务",
+      "source_text": "感谢您的来信。关于贵公司提出的合作方案，我们已经进行了内部讨论，并对此表示浓厚的兴趣。",
+      "translated_text": "",
+      "reference_text": "Thank you for your letter. Regarding the cooperation proposal from your company, we have conducted internal discussions and expressed strong interest in it.",
+      "bleu_score": 0.0,
+      "latency_ms": 398.9032079698518,
+      "total_tokens": 0,
+      "llm_overall": 0.0,
+      "success": false
+    },
+    {
+      "test_case_id": "zh_en_004",
+      "model": "gpt-4.1",
+      "source_lang": "zh",
+      "target_lang": "en",
+      "category": "文学",
+      "source_text": "夕阳西下，断肠人在天涯。",
+      "translated_text": "",
+      "reference_text": "The sun sets in the west, a heartbroken wanderer stands at the edge of the world.",
+      "bleu_score": 0.0,
+      "latency_ms": 323.1029589660466,
+      "total_tokens": 0,
+      "llm_overall": 0.0,
+      "success": false
+    },
+    {
+      "test_case_id": "zh_en_005",
+      "model": "gpt-4.1",
+      "source_lang": "zh",
+      "target_lang": "en",
+      "category": "新闻",
+      "source_text": "据报道，全球气候变化正在加速，各国政府需要采取更加积极的措施来应对这一挑战。",
+      "translated_text": "",
+      "reference_text": "According to reports, global climate change is accelerating, and governments around the world need to take more proactive measures to address this challenge.",
+      "bleu_score": 0.0,
+      "latency_ms": 343.7231669668108,
+      "total_tokens": 0,
+      "llm_overall": 0.0,
+      "success": false
+    },
+    {
+      "test_case_id": "zh_en_long_001",
+      "model": "gpt-4.1",
+      "source_lang": "zh",
+      "target_lang": "en",
+      "category": "技术文档",
+      "source_text": "大型语言模型（LLM）是一种基于深度学习的人工智能系统，它通过在海量文本数据上进行训练，学习语言的模式和结构。\n这些模型能够理解和生成人类语言，执行各种自然语言处理任务，包括文本生成、翻译、摘要、问答等。\n近年来，随着模型规模的不断扩大和训练技术的改进，LLM展现出了惊人的能力，在某些任务上甚至超越了人类的表现。",
+      "translated_text": "",
+      "reference_text": "Large Language Models (LLMs) are artificial intelligence systems based on deep learning that learn the patterns and structures of language by training on massive amounts of text data.\nThese models can understand and generate human language, performing various natural language processing tasks including text generation, translation, summarization, question answering, and more.\nIn recent years, with the continuous expansion of model scale and improvements in training techniques, LLMs have demonstrated remarkable capabilities, even surpassing human performance on certain tasks.",
+      "bleu_score": 0.0,
+      "latency_ms": 335.04316699691117,
+      "total_tokens": 0,
+      "llm_overall": 0.0,
+      "success": false
+    }
+  ]
+}

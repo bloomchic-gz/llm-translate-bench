@@ -1,0 +1,133 @@
+{
+  "test_time": "2025-12-19 10:00:00",
+  "total_time_seconds": 493.55,
+  "models_count": 14,
+  "results": [
+    {
+      "model": "gemini-2.5-pro",
+      "model_short": "Gemini 2.5 Pro",
+      "title_avg_score": 9.067857142857143,
+      "desc_avg_score": 9.3,
+      "overall_avg_score": 9.114285714285716,
+      "avg_latency_ms": 26252.022366644815,
+      "success_rate": "10/15"
+    },
+    {
+      "model": "gemini-3-flash-preview",
+      "model_short": "Gemini 3 Flash",
+      "title_avg_score": 9.044285714285714,
+      "desc_avg_score": 9.142857142857142,
+      "overall_avg_score": 9.077142857142857,
+      "avg_latency_ms": 7992.495947191492,
+      "success_rate": "15/15"
+    },
+    {
+      "model": "gemini-2.5-flash",
+      "model_short": "Gemini 2.5 Flash",
+      "title_avg_score": 8.998571428571429,
+      "desc_avg_score": 9.125714285714286,
+      "overall_avg_score": 9.040952380952382,
+      "avg_latency_ms": 11554.523041727953,
+      "success_rate": "15/15"
+    },
+    {
+      "model": "bedrock/us.anthropic.claude-sonnet-4-5-20250929-v1:0",
+      "model_short": "Claude Sonnet 4.5",
+      "title_avg_score": 8.607142857142858,
+      "desc_avg_score": 9.134285714285713,
+      "overall_avg_score": 8.782857142857143,
+      "avg_latency_ms": 7384.30550279251,
+      "success_rate": "15/15"
+    },
+    {
+      "model": "dashscope/qwen3-max",
+      "model_short": "Qwen3-Max",
+      "title_avg_score": 8.475714285714286,
+      "desc_avg_score": 8.891428571428571,
+      "overall_avg_score": 8.614285714285716,
+      "avg_latency_ms": 16787.519133191865,
+      "success_rate": "15/15"
+    },
+    {
+      "model": "bedrock/us.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "model_short": "Claude Haiku 4.5",
+      "title_avg_score": 8.481428571428571,
+      "desc_avg_score": 8.822857142857142,
+      "overall_avg_score": 8.595238095238095,
+      "avg_latency_ms": 5020.9267581890645,
+      "success_rate": "15/15"
+    },
+    {
+      "model": "gemini-2.5-flash-lite",
+      "model_short": "Gemini 2.5 Flash Lite",
+      "title_avg_score": 8.178571428571429,
+      "desc_avg_score": 9.074285714285717,
+      "overall_avg_score": 8.477142857142859,
+      "avg_latency_ms": 2356.7438861743235,
+      "success_rate": "15/15"
+    },
+    {
+      "model": "bedrock/us.amazon.nova-pro-v1:0",
+      "model_short": "Nova Pro",
+      "title_avg_score": 8.141428571428571,
+      "desc_avg_score": 8.765714285714285,
+      "overall_avg_score": 8.34952380952381,
+      "avg_latency_ms": 6342.494466536057,
+      "success_rate": "15/15"
+    },
+    {
+      "model": "dashscope/qwen-max",
+      "model_short": "Qwen-Max",
+      "title_avg_score": 7.8342857142857145,
+      "desc_avg_score": 8.454285714285714,
+      "overall_avg_score": 8.040952380952382,
+      "avg_latency_ms": 16007.146125116074,
+      "success_rate": "15/15"
+    },
+    {
+      "model": "dashscope/qwen-plus",
+      "model_short": "Qwen-Plus",
+      "title_avg_score": 7.56,
+      "desc_avg_score": 8.5,
+      "overall_avg_score": 7.873333333333333,
+      "avg_latency_ms": 11563.927736047966,
+      "success_rate": "15/15"
+    },
+    {
+      "model": "bedrock/us.amazon.nova-lite-v1:0",
+      "model_short": "Nova Lite",
+      "title_avg_score": 7.277142857142858,
+      "desc_avg_score": 8.465714285714286,
+      "overall_avg_score": 7.673333333333334,
+      "avg_latency_ms": 4092.457727715373,
+      "success_rate": "15/15"
+    },
+    {
+      "model": "dashscope/qwen-flash",
+      "model_short": "Qwen-Flash",
+      "title_avg_score": 7.085714285714286,
+      "desc_avg_score": 8.265714285714285,
+      "overall_avg_score": 7.479047619047619,
+      "avg_latency_ms": 4237.788233192016,
+      "success_rate": "15/15"
+    },
+    {
+      "model": "bedrock/us.meta.llama3-3-70b-instruct-v1:0",
+      "model_short": "Llama 3.3 70B",
+      "title_avg_score": 6.773333333333333,
+      "desc_avg_score": 8.077142857142857,
+      "overall_avg_score": 7.207936507936508,
+      "avg_latency_ms": 4661.200244398788,
+      "success_rate": "15/15"
+    },
+    {
+      "model": "dashscope/qwen-turbo",
+      "model_short": "Qwen-Turbo",
+      "title_avg_score": 6.135714285714285,
+      "desc_avg_score": 7.828571428571427,
+      "overall_avg_score": 6.7,
+      "avg_latency_ms": 4939.644830596323,
+      "success_rate": "15/15"
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "total_time_seconds": 70.25897693634033,
+  "models_tested": [
+    "gemini-2.5-flash-lite",
+    "gemini-2.5-flash",
+    "bedrock/us.anthropic.claude-sonnet-4-5-20250929-v1:0",
+    "bedrock/us.meta.llama3-3-70b-instruct-v1:0",
+    "dashscope/qwen-flash"
+  ],
+  "texts_count": 10,
+  "model_stats": [
+    {
+      "model": "gemini-2.5-flash",
+      "success_rate": 1.0,
+      "avg_latency": 9133.058574888855,
+      "avg_score": 8.951428571428572
+    },
+    {
+      "model": "bedrock/us.anthropic.claude-sonnet-4-5-20250929-v1:0",
+      "success_rate": 1.0,
+      "avg_latency": 5313.157166575547,
+      "avg_score": 8.58404761904762
+    },
+    {
+      "model": "gemini-2.5-flash-lite",
+      "success_rate": 1.0,
+      "avg_latency": 2321.7880790121853,
+      "avg_score": 8.255714285714287
+    },
+    {
+      "model": "bedrock/us.meta.llama3-3-70b-instruct-v1:0",
+      "success_rate": 1.0,
+      "avg_latency": 2830.217158223968,
+      "avg_score": 7.1085714285714285
+    },
+    {
+      "model": "dashscope/qwen-flash",
+      "success_rate": 1.0,
+      "avg_latency": 3521.42077088356,
+      "avg_score": 7.097142857142858
+    }
+  ]
+}
