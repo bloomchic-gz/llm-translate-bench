@@ -6,14 +6,14 @@
 
 - **多语言翻译**: 一次 API 调用，同时输出 7+ 种语言翻译
 - **质量评估**: 使用 Claude Opus 4.5 评估准确性、流畅度、风格
-- **基准测试**: 支持 14+ 个模型的并行测试
+- **基准测试**: 支持 21 个模型的并行测试
 - **电商优化**: 针对商品标题、描述翻译优化
 
 ## 安装
 
 ```bash
 # 克隆项目
-git clone https://github.com/shenyi/llm-translate-bench.git
+git clone https://github.com/bloomchic-gz/llm-translate-bench.git
 cd llm-translate-bench
 
 # 安装（可编辑模式）
@@ -70,17 +70,21 @@ llm-translate-bench/
 
 ## 支持的模型
 
-| 模型 | 评分 | 成本/万次 |
-|-----|------|----------|
-| Gemini 2.5 Pro | 9.11 | $37 |
-| Gemini 3 Flash | 9.08 | $11 |
-| Gemini 2.5 Flash | 9.04 | $9 |
-| Claude Sonnet 4.5 | 8.78 | $58 |
-| Qwen3-Max | 8.61 | $9 |
-| Claude Haiku 4.5 | 8.60 | $15 |
-| **Gemini 2.5 Flash Lite** | **8.48** | **$1.60** |
+| 模型 | 评分 | 成本/万次 | 备注 |
+|-----|------|----------|------|
+| Gemini 2.5 Pro | 9.11 | $37 | 质量最高 |
+| Gemini 3 Flash | 9.08 | $11 | 高质快速 |
+| Gemini 2.5 Flash | 9.04 | $9 | |
+| GPT-5 Mini | 8.80 | $40 | GPT最佳 |
+| Claude Sonnet 4.5 | 8.78 | $58 | |
+| GPT-5.1 | 8.71 | $32 | 快速高质 |
+| Qwen3-Max | 8.61 | $9 | |
+| GPT-4.1 | 8.61 | $32 | |
+| Claude Haiku 4.5 | 8.60 | $15 | |
+| **Gemini 2.5 Flash Lite** | **8.48** | **$1.60** | **性价比之王** |
+| GPT-4.1-mini | 8.46 | $6 | GPT经济 |
 
-> 完整定价见 [docs/PRICING.md](docs/PRICING.md)
+> 完整 21 个模型定价见 [docs/PRICING.md](docs/PRICING.md)
 
 ## 目标语言
 
