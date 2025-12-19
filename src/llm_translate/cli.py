@@ -325,13 +325,20 @@ def cmd_benchmark(args):
     console.print(table)
 
     # 保存结果
+    test_time = time.strftime("%Y-%m-%d %H:%M:%S")
     output = {
-        "test_time": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "test_time": test_time,
         "models_count": len(results),
         "results": results,
     }
 
-    output_file = Path(args.output)
+    # 生成输出文件名（带时间戳）
+    if args.output:
+        output_file = Path(args.output)
+    else:
+        timestamp = time.strftime("%Y%m%d_%H%M%S")
+        output_file = Path(f"results/benchmark_{timestamp}.json")
+
     output_file.parent.mkdir(parents=True, exist_ok=True)
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(output, f, ensure_ascii=False, indent=2)
@@ -385,8 +392,8 @@ def main():
     p_benchmark.add_argument("--no-eval", action="store_true", help="跳过质量评估")
     p_benchmark.add_argument(
         "-o", "--output",
-        default="results/benchmark.json",
-        help="输出文件"
+        default=None,
+        help="输出文件 (默认: results/benchmark_YYYYMMDD_HHMMSS.json)"
     )
     p_benchmark.set_defaults(func=cmd_benchmark)
 

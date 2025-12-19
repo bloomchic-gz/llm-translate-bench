@@ -1,7 +1,7 @@
 {
-  "test_time": "2025-12-19 10:00:00",
+  "test_time": "2025-12-19 12:00:00",
   "total_time_seconds": 493.55,
-  "models_count": 14,
+  "models_count": 21,
   "results": [
     {
       "model": "gemini-2.5-pro",
@@ -31,6 +31,15 @@
       "success_rate": "15/15"
     },
     {
+      "model": "gpt-5-mini",
+      "model_short": "GPT-5 Mini",
+      "title_avg_score": 8.73857142857143,
+      "desc_avg_score": 8.931428571428572,
+      "overall_avg_score": 8.802857142857142,
+      "avg_latency_ms": 22589.718100009486,
+      "success_rate": "15/15"
+    },
+    {
       "model": "bedrock/us.anthropic.claude-sonnet-4-5-20250929-v1:0",
       "model_short": "Claude Sonnet 4.5",
       "title_avg_score": 8.607142857142858,
@@ -40,12 +49,39 @@
       "success_rate": "15/15"
     },
     {
+      "model": "gpt-5.1",
+      "model_short": "GPT-5.1",
+      "title_avg_score": 8.56,
+      "desc_avg_score": 9.008571428571429,
+      "overall_avg_score": 8.709523809523809,
+      "avg_latency_ms": 3804.5300472760573,
+      "success_rate": "15/15"
+    },
+    {
+      "model": "gpt-5-nano",
+      "model_short": "GPT-5 Nano",
+      "title_avg_score": 8.657142857142857,
+      "desc_avg_score": null,
+      "overall_avg_score": 8.657142857142857,
+      "avg_latency_ms": 11505.727792042308,
+      "success_rate": "1/15"
+    },
+    {
       "model": "dashscope/qwen3-max",
       "model_short": "Qwen3-Max",
       "title_avg_score": 8.475714285714286,
       "desc_avg_score": 8.891428571428571,
       "overall_avg_score": 8.614285714285716,
       "avg_latency_ms": 16787.519133191865,
+      "success_rate": "15/15"
+    },
+    {
+      "model": "gpt-4.1",
+      "model_short": "GPT-4.1",
+      "title_avg_score": 8.39857142857143,
+      "desc_avg_score": 9.02,
+      "overall_avg_score": 8.605714285714287,
+      "avg_latency_ms": 3112.311608134769,
       "success_rate": "15/15"
     },
     {
@@ -58,12 +94,30 @@
       "success_rate": "15/15"
     },
     {
+      "model": "gpt-4o",
+      "model_short": "GPT-4o",
+      "title_avg_score": 8.285714285714286,
+      "desc_avg_score": 8.891428571428571,
+      "overall_avg_score": 8.487619047619047,
+      "avg_latency_ms": 4437.440205388702,
+      "success_rate": "15/15"
+    },
+    {
       "model": "gemini-2.5-flash-lite",
       "model_short": "Gemini 2.5 Flash Lite",
       "title_avg_score": 8.178571428571429,
       "desc_avg_score": 9.074285714285717,
       "overall_avg_score": 8.477142857142859,
       "avg_latency_ms": 2356.7438861743235,
+      "success_rate": "15/15"
+    },
+    {
+      "model": "gpt-4.1-mini",
+      "model_short": "GPT-4.1-mini",
+      "title_avg_score": 8.207142857142857,
+      "desc_avg_score": 8.968571428571428,
+      "overall_avg_score": 8.460952380952381,
+      "avg_latency_ms": 3663.3142221253365,
       "success_rate": "15/15"
     },
     {
@@ -100,6 +154,15 @@
       "desc_avg_score": 8.465714285714286,
       "overall_avg_score": 7.673333333333334,
       "avg_latency_ms": 4092.457727715373,
+      "success_rate": "15/15"
+    },
+    {
+      "model": "gpt-4o-mini",
+      "model_short": "GPT-4o-mini",
+      "title_avg_score": 7.18,
+      "desc_avg_score": 8.402857142857142,
+      "overall_avg_score": 7.5876190476190475,
+      "avg_latency_ms": 3745.7167528104037,
       "success_rate": "15/15"
     },
     {
