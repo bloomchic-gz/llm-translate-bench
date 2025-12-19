@@ -15,6 +15,7 @@ from llm_translate.config import (
     EU_LANGUAGES,
     EVALUATOR_MODEL,
 )
+from llm_translate.glossary import build_glossary_prompt
 
 
 @dataclass
@@ -57,15 +58,41 @@ class EvaluationResult:
     total_tokens: int
 
 
-def _build_translate_prompt(text: str, source_lang: str, target_langs: List[str]) -> str:
-    """构建翻译提示词"""
+def _build_translate_prompt(
+    text: str,
+    source_lang: str,
+    target_langs: List[str],
+    glossary: Optional[str] = None,
+) -> str:
+    """构建翻译提示词
+
+    Args:
+        text: 要翻译的文本
+        source_lang: 源语言
+        target_langs: 目标语言列表
+        glossary: 术语表ID (fashion_mini, fashion_full, ecommerce, None)
+    """
     lang_list = ", ".join([
         f"{code} ({EU_LANGUAGES.get(code, code)})"
         for code in target_langs
     ])
 
-    return f"""You are a professional translator. Translate the following text from {source_lang} to multiple languages simultaneously.
+    # 术语表部分
+    glossary_section = ""
+    domain = "general"
+    if glossary:
+        glossary_section = f"""
+{build_glossary_prompt(target_langs, glossary)}
 
+IMPORTANT: Use the terminology from the reference table above.
+"""
+        if "fashion" in glossary:
+            domain = "fashion"
+        elif "ecommerce" in glossary:
+            domain = "e-commerce"
+
+    return f"""You are a professional translator specializing in {domain} content. Translate the following text from {source_lang} to multiple languages simultaneously.
+{glossary_section}
 Source text ({source_lang}):
 {text}
 
@@ -73,8 +100,9 @@ Target languages: {lang_list}
 
 Requirements:
 1. Provide accurate, natural translations for each target language
-2. Return ONLY a valid JSON object with language codes as keys
-3. Do not include any explanation or additional text
+2. Use industry-standard terminology for each target language
+3. Return ONLY a valid JSON object with language codes as keys
+4. Do not include any explanation or additional text
 
 Return format (JSON only):
 {{
@@ -173,6 +201,7 @@ def multi_translate(
     model: str = "gemini-2.5-flash-lite",
     temperature: float = 0.3,
     max_tokens: int = 4096,
+    glossary: Optional[str] = None,
 ) -> MultiTranslateResult:
     """
     一次 API 调用翻译到多个语言
@@ -184,6 +213,7 @@ def multi_translate(
         model: 使用的模型
         temperature: 温度参数
         max_tokens: 最大 token 数
+        glossary: 术语表ID (fashion_mini, fashion_full, ecommerce, None)
 
     Returns:
         MultiTranslateResult: 翻译结果
@@ -191,7 +221,10 @@ def multi_translate(
     if target_langs is None:
         target_langs = ["de", "fr", "es", "it", "pt", "nl", "pl"]
 
-    prompt = _build_translate_prompt(text, source_lang, target_langs)
+    prompt = _build_translate_prompt(
+        text, source_lang, target_langs,
+        glossary=glossary
+    )
     start_time = time.perf_counter()
 
     try:
