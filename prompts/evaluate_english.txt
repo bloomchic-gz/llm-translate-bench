@@ -31,7 +31,5 @@ Output: {{"de":[95,92],"fr":[93,90]}}
 Input: {{"contents":["连衣裙"],"source_lang":"zh","translations":{{"en":["Dress (连衣裙)"]}}}}
 Output: {{"en":[55]}}
 
-## Evaluation Input
+---INPUT---
 {input_json}
-
-## Evaluation Output

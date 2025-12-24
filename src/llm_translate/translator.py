@@ -6,7 +6,7 @@ import json
 import time
 from dataclasses import dataclass, asdict
 from pathlib import Path
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Tuple
 
 import httpx
 
@@ -103,7 +103,7 @@ def _build_translate_prompt(
     target_langs: List[str],
     glossary: Optional[str] = None,
     prompt_template: Optional[str] = None,
-) -> str:
+) -> Tuple[str, str]:
     """构建翻译提示词（业务一致格式）
 
     Args:
@@ -112,6 +112,9 @@ def _build_translate_prompt(
         target_langs: 目标语言列表
         glossary: 术语表ID (fashion_hard, fashion_core, fashion_full, ecommerce, None)
         prompt_template: 提示词模板名称或路径，None 表示使用默认
+
+    Returns:
+        (system_prompt, user_prompt) 元组
     """
     # 术语表部分
     glossary_section = ""
@@ -128,7 +131,15 @@ def _build_translate_prompt(
     # 加载模板并填充变量
     template_name = prompt_template or "default"
     template = load_prompt_template(template_name, "translate")
-    return template.format(input_json=input_json, glossary_section=glossary_section)
+    filled = template.format(input_json=input_json, glossary_section=glossary_section)
+
+    # 分离 system 和 user 部分
+    if "---INPUT---" in filled:
+        parts = filled.split("---INPUT---", 1)
+        return parts[0].strip(), parts[1].strip()
+    else:
+        # 兼容旧模板格式
+        return "", filled
 
 
 def _build_evaluate_prompt(
@@ -136,7 +147,7 @@ def _build_evaluate_prompt(
     source_lang: str,
     translations: Dict[str, str],
     prompt_template: Optional[str] = None,
-) -> str:
+) -> Tuple[str, str]:
     """构建评估提示词（大码女装电商专用）
 
     Args:
@@ -144,6 +155,9 @@ def _build_evaluate_prompt(
         source_lang: 源语言
         translations: 翻译结果
         prompt_template: 提示词模板名称或路径，None 表示使用默认
+
+    Returns:
+        (system_prompt, user_prompt) 元组
     """
     # 构建输入 JSON
     input_data = {
@@ -156,7 +170,15 @@ def _build_evaluate_prompt(
     # 加载模板并填充变量
     template_name = prompt_template or "default"
     template = load_prompt_template(template_name, "evaluate")
-    return template.format(input_json=input_json)
+    filled = template.format(input_json=input_json)
+
+    # 分离 system 和 user 部分
+    if "---INPUT---" in filled:
+        parts = filled.split("---INPUT---", 1)
+        return parts[0].strip(), parts[1].strip()
+    else:
+        # 兼容旧模板格式
+        return "", filled
 
 
 def _parse_json_response(content: str) -> dict:
@@ -171,16 +193,31 @@ def _parse_json_response(content: str) -> dict:
 
 
 def _call_llm(
-    prompt: str,
+    user_prompt: str,
     model: str,
+    system_prompt: str = "",
     temperature: float = 0.3,
     max_tokens: int = 4096,
     timeout: float = 120.0
 ) -> tuple[str, dict, float]:
-    """调用 LLM API，返回 (内容, usage, 延迟ms)"""
+    """调用 LLM API，返回 (内容, usage, 延迟ms)
+
+    Args:
+        user_prompt: 用户消息
+        model: 模型名称
+        system_prompt: 系统消息（可选）
+        temperature: 温度参数
+        max_tokens: 最大 token 数
+        timeout: 超时时间
+    """
+    messages = []
+    if system_prompt:
+        messages.append({"role": "system", "content": system_prompt})
+    messages.append({"role": "user", "content": user_prompt})
+
     payload = {
         "model": model,
-        "messages": [{"role": "user", "content": prompt}],
+        "messages": messages,
         "max_tokens": max_tokens,
     }
     # gpt-5 系列不支持 temperature 参数，只能用默认值
@@ -238,7 +275,7 @@ def multi_translate(
     if target_langs is None:
         target_langs = ["de", "fr", "es", "it", "pt", "nl", "pl"]
 
-    prompt = _build_translate_prompt(
+    system_prompt, user_prompt = _build_translate_prompt(
         text, source_lang, target_langs,
         glossary=glossary,
         prompt_template=translate_prompt,
@@ -247,8 +284,9 @@ def multi_translate(
 
     try:
         content, usage, latency_ms = _call_llm(
-            prompt=prompt,
+            user_prompt=user_prompt,
             model=model,
+            system_prompt=system_prompt,
             temperature=temperature,
             max_tokens=max_tokens,
         )
@@ -325,7 +363,7 @@ def evaluate_translations(
     Returns:
         EvaluationResult: 评估结果
     """
-    prompt = _build_evaluate_prompt(
+    system_prompt, user_prompt = _build_evaluate_prompt(
         source_text, source_lang, translations,
         prompt_template=evaluate_prompt,
     )
@@ -333,8 +371,9 @@ def evaluate_translations(
 
     try:
         content, usage, latency_ms = _call_llm(
-            prompt=prompt,
+            user_prompt=user_prompt,
             model=evaluator_model,
+            system_prompt=system_prompt,
             temperature=0.1,
             max_tokens=2048,
             timeout=180.0,
