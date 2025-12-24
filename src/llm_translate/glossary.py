@@ -6,12 +6,51 @@
 生成日期: 2024-12
 
 支持多个领域的术语表，可通过选项选择：
+- fashion_hard: 难翻译术语表 (13条，约+400 tokens) - 基于数据科学筛选
 - fashion_core: 服装核心版 (80条高频术语，约+2200 tokens)
 - fashion_full: 服装完整版 (180+条术语，约+5000 tokens)
 - ecommerce: 电商通用术语
 """
 
 from typing import Optional
+
+# ============================================================
+# 服装术语表 - 难翻译精简版 (13条)
+# 基于 53 个高频术语的翻译测试，科学筛选出模型真正翻译错误的术语
+# 测试方法：词频分析 → 全量翻译测试 → 人工标注 → 筛选
+# 推荐场景：需要低成本+高准确率时使用
+# ============================================================
+FASHION_HARD = {
+    # === 翻译错误类 (模型翻译成错误的词) ===
+    # Button Up: 模型翻译为 Hemdbluse(衬衫) 而非 Durchgeknöpft(扣紧式)
+    "Button Up": {"de": "Durchgeknöpft", "fr": "Boutonné", "es": "Abotonado", "it": "Abbottonato", "pt": "Abotoado", "nl": "Doorknoopbaar", "pl": "Zapinany na guziki"},
+    # Gathered: 模型翻译为 Gesammelte(收集) 而非 Gerafft(褶皱)
+    "Gathered": {"de": "Gerafft", "fr": "Froncé", "es": "Fruncido", "it": "Arricciato", "pt": "Franzido", "nl": "Gerimpeld", "pl": "Marszczony"},
+    # Ruched: 模型翻译为 Rüschen(荷叶边) 而非 Gerafft(褶皱)
+    "Ruched": {"de": "Gerafft", "fr": "Froncé", "es": "Drapeado", "it": "Drappeggiato", "pt": "Drapeado", "nl": "Gerimpeld", "pl": "Drapowany"},
+    # Overlap Collar: 模型翻译为 Wickelkragen(裹身领) 而非 Überlappkragen(重叠领)
+    "Overlap Collar": {"de": "Überlappkragen", "fr": "Col croisé", "es": "Cuello solapado", "it": "Collo sovrapposto", "pt": "Gola sobreposta", "nl": "Overslagkraag", "pl": "Kołnierz zakładany"},
+    # High Rise: 模型翻译为 High-Waist 而非德语 Hohe Taille
+    "High Rise": {"de": "Hohe Taille", "fr": "Taille haute", "es": "Tiro alto", "it": "Vita alta", "pt": "Cintura alta", "nl": "Hoge taille", "pl": "Wysoka talia"},
+    # Cap Sleeve: 模型翻译为 Flügelärmel(飞袖) 而非 Kappenärmel(帽袖)
+    "Cap Sleeve": {"de": "Kappenärmel", "fr": "Manche courte", "es": "Manga casquillo", "it": "Manica a aletta", "pt": "Manga curta", "nl": "Kapmouw", "pl": "Krótkie rękawy"},
+
+    # === 保留英文类 (模型不翻译，直接保留英文) ===
+    # Pointelle Knit: 模型保留 Pointelle 不翻译
+    "Pointelle Knit": {"de": "Lochmuster", "fr": "Maille ajourée", "es": "Punto calado", "it": "Maglia traforata", "pt": "Tricô rendado", "nl": "Ajourbreisel", "pl": "Ażurowy splot"},
+    # Heather: 模型保留 Heather 不翻译
+    "Heather": {"de": "Meliert", "fr": "Chiné", "es": "Jaspeado", "it": "Mélange", "pt": "Mesclado", "nl": "Gemêleerd", "pl": "Melanż"},
+    # Boho Print: 模型保留 Boho-Print 不翻译
+    "Boho Print": {"de": "Boho-Druck", "fr": "Imprimé bohème", "es": "Estampado boho", "it": "Stampa boho", "pt": "Estampa boho", "nl": "Boho print", "pl": "Wzór boho"},
+    # Tie Dye: 模型保留 Tie-Dye 不翻译
+    "Tie Dye": {"de": "Batik", "fr": "Tie and dye", "es": "Tie dye", "it": "Tie dye", "pt": "Tie dye", "nl": "Tie-dye", "pl": "Tie dye"},
+    # Plaid: 模型保留 Plaid 不翻译
+    "Plaid": {"de": "Karo", "fr": "Carreaux", "es": "Cuadros", "it": "Quadri", "pt": "Xadrez", "nl": "Geruit", "pl": "Krata"},
+    # Colorblock: 模型保留 Colorblock 不翻译
+    "Colorblock": {"de": "Colorblocking", "fr": "Color block", "es": "Bloques de color", "it": "Color block", "pt": "Color block", "nl": "Colorblock", "pl": "Bloki kolorów"},
+    # Dolman Sleeve: 模型保留 Dolman 不翻译
+    "Dolman Sleeve": {"de": "Dolmanärmel", "fr": "Manche dolman", "es": "Manga dolmán", "it": "Manica a dolman", "pt": "Manga dolmã", "nl": "Dolmanmouw", "pl": "Rękawy dolman"},
+}
 
 # ============================================================
 # 服装术语表 - 核心版 (80条高频术语)
@@ -258,6 +297,12 @@ ECOMMERCE_GENERAL = {
 # 术语表注册表
 # ============================================================
 GLOSSARY_REGISTRY = {
+    "fashion_hard": {
+        "name": "Fashion (Hard Terms)",
+        "description": "难翻译术语表，13条基于数据科学筛选的术语",
+        "terms": FASHION_HARD,
+        "token_estimate": 400,
+    },
     "fashion_core": {
         "name": "Fashion (Core)",
         "description": "服装核心版术语表，80条高频术语（频率≥500）",

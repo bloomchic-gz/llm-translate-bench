@@ -135,6 +135,8 @@ def cmd_translate(args):
     console.print(f"模型: {args.model}")
     console.print(f"源语言: {args.source}")
     console.print(f"目标语言: {', '.join(args.targets)} ({len(args.targets)}个)")
+    if args.glossary:
+        console.print(f"术语表: {args.glossary}")
     console.print()
 
     console.print("[cyan]正在翻译...[/cyan]")
@@ -143,6 +145,7 @@ def cmd_translate(args):
         source_lang=args.source,
         target_langs=args.targets,
         model=args.model,
+        glossary=args.glossary,
     )
 
     print_result(result)
@@ -195,12 +198,18 @@ def cmd_benchmark(args):
     models = args.models or AVAILABLE_MODELS
     target_langs = args.targets
 
+    glossary = getattr(args, 'glossary', None)
+    concurrency = getattr(args, 'concurrency', 1)
+
     console.print(f"\n[bold blue]{'=' * 60}[/bold blue]")
     console.print("[bold blue]电商翻译全模型基准测试[/bold blue]")
     console.print(f"[bold blue]{'=' * 60}[/bold blue]")
     console.print(f"\n模型数量: {len(models)}")
     console.print(f"测试文本: {len(titles)} 标题 + {len(descriptions)} 描述")
     console.print(f"目标语言: {len(target_langs)} 个")
+    console.print(f"并发度: {concurrency} (每模型)")
+    if glossary:
+        console.print(f"术语表: {glossary}")
 
     results = []
     lock = threading.Lock()
@@ -208,16 +217,19 @@ def cmd_benchmark(args):
     def test_model(model: str) -> dict:
         """测试单个模型"""
         model_short = get_model_short_name(model)
-        model_results = []
+        model_results = [None] * len(all_texts)  # 预分配保持顺序
         start_time = time.time()
+        completed_count = [0]  # 用列表以便在闭包中修改
 
-        for i, (text, text_type) in enumerate(all_texts):
+        def process_single(idx: int, text: str, text_type: str) -> None:
+            """处理单个文本"""
             try:
                 result = multi_translate(
                     text=text,
                     source_lang="en",
                     target_langs=target_langs,
                     model=model,
+                    glossary=glossary,
                 )
 
                 score = None
@@ -230,34 +242,53 @@ def cmd_benchmark(args):
                     if eval_result.scores:
                         score = sum(s.overall for s in eval_result.scores.values()) / len(eval_result.scores)
 
-                model_results.append(SingleResult(
+                model_results[idx] = SingleResult(
                     text_type=text_type,
                     text=text[:50] + "..." if len(text) > 50 else text,
                     success=result.success,
                     latency_ms=result.latency_ms,
                     score=score,
-                ))
+                )
 
                 with lock:
-                    console.print(f"  [{model_short}] {i + 1}/{len(all_texts)} 完成" +
+                    completed_count[0] += 1
+                    console.print(f"  [{model_short}] {completed_count[0]}/{len(all_texts)} 完成" +
                                   (f", 评分: {score:.1f}" if score else ""))
 
             except Exception as e:
-                model_results.append(SingleResult(
+                model_results[idx] = SingleResult(
                     text_type=text_type,
                     text=text[:50] + "...",
                     success=False,
                     latency_ms=0,
                     score=None,
                     error=str(e),
-                ))
+                )
+                with lock:
+                    completed_count[0] += 1
+
+        # 使用线程池并发处理
+        if concurrency > 1:
+            with ThreadPoolExecutor(max_workers=concurrency) as executor:
+                futures = []
+                for i, (text, text_type) in enumerate(all_texts):
+                    futures.append(executor.submit(process_single, i, text, text_type))
+                # 等待所有任务完成
+                for f in futures:
+                    f.result()
+        else:
+            # 串行处理
+            for i, (text, text_type) in enumerate(all_texts):
+                process_single(i, text, text_type)
 
         total_time = time.time() - start_time
-        success_count = sum(1 for r in model_results if r.success)
-        title_scores = [r.score for r in model_results if r.text_type == "title" and r.score]
-        desc_scores = [r.score for r in model_results if r.text_type == "description" and r.score]
-        all_scores = [r.score for r in model_results if r.score]
-        latencies = [r.latency_ms for r in model_results if r.success]
+        # 过滤 None 值（并发时的安全检查）
+        valid_results = [r for r in model_results if r is not None]
+        success_count = sum(1 for r in valid_results if r.success)
+        title_scores = [r.score for r in valid_results if r.text_type == "title" and r.score]
+        desc_scores = [r.score for r in valid_results if r.text_type == "description" and r.score]
+        all_scores = [r.score for r in valid_results if r.score]
+        latencies = [r.latency_ms for r in valid_results if r.success]
 
         return {
             "model": model,
@@ -266,7 +297,7 @@ def cmd_benchmark(args):
             "desc_avg_score": sum(desc_scores) / len(desc_scores) if desc_scores else None,
             "overall_avg_score": sum(all_scores) / len(all_scores) if all_scores else None,
             "avg_latency_ms": sum(latencies) / len(latencies) if latencies else 0,
-            "success_rate": f"{success_count}/{len(model_results)}",
+            "success_rate": f"{success_count}/{len(valid_results)}",
             "total_time_s": total_time,
         }
 
@@ -279,9 +310,10 @@ def cmd_benchmark(args):
             try:
                 result = future.result()
                 results.append(result)
+                score_str = f"评分 {result['overall_avg_score']:.2f}/10, " if result['overall_avg_score'] else ""
                 console.print(
                     f"[green]✓ {result['model_short']} 完成: "
-                    f"评分 {result['overall_avg_score']:.2f}/10, "
+                    f"{score_str}"
                     f"耗时 {result['total_time_s']:.1f}s[/green]"
                 )
             except Exception as e:
@@ -367,6 +399,7 @@ def main():
     )
     p_translate.add_argument("-s", "--source", default="en", help="源语言代码")
     p_translate.add_argument("-m", "--model", default="gemini-2.5-flash-lite", help="使用的模型")
+    p_translate.add_argument("-g", "--glossary", help="术语表 (fashion_hard, fashion_core, fashion_full, ecommerce)")
     p_translate.add_argument("-o", "--output", help="保存结果到 JSON 文件")
     p_translate.add_argument("-e", "--eval", action="store_true", help="使用 Opus 4.5 评估质量")
     p_translate.set_defaults(func=cmd_translate)
@@ -390,6 +423,16 @@ def main():
         help="目标语言代码列表"
     )
     p_benchmark.add_argument("--no-eval", action="store_true", help="跳过质量评估")
+    p_benchmark.add_argument(
+        "-c", "--concurrency",
+        type=int,
+        default=1,
+        help="每个模型的并发度 (默认: 1，即串行)"
+    )
+    p_benchmark.add_argument(
+        "-g", "--glossary",
+        help="术语表 (fashion_hard, fashion_core, fashion_full, ecommerce)"
+    )
     p_benchmark.add_argument(
         "-o", "--output",
         default=None,
