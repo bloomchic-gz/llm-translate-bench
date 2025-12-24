@@ -6,8 +6,8 @@ LLM 多语言翻译基准测试工具，用于评估不同 LLM 模型在电商�
 
 **核心功能：**
 - 一次 API 调用同时翻译到 7 种欧盟语言
-- 使用 Claude Opus 4.5 评估翻译质量（准确性、流畅度、风格）
-- 支持 14+ 个模型的并行基准测试
+- 使用 Claude Opus 4.5 进行 100 分制翻译质量评估
+- 支持 23 个模型的并行基准测试
 
 ## 项目结构
 
@@ -15,10 +15,16 @@ LLM 多语言翻译基准测试工具，用于评估不同 LLM 模型在电商�
 src/llm_translate/
 ├── config.py      # 配置：API、模型列表、语言代码
 ├── translator.py  # 核心：multi_translate(), evaluate_translations()
+├── glossary.py    # 术语表（服装专业术语中英文映射）
 └── cli.py         # 命令行入口
 
-data/ecommerce.json    # 测试数据（titles + descriptions）
-results/               # 测试结果输出目录
+data/
+├── ecommerce.json           # 测试数据（titles + descriptions）
+└── product_titles_2000.txt  # 2000条商品标题
+
+results/               # 汇总结果（benchmark_时间戳.json）
+└── details/           # 详细翻译和评估结果
+
 docs/PRICING.md        # 模型定价对比
 docs/PROMPTS.md        # 翻译和评估提示词
 ```
@@ -88,24 +94,31 @@ API_KEY=your-api-key
 
 ## 结果输出
 
-基准测试结果保存在 `results/benchmark.json`：
+基准测试结果保存在 `results/benchmark_时间戳.json`（汇总）和 `results/details/benchmark_时间戳.json`（详细）：
+
+**汇总结果格式：**
 ```json
 {
-  "test_time": "2025-12-19 10:00:00",
-  "models_count": 14,
+  "test_time": "2025-12-24 17:08:26",
+  "config": {
+    "models_count": 3,
+    "titles_count": 100,
+    "target_langs": ["de", "fr", "es", "it"]
+  },
   "results": [
     {
       "model": "gemini-2.5-flash-lite",
       "model_short": "Gemini 2.5 Flash Lite",
-      "title_avg_score": 8.18,
-      "desc_avg_score": 9.07,
-      "overall_avg_score": 8.48,
-      "avg_latency_ms": 2356,
-      "success_rate": "15/15"
+      "title_avg_score": 89.6,
+      "overall_avg_score": 89.6,
+      "avg_latency_ms": 3128,
+      "success_rate": "100/100"
     }
   ]
 }
 ```
+
+**详细结果**（details 目录）包含每条翻译的完整译文和各语言评分。
 
 ## 常见任务
 

@@ -5,9 +5,9 @@
 ## 功能特性
 
 - **多语言翻译**: 一次 API 调用，同时输出 7+ 种语言翻译
-- **质量评估**: 使用 Claude Opus 4.5 评估准确性、流畅度、风格
-- **基准测试**: 支持 21 个模型的并行测试
-- **电商优化**: 针对商品标题、描述翻译优化
+- **质量评估**: 使用 Claude Opus 4.5 进行 100 分制评估
+- **基准测试**: 支持 23 个模型的并行测试
+- **电商优化**: 针对大码女装商品标题、描述翻译优化
 
 ## 安装
 
@@ -58,10 +58,13 @@ llm-translate-bench/
 │       ├── __init__.py
 │       ├── config.py      # 配置
 │       ├── translator.py  # 核心翻译
+│       ├── glossary.py    # 术语表
 │       └── cli.py         # 命令行
 ├── data/
-│   └── ecommerce.json     # 测试数据
-├── results/               # 测试结果
+│   ├── ecommerce.json           # 测试数据
+│   └── product_titles_2000.txt  # 2000条商品标题
+├── results/               # 汇总结果
+│   └── details/           # 详细翻译和评估结果
 ├── tests/
 └── docs/
     ├── PRICING.md         # 模型定价
