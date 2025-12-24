@@ -128,18 +128,13 @@ def _build_translate_prompt(
     langs_json = json.dumps(target_langs)
     input_json = f'{{"contents":["{text}"],"langs":{langs_json}}}'
 
-    # 加载模板并填充变量
+    # 加载模板作为 system prompt
     template_name = prompt_template or "default"
     template = load_prompt_template(template_name, "translate")
-    filled = template.format(input_json=input_json, glossary_section=glossary_section)
+    system_prompt = template.format(glossary_section=glossary_section)
 
-    # 分离 system 和 user 部分
-    if "---INPUT---" in filled:
-        parts = filled.split("---INPUT---", 1)
-        return parts[0].strip(), parts[1].strip()
-    else:
-        # 兼容旧模板格式
-        return "", filled
+    # input_json 作为 user prompt
+    return system_prompt, input_json
 
 
 def _build_evaluate_prompt(
@@ -167,18 +162,12 @@ def _build_evaluate_prompt(
     }
     input_json = json.dumps(input_data, ensure_ascii=False)
 
-    # 加载模板并填充变量
+    # 加载模板作为 system prompt
     template_name = prompt_template or "default"
-    template = load_prompt_template(template_name, "evaluate")
-    filled = template.format(input_json=input_json)
+    system_prompt = load_prompt_template(template_name, "evaluate")
 
-    # 分离 system 和 user 部分
-    if "---INPUT---" in filled:
-        parts = filled.split("---INPUT---", 1)
-        return parts[0].strip(), parts[1].strip()
-    else:
-        # 兼容旧模板格式
-        return "", filled
+    # input_json 作为 user prompt
+    return system_prompt, input_json
 
 
 def _parse_json_response(content: str) -> dict:

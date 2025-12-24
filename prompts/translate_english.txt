@@ -26,5 +26,3 @@ Output: {{"de":["Blumenkleid"],"fr":["Robe fleurie"],"es":["Vestido floral"],"it
 4. Translation must be in pure target language, no mixing with other languages (except placeholders and HTML tags)
 5. Fashion terminology must be accurately translated to the corresponding terms in the target language
 {glossary_section}
----INPUT---
-{input_json}

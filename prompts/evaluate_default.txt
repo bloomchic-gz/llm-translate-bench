@@ -30,6 +30,3 @@
 
 输入：{{"contents":["连衣裙"],"source_lang":"zh","translations":{{"en":["Dress (连衣裙)"]}}}}
 输出：{{"en":[55]}}
-
----INPUT---
-{input_json}
