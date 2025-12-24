@@ -1,8 +1,49 @@
 # 多语言翻译提示词
 
-## 1. 翻译提示词 (Translation Prompt)
+## 提示词文件
+
+提示词已文件化，存放在 `prompts/` 目录：
+
+```
+prompts/
+├── translate_default.txt    # 默认翻译提示词（中文）
+├── translate_english.txt    # 英文版翻译提示词
+├── evaluate_default.txt     # 默认评估提示词（中文）
+└── evaluate_english.txt     # 英文版评估提示词
+```
+
+### CLI 参数
+
+```bash
+# 使用默认提示词
+llm-translate translate "Hello"
+
+# 使用内置提示词
+llm-translate translate "Hello" -tp english
+
+# 使用自定义提示词文件
+llm-translate translate "Hello" -tp ./my_translate.txt -ep ./my_evaluate.txt
+
+# 指定评估模型
+llm-translate translate "Hello" --eval -em gemini-2.5-flash-lite
+
+# benchmark 使用自定义提示词
+llm-translate benchmark -tp english -ep english
+```
+
+| 参数 | 说明 | 默认值 |
+|------|------|--------|
+| `-tp, --translate-prompt` | 翻译提示词（名称或文件路径） | default |
+| `-ep, --evaluate-prompt` | 评估提示词（名称或文件路径） | default |
+| `-em, --evaluator-model` | 评估模型 | Claude Opus 4.5 |
+
+---
+
+## 1. 翻译提示词 (System Prompt)
 
 大码女装电商专用翻译提示词，一次 API 调用同时翻译成多个语言，返回 JSON 格式。
+
+**文件**: `prompts/translate_default.txt`
 
 ```
 你是大码女装（Plus Size Women's Fashion）电商翻译专家。
@@ -32,36 +73,36 @@
 3. 保留换行符和 HTML 标签原样不变
 4. 翻译结果必须是纯目标语言，禁止混入其他语言（占位符和HTML标签除外）
 5. 服装专业术语必须准确翻译为目标语言的对应术语
-
-## 输入
-{input_json}
-
-## 输出
+{glossary_section}
 ```
 
 ### 变量说明
 
-| 变量 | 说明 | 示例 |
-|-----|------|------|
-| `{input_json}` | 输入 JSON | `{"contents":["Floral Dress"],"langs":["de","fr"]}` |
+| 变量 | 说明 | 来源 |
+|------|------|------|
+| `{glossary_section}` | 术语表部分（可选） | 由 `--glossary` 参数生成 |
 
-### 使用示例
+### User Prompt
 
-**输入：**
+输入 JSON 直接作为 user message 发送：
+
 ```json
 {"contents":["Floral Ruffle Hem Dress","V Neck T-Shirt"],"langs":["de","fr","es","it"]}
 ```
 
-**输出：**
+### 输出示例
+
 ```json
 {"de":["Blumenkleid mit Rüschensaum","V-Ausschnitt T-Shirt"],"fr":["Robe fleurie à ourlet volant","T-shirt col en V"],"es":["Vestido floral con dobladillo de volantes","Camiseta cuello en V"],"it":["Vestito floreale con orlo a balze","T-shirt scollo a V"]}
 ```
 
 ---
 
-## 2. 翻译质量评估提示词 (Evaluation Prompt)
+## 2. 评估提示词 (System Prompt)
 
 使用 Claude Opus 4.5 对翻译结果进行质量评分，100 分制。
+
+**文件**: `prompts/evaluate_default.txt`
 
 ```
 你是大码女装电商翻译质量评估专家。
@@ -96,20 +137,17 @@
 
 输入：{"contents":["连衣裙"],"source_lang":"zh","translations":{"en":["Dress (连衣裙)"]}}
 输出：{"en":[55]}
-
-## 评估输入
-{input_json}
-
-## 评估输出
 ```
 
-### 变量说明
+### User Prompt
 
-| 变量 | 说明 | 示例 |
-|-----|------|------|
-| `{input_json}` | 评估输入 JSON | `{"contents":["Floral Dress"],"source_lang":"en","translations":{"de":["Blumenkleid"]}}` |
+评估输入 JSON 直接作为 user message 发送：
 
-### 期望输出
+```json
+{"contents":["Floral Dress"],"source_lang":"en","translations":{"de":["Blumenkleid"],"fr":["Robe fleurie"]}}
+```
+
+### 输出示例
 
 ```json
 {"de":[95],"fr":[93],"es":[91],"it":[90]}
@@ -117,7 +155,55 @@
 
 ---
 
-## 3. 评分标准说明
+## 3. API 调用方式
+
+### System/User 分离
+
+提示词使用 system role，输入 JSON 使用 user role：
+
+```json
+{
+  "model": "gemini-3-flash-preview",
+  "messages": [
+    {"role": "system", "content": "{system_prompt}"},
+    {"role": "user", "content": "{input_json}"}
+  ],
+  "temperature": 0.3,
+  "max_tokens": 4096
+}
+```
+
+### 翻译调用参数
+
+```json
+{
+  "model": "gemini-3-flash-preview",
+  "temperature": 0.3,
+  "max_tokens": 4096,
+  "timeout": 120
+}
+```
+
+### 评估调用参数
+
+```json
+{
+  "model": "bedrock/us.anthropic.claude-opus-4-5-20251101-v1:0",
+  "temperature": 0.1,
+  "max_tokens": 2048,
+  "timeout": 180
+}
+```
+
+| 参数 | 翻译推荐值 | 评估推荐值 | 说明 |
+|-----|-----------|-----------|------|
+| `temperature` | 0.3 | 0.1 | 翻译需要一定创造性，评估需要稳定性 |
+| `max_tokens` | 4096 | 2048 | 多语言输出需要足够空间 |
+| `timeout` | 120s | 180s | 评估需要更长时间 |
+
+---
+
+## 4. 评分标准说明
 
 ### 100 分制评分档位
 
@@ -140,37 +226,6 @@
 | 漏译关键词 | -10 | 漏掉 V Neck、Floral 等关键词 |
 | 语法错误 | -10 | 目标语言语法不正确 |
 | 风格不符 | -5 | 不符合电商标题简洁风格 |
-
----
-
-## 4. API 调用参数建议
-
-### 翻译调用
-
-```json
-{
-  "model": "gemini-2.5-flash-lite",
-  "messages": [{"role": "user", "content": "{prompt}"}],
-  "temperature": 0.3,
-  "max_tokens": 4096
-}
-```
-
-### 评估调用
-
-```json
-{
-  "model": "bedrock/us.anthropic.claude-opus-4-5-20251101-v1:0",
-  "messages": [{"role": "user", "content": "{prompt}"}],
-  "temperature": 0.1,
-  "max_tokens": 2048
-}
-```
-
-| 参数 | 翻译推荐值 | 评估推荐值 | 说明 |
-|-----|-----------|-----------|------|
-| `temperature` | 0.3 | 0.1 | 翻译需要一定创造性，评估需要稳定性 |
-| `max_tokens` | 4096 | 2048 | 多语言输出需要足够空间 |
 
 ---
 
@@ -205,15 +260,55 @@
 基于 100 条商品标题测试结果（2024-12-24）：
 
 | 排名 | 模型 | 评分 | 延迟 | 成功率 | 推荐场景 |
-|-----|------|------|------|--------|---------|
-| 1 | Qwen3-Max | 92.3 | 7.2s | 100% | 质量优先 |
-| 2 | Gemini 2.5 Flash Lite | 90.7 | 2.0s | 100% | 性价比首选 |
-| 3 | Claude Haiku 4.5 | 87.9 | 2.8s | 100% | 稳定可靠 |
+|:---:|------|:----:|-----:|:------:|---------|
+| 🥇 | **Gemini 3 Flash** | **92.0** | 2174ms | 100% | 质量最高 |
+| 🥈 | **Qwen3-Max** | **90.5** | 5954ms | 100% | 阿里云生态 |
+| 🥉 | **Gemini 2.5 Flash Lite** | **90.1** | 1638ms | 100% | 性价比之王 |
+| 4 | **Claude Haiku 4.5** | **89.6** | 2420ms | 100% | 稳定可靠 |
 
 ### 推荐配置
 
 | 场景 | 推荐模型 | 理由 |
 |-----|---------|------|
-| 大批量翻译 | Gemini 2.5 Flash Lite | 速度快、成本低、质量好 |
-| 质量优先 | Qwen3-Max | 评分最高 |
+| 大批量翻译 | Gemini 2.5 Flash Lite | 速度最快、成本最低、质量好 |
+| 质量优先 | Gemini 3 Flash | 评分最高 (92.0) |
 | 稳定性优先 | Claude Haiku 4.5 | Bedrock 托管，稳定性好 |
+| 阿里云用户 | Qwen3-Max | 阿里云生态集成 |
+
+---
+
+## 7. 自定义提示词
+
+### 创建自定义翻译提示词
+
+1. 复制默认模板：
+```bash
+cp prompts/translate_default.txt prompts/translate_custom.txt
+```
+
+2. 编辑模板，保留 `{glossary_section}` 占位符
+
+3. 使用自定义提示词：
+```bash
+llm-translate translate "Hello" -tp custom
+# 或使用完整路径
+llm-translate translate "Hello" -tp ./prompts/translate_custom.txt
+```
+
+### 创建自定义评估提示词
+
+1. 复制默认模板：
+```bash
+cp prompts/evaluate_default.txt prompts/evaluate_custom.txt
+```
+
+2. 编辑模板
+
+3. 使用自定义提示词：
+```bash
+llm-translate translate "Hello" --eval -ep custom
+```
+
+---
+
+*更新时间: 2025-12-24*
