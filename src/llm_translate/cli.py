@@ -22,6 +22,7 @@ from llm_translate.config import (
     EU_LANGUAGES,
     AVAILABLE_MODELS,
     DEFAULT_TARGET_LANGS,
+    EVALUATOR_MODEL,
     get_model_short_name,
 )
 from llm_translate.translator import (
@@ -66,10 +67,11 @@ def print_result(result: MultiTranslateResult):
     )
 
 
-def print_evaluation(eval_result, translation_model: str):
+def print_evaluation(eval_result, translation_model: str, evaluator_model: str = None):
     """打印评估结果"""
+    eval_model_name = get_model_short_name(evaluator_model) if evaluator_model else "Opus 4.5"
     table = Table(
-        title="翻译质量评分 (评估模型: Opus 4.5)",
+        title=f"翻译质量评分 (评估模型: {eval_model_name})",
         box=box.ROUNDED,
         show_header=True,
         header_style="bold magenta"
@@ -148,15 +150,17 @@ def cmd_translate(args):
 
     if args.eval and result.success:
         console.print()
-        console.print("[cyan]正在使用 Opus 4.5 评估翻译质量...[/cyan]")
+        eval_model_short = get_model_short_name(args.evaluator_model)
+        console.print(f"[cyan]正在使用 {eval_model_short} 评估翻译质量...[/cyan]")
         eval_result = evaluate_translations(
             source_text=text,
             translations=result.translations,
             source_lang=args.source,
+            evaluator_model=args.evaluator_model,
             evaluate_prompt=args.evaluate_prompt,
         )
         console.print()
-        print_evaluation(eval_result, args.model)
+        print_evaluation(eval_result, args.model, args.evaluator_model)
 
     if args.output:
         with open(args.output, "w", encoding="utf-8") as f:
@@ -217,6 +221,7 @@ def cmd_benchmark(args):
     concurrency = getattr(args, 'concurrency', 1)
     translate_prompt = getattr(args, 'translate_prompt', None)
     evaluate_prompt = getattr(args, 'evaluate_prompt', None)
+    evaluator_model = getattr(args, 'evaluator_model', EVALUATOR_MODEL)
 
     console.print(f"\n[bold blue]{'=' * 60}[/bold blue]")
     console.print("[bold blue]电商翻译全模型基准测试[/bold blue]")
@@ -259,6 +264,7 @@ def cmd_benchmark(args):
                         source_text=text,
                         translations=result.translations,
                         source_lang="en",
+                        evaluator_model=evaluator_model,
                         evaluate_prompt=evaluate_prompt,
                     )
                     eval_latency_ms = eval_result.latency_ms
@@ -472,6 +478,7 @@ def main():
     p_translate.add_argument("-e", "--eval", action="store_true", help="使用 Opus 4.5 评估质量")
     p_translate.add_argument("-tp", "--translate-prompt", help="翻译提示词模板 (名称或文件路径)")
     p_translate.add_argument("-ep", "--evaluate-prompt", help="评估提示词模板 (名称或文件路径)")
+    p_translate.add_argument("-em", "--evaluator-model", default=EVALUATOR_MODEL, help="评估模型 (默认: Opus 4.5)")
     p_translate.set_defaults(func=cmd_translate)
 
     # benchmark 命令
@@ -510,6 +517,7 @@ def main():
     )
     p_benchmark.add_argument("-tp", "--translate-prompt", help="翻译提示词模板 (名称或文件路径)")
     p_benchmark.add_argument("-ep", "--evaluate-prompt", help="评估提示词模板 (名称或文件路径)")
+    p_benchmark.add_argument("-em", "--evaluator-model", default=EVALUATOR_MODEL, help="评估模型 (默认: Opus 4.5)")
     p_benchmark.set_defaults(func=cmd_benchmark)
 
     # models 命令
