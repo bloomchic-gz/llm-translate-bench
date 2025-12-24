@@ -93,12 +93,10 @@ def print_evaluation(eval_result, translation_model: str, evaluator_model: str =
     for lang_code in sorted(eval_result.scores.keys()):
         score = eval_result.scores[lang_code]
         lang_name = EU_LANGUAGES.get(lang_code, lang_code)
-        # overall 是 10 分制，转换为 100 分制显示
-        score_100 = score.overall * 10
 
         table.add_row(
             lang_name,
-            f"[bold {score_color(score_100)}]{score_100:.0f}[/]",
+            f"[bold {score_color(score.overall)}]{score.overall:.0f}[/]",
         )
         total_overall += score.overall
         count += 1
@@ -107,9 +105,8 @@ def print_evaluation(eval_result, translation_model: str, evaluator_model: str =
 
     if count > 0:
         avg = total_overall / count
-        avg_100 = avg * 10
-        color = "green" if avg_100 >= 85 else "yellow" if avg_100 >= 70 else "red"
-        console.print(f"\n[bold]平均分: [{color}]{avg_100:.1f}/100[/][/bold]")
+        color = "green" if avg >= 85 else "yellow" if avg >= 70 else "red"
+        console.print(f"\n[bold]平均分: [{color}]{avg:.1f}/100[/][/bold]")
 
     console.print(f"[dim]评估耗时: {eval_result.latency_ms:.0f}ms | Tokens: {eval_result.total_tokens}[/dim]")
 
@@ -272,7 +269,7 @@ def cmd_benchmark(args):
                         score = sum(s.overall for s in eval_result.scores.values()) / len(eval_result.scores)
                         # 保存各语言评估分数（100分制）
                         eval_scores = {
-                            lang: int(s.overall * 10)
+                            lang: int(s.overall)
                             for lang, s in eval_result.scores.items()
                         }
 
@@ -291,7 +288,7 @@ def cmd_benchmark(args):
                 with lock:
                     completed_count[0] += 1
                     console.print(f"  [{model_short}] {completed_count[0]}/{len(all_texts)} 完成" +
-                                  (f", 评分: {score:.1f}" if score else ""))
+                                  (f", 评分: {score:.0f}" if score else ""))
 
             except Exception as e:
                 model_results[idx] = SingleResult(
@@ -351,7 +348,7 @@ def cmd_benchmark(args):
                 result = future.result()
                 with lock:
                     results.append(result)
-                score_str = f"评分 {result['overall_avg_score']:.2f}/10, " if result['overall_avg_score'] else ""
+                score_str = f"评分 {result['overall_avg_score']:.1f}/100, " if result['overall_avg_score'] else ""
                 console.print(
                     f"[green]✓ {result['model_short']} 完成: "
                     f"{score_str}"
@@ -381,8 +378,8 @@ def cmd_benchmark(args):
         def score_fmt(s):
             if s is None:
                 return "[dim]N/A[/dim]"
-            color = "green" if s >= 9 else "yellow" if s >= 8 else "red"
-            return f"[{color}]{s:.2f}[/]"
+            color = "green" if s >= 90 else "yellow" if s >= 80 else "red"
+            return f"[{color}]{s:.1f}[/]"
 
         rank = f"🏆{i}" if i == 1 else f"  {i}"
         table.add_row(

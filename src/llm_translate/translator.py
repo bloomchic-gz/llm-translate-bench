@@ -374,14 +374,14 @@ def evaluate_translations(
         for lang_code, score_value in scores_data.items():
             # 支持新格式（数组）和旧格式（字典）
             if isinstance(score_value, list):
-                # 新格式：取第一个分数，转换为 0-10 分制用于 overall
+                # 新格式：取第一个分数，直接存储 100 分制
                 raw_score = score_value[0] if score_value else 0
                 scores[lang_code] = TranslationScore(
                     lang_code=lang_code,
                     accuracy=0,
                     fluency=0,
                     style=0,
-                    overall=raw_score / 10,  # 100分制转10分制
+                    overall=raw_score,  # 100 分制
                     comments="",
                 )
             else:
