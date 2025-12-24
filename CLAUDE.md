@@ -18,6 +18,10 @@ src/llm_translate/
 ├── glossary.py    # 术语表（服装专业术语中英文映射）
 └── cli.py         # 命令行入口
 
+prompts/                       # 提示词模板
+├── translate_default.txt      # 默认翻译提示词
+└── evaluate_default.txt       # 默认评估提示词
+
 data/
 ├── ecommerce.json           # 测试数据（titles + descriptions）
 └── product_titles_2000.txt  # 2000条商品标题
@@ -26,7 +30,7 @@ results/               # 汇总结果（benchmark_时间戳.json）
 └── details/           # 详细翻译和评估结果
 
 docs/PRICING.md        # 模型定价对比
-docs/PROMPTS.md        # 翻译和评估提示词
+docs/PROMPTS.md        # 翻译和评估提示词文档
 ```
 
 ## 常用命令
@@ -50,7 +54,26 @@ llm-translate benchmark --no-eval
 
 # 列出可用模型
 llm-translate models
+
+# 使用自定义提示词
+llm-translate translate "Hello" -tp ./my_prompt.txt
+llm-translate benchmark -tp custom -ep default
 ```
+
+## 自定义提示词
+
+提示词模板使用 Python format 语法（`{variable}` 占位符）。
+
+**翻译提示词可用变量：**
+- `{input_json}` - 输入 JSON
+- `{glossary_section}` - 术语表部分（可能为空）
+
+**评估提示词可用变量：**
+- `{input_json}` - 输入 JSON
+
+**使用方式：**
+- 内置名称：`-tp default` 加载 `prompts/translate_default.txt`
+- 文件路径：`-tp ./my_prompt.txt` 直接加载文件
 
 ## 添加新模型
 

@@ -44,6 +44,9 @@ llm-translate benchmark -m gemini-2.5-flash-lite qwen3-max
 
 # 列出可用模型
 llm-translate models
+
+# 使用自定义提示词
+llm-translate translate "Hello" -tp ./my_prompt.txt -ep ./my_eval.txt
 ```
 
 ## 项目结构
@@ -60,6 +63,9 @@ llm-translate-bench/
 │       ├── translator.py  # 核心翻译
 │       ├── glossary.py    # 术语表
 │       └── cli.py         # 命令行
+├── prompts/                     # 提示词模板
+│   ├── translate_default.txt    # 默认翻译提示词
+│   └── evaluate_default.txt     # 默认评估提示词
 ├── data/
 │   ├── ecommerce.json           # 测试数据
 │   └── product_titles_2000.txt  # 2000条商品标题

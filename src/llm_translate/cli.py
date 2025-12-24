@@ -141,6 +141,7 @@ def cmd_translate(args):
         target_langs=args.targets,
         model=args.model,
         glossary=args.glossary,
+        translate_prompt=args.translate_prompt,
     )
 
     print_result(result)
@@ -152,6 +153,7 @@ def cmd_translate(args):
             source_text=text,
             translations=result.translations,
             source_lang=args.source,
+            evaluate_prompt=args.evaluate_prompt,
         )
         console.print()
         print_evaluation(eval_result, args.model)
@@ -213,6 +215,8 @@ def cmd_benchmark(args):
 
     glossary = getattr(args, 'glossary', None)
     concurrency = getattr(args, 'concurrency', 1)
+    translate_prompt = getattr(args, 'translate_prompt', None)
+    evaluate_prompt = getattr(args, 'evaluate_prompt', None)
 
     console.print(f"\n[bold blue]{'=' * 60}[/bold blue]")
     console.print("[bold blue]电商翻译全模型基准测试[/bold blue]")
@@ -243,6 +247,7 @@ def cmd_benchmark(args):
                     target_langs=target_langs,
                     model=model,
                     glossary=glossary,
+                    translate_prompt=translate_prompt,
                 )
 
                 score = None
@@ -254,6 +259,7 @@ def cmd_benchmark(args):
                         source_text=text,
                         translations=result.translations,
                         source_lang="en",
+                        evaluate_prompt=evaluate_prompt,
                     )
                     eval_latency_ms = eval_result.latency_ms
                     if eval_result.scores:
@@ -464,6 +470,8 @@ def main():
     p_translate.add_argument("-g", "--glossary", help="术语表 (fashion_hard, fashion_core, fashion_full, ecommerce)")
     p_translate.add_argument("-o", "--output", help="保存结果到 JSON 文件")
     p_translate.add_argument("-e", "--eval", action="store_true", help="使用 Opus 4.5 评估质量")
+    p_translate.add_argument("-tp", "--translate-prompt", help="翻译提示词模板 (名称或文件路径)")
+    p_translate.add_argument("-ep", "--evaluate-prompt", help="评估提示词模板 (名称或文件路径)")
     p_translate.set_defaults(func=cmd_translate)
 
     # benchmark 命令
@@ -500,6 +508,8 @@ def main():
         default=None,
         help="输出文件 (默认: results/benchmark_YYYYMMDD_HHMMSS.json)"
     )
+    p_benchmark.add_argument("-tp", "--translate-prompt", help="翻译提示词模板 (名称或文件路径)")
+    p_benchmark.add_argument("-ep", "--evaluate-prompt", help="评估提示词模板 (名称或文件路径)")
     p_benchmark.set_defaults(func=cmd_benchmark)
 
     # models 命令

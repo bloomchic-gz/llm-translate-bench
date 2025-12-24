@@ -5,6 +5,7 @@
 import json
 import time
 from dataclasses import dataclass, asdict
+from pathlib import Path
 from typing import List, Dict, Optional
 
 import httpx
@@ -16,6 +17,44 @@ from llm_translate.config import (
     EVALUATOR_MODEL,
 )
 from llm_translate.glossary import build_glossary_prompt
+
+
+# 提示词模板缓存
+_prompt_cache: Dict[str, str] = {}
+
+
+def load_prompt_template(name: str, prompt_type: str) -> str:
+    """
+    加载提示词模板
+
+    Args:
+        name: 模板名称（如 'default'）或文件路径
+        prompt_type: "translate" 或 "evaluate"
+
+    Returns:
+        模板内容字符串
+    """
+    cache_key = f"{prompt_type}_{name}"
+    if cache_key in _prompt_cache:
+        return _prompt_cache[cache_key]
+
+    # 如果是文件路径，直接加载
+    path = Path(name)
+    if path.exists():
+        template = path.read_text(encoding="utf-8")
+        _prompt_cache[cache_key] = template
+        return template
+
+    # 否则从 prompts/ 目录加载
+    prompts_dir = Path(__file__).parent.parent.parent / "prompts"
+    template_file = prompts_dir / f"{prompt_type}_{name}.txt"
+
+    if template_file.exists():
+        template = template_file.read_text(encoding="utf-8")
+        _prompt_cache[cache_key] = template
+        return template
+
+    raise FileNotFoundError(f"提示词模板不存在: {name} (尝试路径: {template_file})")
 
 
 @dataclass
@@ -63,6 +102,7 @@ def _build_translate_prompt(
     source_lang: str,
     target_langs: List[str],
     glossary: Optional[str] = None,
+    prompt_template: Optional[str] = None,
 ) -> str:
     """构建翻译提示词（业务一致格式）
 
@@ -71,6 +111,7 @@ def _build_translate_prompt(
         source_lang: 源语言
         target_langs: 目标语言列表
         glossary: 术语表ID (fashion_hard, fashion_core, fashion_full, ecommerce, None)
+        prompt_template: 提示词模板名称或路径，None 表示使用默认
     """
     # 术语表部分
     glossary_section = ""
@@ -84,42 +125,26 @@ def _build_translate_prompt(
     langs_json = json.dumps(target_langs)
     input_json = f'{{"contents":["{text}"],"langs":{langs_json}}}'
 
-    return f"""你是大码女装（Plus Size Women's Fashion）电商翻译专家。
-
-## 任务
-将电商内容从英语翻译到指定的目标语言，包括：
-- 商品相关：标题、描述、属性、标签等
-- 运营相关：活动标题、营销文案等
-- 文章相关：博客、穿搭指南、品牌故事等
-
-## 输入格式
-{{"contents":["text1","text2"],"langs":["de","fr","es","it"]}}
-
-## 输出格式
-只输出一行有效JSON，格式为：{{"de":["..."],"fr":["..."],"es":["..."],"it":["..."]}}
-- 每个语言键对应一个数组
-- 数组内元素数量与输入contents数量相同
-- 禁止输出任何解释文字
-
-## 示例
-输入：{{"contents":["Floral Dress"],"langs":["de","fr","es","it"]}}
-输出：{{"de":["Blumenkleid"],"fr":["Robe fleurie"],"es":["Vestido floral"],"it":["Vestito floreale"]}}
-
-## 翻译规则
-1. 保持原文的简洁风格，不要过度展开
-2. 保留占位符 {{{{ xxx }}}} 原样不翻译，xxx 为任意变量名
-3. 保留换行符和 HTML 标签原样不变
-4. 翻译结果必须是纯目标语言，禁止混入其他语言（占位符和HTML标签除外）
-5. 服装专业术语必须准确翻译为目标语言的对应术语
-{glossary_section}
-## 输入
-{input_json}
-
-## 输出"""
+    # 加载模板并填充变量
+    template_name = prompt_template or "default"
+    template = load_prompt_template(template_name, "translate")
+    return template.format(input_json=input_json, glossary_section=glossary_section)
 
 
-def _build_evaluate_prompt(source_text: str, source_lang: str, translations: Dict[str, str]) -> str:
-    """构建评估提示词（大码女装电商专用）"""
+def _build_evaluate_prompt(
+    source_text: str,
+    source_lang: str,
+    translations: Dict[str, str],
+    prompt_template: Optional[str] = None,
+) -> str:
+    """构建评估提示词（大码女装电商专用）
+
+    Args:
+        source_text: 原文
+        source_lang: 源语言
+        translations: 翻译结果
+        prompt_template: 提示词模板名称或路径，None 表示使用默认
+    """
     # 构建输入 JSON
     input_data = {
         "contents": [source_text],
@@ -128,43 +153,10 @@ def _build_evaluate_prompt(source_text: str, source_lang: str, translations: Dic
     }
     input_json = json.dumps(input_data, ensure_ascii=False)
 
-    return f"""你是大码女装电商翻译质量评估专家。
-
-## 任务
-评估翻译结果的质量并打分。
-
-## 输入格式
-{{"contents":["原文1","原文2"],"source_lang":"en","translations":{{"de":["德语译文1","德语译文2"],"fr":["法语译文1","法语译文2"]}}}}
-
-## 输出格式
-只输出JSON对象，每个语言对应一个分数数组（与原文一一对应）：
-{{"de":[95,88],"fr":[90,85]}}
-
-## 评分标准 (1-100)
-- 95-100: 完美翻译，准确流畅，术语专业
-- 85-94: 优秀翻译，准确自然，极小瑕疵
-- 70-84: 良好翻译，意思正确，表达略有不足
-- 50-69: 合格翻译，有明显问题
-- 30-49: 较差翻译，部分意思偏差
-- 1-29: 严重错误，意思错误或混合语言
-
-## 扣分项
-- 混合语言（如 "Kleid (dress)"）：-30分
-- 服装术语不准确：-15分
-- 过度展开或漏译：-10分
-- 语法错误：-10分
-
-## 示例
-输入：{{"contents":["Floral Dress","V Neck T-Shirt"],"source_lang":"en","translations":{{"de":["Blumenkleid","V-Ausschnitt T-Shirt"],"fr":["Robe fleurie","T-shirt col en V"]}}}}
-输出：{{"de":[95,92],"fr":[93,90]}}
-
-输入：{{"contents":["连衣裙"],"source_lang":"zh","translations":{{"en":["Dress (连衣裙)"]}}}}
-输出：{{"en":[55]}}
-
-## 评估输入
-{input_json}
-
-## 评估输出"""
+    # 加载模板并填充变量
+    template_name = prompt_template or "default"
+    template = load_prompt_template(template_name, "evaluate")
+    return template.format(input_json=input_json)
 
 
 def _parse_json_response(content: str) -> dict:
@@ -225,6 +217,7 @@ def multi_translate(
     temperature: float = 0.3,
     max_tokens: int = 4096,
     glossary: Optional[str] = None,
+    translate_prompt: Optional[str] = None,
 ) -> MultiTranslateResult:
     """
     一次 API 调用翻译到多个语言
@@ -237,6 +230,7 @@ def multi_translate(
         temperature: 温度参数
         max_tokens: 最大 token 数
         glossary: 术语表ID (fashion_mini, fashion_full, ecommerce, None)
+        translate_prompt: 翻译提示词模板名称或路径
 
     Returns:
         MultiTranslateResult: 翻译结果
@@ -246,7 +240,8 @@ def multi_translate(
 
     prompt = _build_translate_prompt(
         text, source_lang, target_langs,
-        glossary=glossary
+        glossary=glossary,
+        prompt_template=translate_prompt,
     )
     start_time = time.perf_counter()
 
@@ -315,6 +310,7 @@ def evaluate_translations(
     translations: Dict[str, str],
     source_lang: str = "en",
     evaluator_model: str = EVALUATOR_MODEL,
+    evaluate_prompt: Optional[str] = None,
 ) -> EvaluationResult:
     """
     使用 LLM 评估翻译质量
@@ -324,11 +320,15 @@ def evaluate_translations(
         translations: 翻译结果 {lang_code: text}
         source_lang: 源语言代码
         evaluator_model: 评估模型
+        evaluate_prompt: 评估提示词模板名称或路径
 
     Returns:
         EvaluationResult: 评估结果
     """
-    prompt = _build_evaluate_prompt(source_text, source_lang, translations)
+    prompt = _build_evaluate_prompt(
+        source_text, source_lang, translations,
+        prompt_template=evaluate_prompt,
+    )
     start_time = time.perf_counter()
 
     try:
