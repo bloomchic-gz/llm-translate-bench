@@ -178,6 +178,24 @@ class SingleResult:
     latency_ms: float
     score: Optional[float]
     error: Optional[str] = None
+    # 详细结果
+    translations: Optional[dict] = None  # 各语言翻译结果
+    eval_scores: Optional[dict] = None   # 各语言评估详情
+    eval_latency_ms: Optional[float] = None  # 评估耗时
+
+    def to_dict(self) -> dict:
+        """转换为字典"""
+        return {
+            "text_type": self.text_type,
+            "text": self.text,
+            "success": self.success,
+            "latency_ms": self.latency_ms,
+            "score": self.score,
+            "error": self.error,
+            "translations": self.translations,
+            "eval_scores": self.eval_scores,
+            "eval_latency_ms": self.eval_latency_ms,
+        }
 
 
 def cmd_benchmark(args):
@@ -233,21 +251,39 @@ def cmd_benchmark(args):
                 )
 
                 score = None
+                eval_scores = None
+                eval_latency_ms = None
+
                 if not args.no_eval and result.success:
                     eval_result = evaluate_translations(
                         source_text=text,
                         translations=result.translations,
                         source_lang="en",
                     )
+                    eval_latency_ms = eval_result.latency_ms
                     if eval_result.scores:
                         score = sum(s.overall for s in eval_result.scores.values()) / len(eval_result.scores)
+                        # 保存各语言评估详情
+                        eval_scores = {
+                            lang: {
+                                "accuracy": s.accuracy,
+                                "fluency": s.fluency,
+                                "style": s.style,
+                                "overall": s.overall,
+                                "comments": s.comments,
+                            }
+                            for lang, s in eval_result.scores.items()
+                        }
 
                 model_results[idx] = SingleResult(
                     text_type=text_type,
-                    text=text[:50] + "..." if len(text) > 50 else text,
+                    text=text,  # 保存完整原文
                     success=result.success,
                     latency_ms=result.latency_ms,
                     score=score,
+                    translations=result.translations if result.success else None,
+                    eval_scores=eval_scores,
+                    eval_latency_ms=eval_latency_ms,
                 )
 
                 with lock:
@@ -258,7 +294,7 @@ def cmd_benchmark(args):
             except Exception as e:
                 model_results[idx] = SingleResult(
                     text_type=text_type,
-                    text=text[:50] + "...",
+                    text=text,  # 保存完整原文
                     success=False,
                     latency_ms=0,
                     score=None,
@@ -299,6 +335,8 @@ def cmd_benchmark(args):
             "avg_latency_ms": sum(latencies) / len(latencies) if latencies else 0,
             "success_rate": f"{success_count}/{len(valid_results)}",
             "total_time_s": total_time,
+            # 详细结果
+            "details": [r.to_dict() for r in valid_results],
         }
 
     console.print(f"\n[bold cyan]开始并行测试 {len(models)} 个模型[/bold cyan]\n")
@@ -309,7 +347,8 @@ def cmd_benchmark(args):
             model = futures[future]
             try:
                 result = future.result()
-                results.append(result)
+                with lock:
+                    results.append(result)
                 score_str = f"评分 {result['overall_avg_score']:.2f}/10, " if result['overall_avg_score'] else ""
                 console.print(
                     f"[green]✓ {result['model_short']} 完成: "
@@ -358,24 +397,57 @@ def cmd_benchmark(args):
 
     # 保存结果
     test_time = time.strftime("%Y-%m-%d %H:%M:%S")
-    output = {
-        "test_time": test_time,
-        "models_count": len(results),
-        "results": results,
-    }
+    # 使用毫秒级时间戳避免文件名冲突
+    timestamp = f"{time.strftime('%Y%m%d_%H%M%S')}_{int(time.time() * 1000) % 1000:03d}"
 
-    # 生成输出文件名（带时间戳）
+    # 生成输出文件名
     if args.output:
         output_file = Path(args.output)
+        details_file = output_file.parent / "details" / output_file.name
     else:
-        timestamp = time.strftime("%Y%m%d_%H%M%S")
         output_file = Path(f"results/benchmark_{timestamp}.json")
+        details_file = Path(f"results/details/benchmark_{timestamp}.json")
 
+    # 汇总结果（不含详细数据）
+    summary_results = []
+    for r in results:
+        summary = {k: v for k, v in r.items() if k != "details"}
+        summary_results.append(summary)
+
+    summary_output = {
+        "test_time": test_time,
+        "config": {
+            "data_file": str(data_file),
+            "models_count": len(results),
+            "titles_count": len(titles),
+            "descriptions_count": len(descriptions),
+            "target_langs": target_langs,
+            "glossary": glossary,
+            "concurrency": concurrency,
+            "eval_enabled": not args.no_eval,
+        },
+        "results": summary_results,
+    }
+
+    # 详细结果（含翻译和评估明细）
+    details_output = {
+        "test_time": test_time,
+        "config": summary_output["config"],
+        "results": results,  # 包含 details
+    }
+
+    # 保存汇总结果
     output_file.parent.mkdir(parents=True, exist_ok=True)
     with open(output_file, "w", encoding="utf-8") as f:
-        json.dump(output, f, ensure_ascii=False, indent=2)
+        json.dump(summary_output, f, ensure_ascii=False, indent=2)
 
-    console.print(f"\n[green]结果已保存到: {output_file}[/green]")
+    # 保存详细结果
+    details_file.parent.mkdir(parents=True, exist_ok=True)
+    with open(details_file, "w", encoding="utf-8") as f:
+        json.dump(details_output, f, ensure_ascii=False, indent=2)
+
+    console.print(f"\n[green]汇总结果: {output_file}[/green]")
+    console.print(f"[green]详细结果: {details_file}[/green]")
     return 0
 
 
