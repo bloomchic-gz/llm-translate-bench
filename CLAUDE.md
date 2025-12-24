@@ -5,9 +5,10 @@
 LLM 多语言翻译基准测试工具，用于评估不同 LLM 模型在电商商品翻译场景下的性能。
 
 **核心功能：**
-- 一次 API 调用同时翻译到 7 种欧盟语言
+- **多文本批量翻译**：一次 API 调用同时翻译多条文本到多个语言
 - 使用 Claude Opus 4.5 进行 100 分制翻译质量评估
 - 支持 23 个模型的并行基准测试
+- 针对大码女装电商场景优化
 
 ## 项目结构
 
@@ -29,8 +30,10 @@ data/
 results/               # 汇总结果（benchmark_时间戳.json）
 └── details/           # 详细翻译和评估结果
 
-docs/PRICING.md        # 模型定价对比
-docs/PROMPTS.md        # 翻译和评估提示词文档
+docs/
+├── BENCHMARK.md             # 基准测试报告
+├── PROMPTS.md               # 提示词文档
+└── PRICING_archived.md      # 定价对比（已归档）
 ```
 
 ## 常用命令
@@ -39,15 +42,23 @@ docs/PROMPTS.md        # 翻译和评估提示词文档
 # 安装项目
 pip install -e .
 
-# 翻译测试
+# 单文本翻译
 llm-translate translate "Hello world"
+
+# 多文本批量翻译（一次 API 调用）
+llm-translate translate "Floral Dress" "V Neck T-Shirt" "High Waist Jeans"
+
+# 翻译并评估质量
 llm-translate translate "Floral Print Dress" -m gemini-2.5-flash-lite --eval
+
+# 多文本翻译+评估
+llm-translate translate "text1" "text2" "text3" --eval
 
 # 基准测试（所有模型）
 llm-translate benchmark
 
-# 测试指定模型
-llm-translate benchmark -m gemini-2.5-flash-lite qwen3-max
+# 测试指定模型，设置并发
+llm-translate benchmark -m gemini-3-flash-preview qwen3-max -c 5
 
 # 跳过评估（快速测试）
 llm-translate benchmark --no-eval
@@ -56,8 +67,8 @@ llm-translate benchmark --no-eval
 llm-translate models
 
 # 使用自定义提示词
-llm-translate translate "Hello" -tp ./my_prompt.txt
-llm-translate benchmark -tp custom -ep default
+llm-translate translate "Hello" -tp ./my_prompt.txt -ep ./my_eval.txt
+llm-translate benchmark -tp english -ep default
 ```
 
 ## 自定义提示词
@@ -155,8 +166,8 @@ llm-translate translate "Ditsy Floral Ruffle Hem Dress" -m MODEL_ID --eval
 llm-translate benchmark -m model1 model2
 ```
 
-### 更新定价文档
-编辑 `docs/PRICING.md`，更新模型评分和价格信息。
+### 更新基准测试报告
+编辑 `docs/BENCHMARK.md`，更新测试结果和推荐。
 
 ### 添加新测试数据
 编辑 `data/ecommerce.json`，添加新的 titles 或 descriptions。
@@ -164,13 +175,13 @@ llm-translate benchmark -m model1 model2
 ## 代码修改指南
 
 ### 修改翻译提示词
-编辑 `src/llm_translate/translator.py` 中的 `_build_translate_prompt()` 函数。
+编辑 `prompts/translate_default.txt` 文件，或创建新的提示词文件通过 `-tp` 参数使用。
 
 ### 修改评估提示词
-编辑 `src/llm_translate/translator.py` 中的 `_build_evaluate_prompt()` 函数。
+编辑 `prompts/evaluate_default.txt` 文件，或创建新的提示词文件通过 `-ep` 参数使用。
 
 ### 修改评估模型
-编辑 `src/llm_translate/config.py` 中的 `EVALUATOR_MODEL` 常量。
+通过 `-em` 参数指定，或编辑 `src/llm_translate/config.py` 中的 `EVALUATOR_MODEL` 常量。
 
 ### 添加新的目标语言
 编辑 `src/llm_translate/config.py`：

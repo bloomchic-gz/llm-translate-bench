@@ -326,7 +326,7 @@ def cmd_benchmark(args):
 
                 if not args.no_eval and result.success:
                     eval_result = evaluate_translations(
-                        source_text=text,
+                        source_texts=text,
                         translations=result.get_single_translations(),
                         source_lang="en",
                         evaluator_model=evaluator_model,
