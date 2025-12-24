@@ -60,9 +60,9 @@ def load_prompt_template(name: str, prompt_type: str) -> str:
 @dataclass
 class MultiTranslateResult:
     """多语言翻译结果"""
-    source_text: str
+    source_texts: List[str]
     source_lang: str
-    translations: Dict[str, str]
+    translations: Dict[str, List[str]]  # {lang: [text1, text2, ...]}
     model: str
     latency_ms: float
     prompt_tokens: int
@@ -74,6 +74,15 @@ class MultiTranslateResult:
     def to_dict(self) -> dict:
         return asdict(self)
 
+    @property
+    def source_text(self) -> str:
+        """兼容旧接口：返回第一个源文本"""
+        return self.source_texts[0] if self.source_texts else ""
+
+    def get_single_translations(self) -> Dict[str, str]:
+        """兼容旧接口：返回单文本翻译结果"""
+        return {lang: texts[0] if texts else "" for lang, texts in self.translations.items()}
+
 
 @dataclass
 class TranslationScore:
@@ -82,23 +91,29 @@ class TranslationScore:
     accuracy: int
     fluency: int
     style: int
-    overall: float
+    overall: float  # 平均分
     comments: str
+    individual_scores: Optional[List[float]] = None  # 各条文本的分数
 
 
 @dataclass
 class EvaluationResult:
     """评估结果"""
-    source_text: str
+    source_texts: List[str]
     model_evaluated: str
     evaluator_model: str
     scores: Dict[str, TranslationScore]
     latency_ms: float
     total_tokens: int
 
+    @property
+    def source_text(self) -> str:
+        """兼容旧接口"""
+        return self.source_texts[0] if self.source_texts else ""
+
 
 def _build_translate_prompt(
-    text: str,
+    texts: List[str],
     source_lang: str,
     target_langs: List[str],
     glossary: Optional[str] = None,
@@ -107,7 +122,7 @@ def _build_translate_prompt(
     """构建翻译提示词（业务一致格式）
 
     Args:
-        text: 要翻译的文本
+        texts: 要翻译的文本列表
         source_lang: 源语言
         target_langs: 目标语言列表
         glossary: 术语表ID (fashion_hard, fashion_core, fashion_full, ecommerce, None)
@@ -125,8 +140,8 @@ def _build_translate_prompt(
 """
 
     # 构建输入 JSON
-    langs_json = json.dumps(target_langs)
-    input_json = f'{{"contents":["{text}"],"langs":{langs_json}}}'
+    input_data = {"contents": texts, "langs": target_langs}
+    input_json = json.dumps(input_data, ensure_ascii=False)
 
     # 加载模板作为 system prompt
     template_name = prompt_template or "default"
@@ -138,17 +153,17 @@ def _build_translate_prompt(
 
 
 def _build_evaluate_prompt(
-    source_text: str,
+    source_texts: List[str],
     source_lang: str,
-    translations: Dict[str, str],
+    translations: Dict[str, List[str]],
     prompt_template: Optional[str] = None,
 ) -> Tuple[str, str]:
     """构建评估提示词（大码女装电商专用）
 
     Args:
-        source_text: 原文
+        source_texts: 原文列表
         source_lang: 源语言
-        translations: 翻译结果
+        translations: 翻译结果 {lang: [text1, text2, ...]}
         prompt_template: 提示词模板名称或路径，None 表示使用默认
 
     Returns:
@@ -156,9 +171,9 @@ def _build_evaluate_prompt(
     """
     # 构建输入 JSON
     input_data = {
-        "contents": [source_text],
+        "contents": source_texts,
         "source_lang": source_lang,
-        "translations": {lang: [text] for lang, text in translations.items()}
+        "translations": translations
     }
     input_json = json.dumps(input_data, ensure_ascii=False)
 
@@ -236,7 +251,7 @@ def _call_llm(
 
 
 def multi_translate(
-    text: str,
+    texts: List[str],
     source_lang: str = "en",
     target_langs: Optional[List[str]] = None,
     model: str = "gemini-2.5-flash-lite",
@@ -246,10 +261,10 @@ def multi_translate(
     translate_prompt: Optional[str] = None,
 ) -> MultiTranslateResult:
     """
-    一次 API 调用翻译到多个语言
+    一次 API 调用翻译多个文本到多个语言
 
     Args:
-        text: 要翻译的文本
+        texts: 要翻译的文本列表
         source_lang: 源语言代码
         target_langs: 目标语言代码列表
         model: 使用的模型
@@ -261,11 +276,15 @@ def multi_translate(
     Returns:
         MultiTranslateResult: 翻译结果
     """
+    # 兼容单文本输入
+    if isinstance(texts, str):
+        texts = [texts]
+
     if target_langs is None:
         target_langs = ["de", "fr", "es", "it", "pt", "nl", "pl"]
 
     system_prompt, user_prompt = _build_translate_prompt(
-        text, source_lang, target_langs,
+        texts, source_lang, target_langs,
         glossary=glossary,
         prompt_template=translate_prompt,
     )
@@ -281,16 +300,16 @@ def multi_translate(
         )
         raw_translations = _parse_json_response(content)
 
-        # 新格式: {"de": ["译文1"], "fr": ["译文1"]} -> {"de": "译文1", "fr": "译文1"}
+        # 格式: {"de": ["译文1", "译文2"], "fr": ["译文1", "译文2"]}
         translations = {}
         for lang, trans_list in raw_translations.items():
-            if isinstance(trans_list, list) and len(trans_list) > 0:
-                translations[lang] = trans_list[0]
+            if isinstance(trans_list, list):
+                translations[lang] = trans_list
             elif isinstance(trans_list, str):
-                translations[lang] = trans_list  # 兼容旧格式
+                translations[lang] = [trans_list]  # 兼容旧格式
 
         return MultiTranslateResult(
-            source_text=text,
+            source_texts=texts,
             source_lang=source_lang,
             translations=translations,
             model=model,
@@ -304,7 +323,7 @@ def multi_translate(
     except json.JSONDecodeError as e:
         latency_ms = (time.perf_counter() - start_time) * 1000
         return MultiTranslateResult(
-            source_text=text,
+            source_texts=texts,
             source_lang=source_lang,
             translations={},
             model=model,
@@ -319,7 +338,7 @@ def multi_translate(
     except Exception as e:
         latency_ms = (time.perf_counter() - start_time) * 1000
         return MultiTranslateResult(
-            source_text=text,
+            source_texts=texts,
             source_lang=source_lang,
             translations={},
             model=model,
@@ -333,8 +352,8 @@ def multi_translate(
 
 
 def evaluate_translations(
-    source_text: str,
-    translations: Dict[str, str],
+    source_texts: List[str],
+    translations: Dict[str, List[str]],
     source_lang: str = "en",
     evaluator_model: str = EVALUATOR_MODEL,
     evaluate_prompt: Optional[str] = None,
@@ -343,8 +362,8 @@ def evaluate_translations(
     使用 LLM 评估翻译质量
 
     Args:
-        source_text: 原文
-        translations: 翻译结果 {lang_code: text}
+        source_texts: 原文列表
+        translations: 翻译结果 {lang_code: [text1, text2, ...]}
         source_lang: 源语言代码
         evaluator_model: 评估模型
         evaluate_prompt: 评估提示词模板名称或路径
@@ -352,8 +371,14 @@ def evaluate_translations(
     Returns:
         EvaluationResult: 评估结果
     """
+    # 兼容单文本输入
+    if isinstance(source_texts, str):
+        source_texts = [source_texts]
+    if translations and isinstance(next(iter(translations.values())), str):
+        translations = {lang: [text] for lang, text in translations.items()}
+
     system_prompt, user_prompt = _build_evaluate_prompt(
-        source_text, source_lang, translations,
+        source_texts, source_lang, translations,
         prompt_template=evaluate_prompt,
     )
     start_time = time.perf_counter()
@@ -364,25 +389,25 @@ def evaluate_translations(
             model=evaluator_model,
             system_prompt=system_prompt,
             temperature=0.1,
-            max_tokens=2048,
-            timeout=180.0,
+            max_tokens=4096,  # 多文本需要更大空间
+            timeout=300.0,    # 多文本需要更长时间
         )
         scores_data = _parse_json_response(content)
 
-        # 新格式: {"de": [95], "fr": [90]} -> TranslationScore
+        # 格式: {"de": [95, 88, 92], "fr": [90, 85, 91]} -> TranslationScore
         scores = {}
         for lang_code, score_value in scores_data.items():
-            # 支持新格式（数组）和旧格式（字典）
             if isinstance(score_value, list):
-                # 新格式：取第一个分数，直接存储 100 分制
-                raw_score = score_value[0] if score_value else 0
+                # 计算平均分
+                avg_score = sum(score_value) / len(score_value) if score_value else 0
                 scores[lang_code] = TranslationScore(
                     lang_code=lang_code,
                     accuracy=0,
                     fluency=0,
                     style=0,
-                    overall=raw_score,  # 100 分制
+                    overall=avg_score,  # 平均分
                     comments="",
+                    individual_scores=score_value,  # 各条分数
                 )
             else:
                 # 旧格式兼容
@@ -396,7 +421,7 @@ def evaluate_translations(
                 )
 
         return EvaluationResult(
-            source_text=source_text,
+            source_texts=source_texts,
             model_evaluated="",
             evaluator_model=evaluator_model,
             scores=scores,
@@ -407,7 +432,7 @@ def evaluate_translations(
     except Exception:
         latency_ms = (time.perf_counter() - start_time) * 1000
         return EvaluationResult(
-            source_text=source_text,
+            source_texts=source_texts,
             model_evaluated="",
             evaluator_model=evaluator_model,
             scores={},

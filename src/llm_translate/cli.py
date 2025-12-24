@@ -36,8 +36,10 @@ console = Console()
 
 def print_result(result: MultiTranslateResult):
     """打印翻译结果"""
+    # 显示源文本
+    source_display = "\n".join(f"{i+1}. {t}" for i, t in enumerate(result.source_texts))
     console.print(Panel.fit(
-        f"[bold]源文本 ({result.source_lang})[/bold]\n{result.source_text}",
+        f"[bold]源文本 ({result.source_lang}) - {len(result.source_texts)} 条[/bold]\n{source_display}",
         border_style="blue"
     ))
     console.print()
@@ -46,23 +48,31 @@ def print_result(result: MultiTranslateResult):
         console.print(f"[red]翻译失败: {result.error}[/red]")
         return
 
-    table = Table(
-        title=f"翻译结果 (模型: {result.model})",
-        box=box.ROUNDED,
-        show_header=True,
-        header_style="bold cyan"
-    )
-    table.add_column("语言", style="bold", width=15)
-    table.add_column("翻译结果", width=60)
+    # 多文本：每个文本一个表格
+    for idx, source_text in enumerate(result.source_texts):
+        if len(result.source_texts) > 1:
+            console.print(f"[bold cyan]#{idx+1}[/bold cyan] {source_text}")
 
-    for lang_code in sorted(result.translations.keys()):
-        lang_name = EU_LANGUAGES.get(lang_code, lang_code)
-        table.add_row(lang_name, result.translations[lang_code])
+        table = Table(
+            title=f"翻译结果 (模型: {result.model})" if len(result.source_texts) == 1 else None,
+            box=box.ROUNDED,
+            show_header=True,
+            header_style="bold cyan"
+        )
+        table.add_column("语言", style="bold", width=15)
+        table.add_column("翻译结果", width=60)
 
-    console.print(table)
-    console.print()
+        for lang_code in sorted(result.translations.keys()):
+            lang_name = EU_LANGUAGES.get(lang_code, lang_code)
+            trans_list = result.translations[lang_code]
+            trans_text = trans_list[idx] if idx < len(trans_list) else ""
+            table.add_row(lang_name, trans_text)
+
+        console.print(table)
+        console.print()
+
     console.print(
-        f"[dim]单次 API 调用 | 延迟: {result.latency_ms:.0f}ms | "
+        f"[dim]单次 API 调用 | {len(result.source_texts)} 条文本 | 延迟: {result.latency_ms:.0f}ms | "
         f"Tokens: {result.total_tokens} (输入: {result.prompt_tokens}, 输出: {result.completion_tokens})[/dim]"
     )
 
@@ -111,12 +121,69 @@ def print_evaluation(eval_result, translation_model: str, evaluator_model: str =
     console.print(f"[dim]评估耗时: {eval_result.latency_ms:.0f}ms | Tokens: {eval_result.total_tokens}[/dim]")
 
 
+def print_evaluation_multi(eval_result, translation_model: str, evaluator_model: str = None):
+    """打印多文本评估结果"""
+    eval_model_name = get_model_short_name(evaluator_model) if evaluator_model else "Opus 4.5"
+    num_texts = len(eval_result.source_texts)
+
+    def score_color(s):
+        if s >= 85:
+            return "green"
+        elif s >= 70:
+            return "yellow"
+        return "red"
+
+    # 汇总表格
+    table = Table(
+        title=f"翻译质量评分 - {num_texts} 条文本 (评估模型: {eval_model_name})",
+        box=box.ROUNDED,
+        show_header=True,
+        header_style="bold magenta"
+    )
+    table.add_column("语言", style="bold", width=20)
+    table.add_column("平均分", justify="center", width=10)
+    table.add_column("分数分布", width=40)
+
+    total_overall = 0
+    count = 0
+
+    for lang_code in sorted(eval_result.scores.keys()):
+        score = eval_result.scores[lang_code]
+        lang_name = EU_LANGUAGES.get(lang_code, lang_code)
+
+        # 分数分布
+        if score.individual_scores:
+            scores_str = ", ".join(str(int(s)) for s in score.individual_scores[:10])
+            if len(score.individual_scores) > 10:
+                scores_str += f"... (+{len(score.individual_scores)-10})"
+        else:
+            scores_str = "-"
+
+        table.add_row(
+            lang_name,
+            f"[bold {score_color(score.overall)}]{score.overall:.1f}[/]",
+            f"[dim]{scores_str}[/dim]",
+        )
+        total_overall += score.overall
+        count += 1
+
+    console.print(table)
+
+    if count > 0:
+        avg = total_overall / count
+        color = "green" if avg >= 85 else "yellow" if avg >= 70 else "red"
+        console.print(f"\n[bold]总平均分: [{color}]{avg:.1f}/100[/][/bold]")
+
+    console.print(f"[dim]评估耗时: {eval_result.latency_ms:.0f}ms | Tokens: {eval_result.total_tokens} | 文本数: {num_texts}[/dim]")
+
+
 def cmd_translate(args):
     """翻译命令"""
     if args.file:
         text = Path(args.file).read_text(encoding="utf-8").strip()
-    elif args.text:
-        text = args.text
+        texts = [text]
+    elif args.texts:
+        texts = args.texts
     else:
         console.print("[red]错误: 请提供要翻译的文本[/red]")
         return 1
@@ -129,13 +196,14 @@ def cmd_translate(args):
     console.print(f"模型: {args.model}")
     console.print(f"源语言: {args.source}")
     console.print(f"目标语言: {', '.join(args.targets)} ({len(args.targets)}个)")
+    console.print(f"文本数量: {len(texts)}")
     if args.glossary:
         console.print(f"术语表: {args.glossary}")
     console.print()
 
     console.print("[cyan]正在翻译...[/cyan]")
     result = multi_translate(
-        text=text,
+        texts=texts,
         source_lang=args.source,
         target_langs=args.targets,
         model=args.model,
@@ -148,16 +216,16 @@ def cmd_translate(args):
     if args.eval and result.success:
         console.print()
         eval_model_short = get_model_short_name(args.evaluator_model)
-        console.print(f"[cyan]正在使用 {eval_model_short} 评估翻译质量...[/cyan]")
+        console.print(f"[cyan]正在使用 {eval_model_short} 评估翻译质量 ({len(texts)} 条文本)...[/cyan]")
         eval_result = evaluate_translations(
-            source_text=text,
+            source_texts=texts,
             translations=result.translations,
             source_lang=args.source,
             evaluator_model=args.evaluator_model,
             evaluate_prompt=args.evaluate_prompt,
         )
         console.print()
-        print_evaluation(eval_result, args.model, args.evaluator_model)
+        print_evaluation_multi(eval_result, args.model, args.evaluator_model)
 
     if args.output:
         with open(args.output, "w", encoding="utf-8") as f:
@@ -244,7 +312,7 @@ def cmd_benchmark(args):
             """处理单个文本"""
             try:
                 result = multi_translate(
-                    text=text,
+                    texts=text,
                     source_lang="en",
                     target_langs=target_langs,
                     model=model,
@@ -259,7 +327,7 @@ def cmd_benchmark(args):
                 if not args.no_eval and result.success:
                     eval_result = evaluate_translations(
                         source_text=text,
-                        translations=result.translations,
+                        translations=result.get_single_translations(),
                         source_lang="en",
                         evaluator_model=evaluator_model,
                         evaluate_prompt=evaluate_prompt,
@@ -280,7 +348,7 @@ def cmd_benchmark(args):
                     latency_ms=result.latency_ms,
                     score=score,
                     error=result.error if not result.success else None,
-                    translations=result.translations if result.success else None,
+                    translations=result.get_single_translations() if result.success else None,
                     eval_scores=eval_scores,
                     eval_latency_ms=eval_latency_ms,
                 )
@@ -460,7 +528,7 @@ def main():
 
     # translate 命令
     p_translate = subparsers.add_parser("translate", help="翻译文本")
-    p_translate.add_argument("text", nargs="?", help="要翻译的文本")
+    p_translate.add_argument("texts", nargs="*", help="要翻译的文本（支持多个）")
     p_translate.add_argument("-f", "--file", help="从文件读取文本")
     p_translate.add_argument(
         "-t", "--targets",
