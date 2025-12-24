@@ -118,33 +118,52 @@ def _build_translate_prompt(
 
 
 def _build_evaluate_prompt(source_text: str, source_lang: str, translations: Dict[str, str]) -> str:
-    """构建评估提示词"""
-    translations_text = "\n".join([
-        f"[{code}] {EU_LANGUAGES.get(code, code)}:\n{text}"
-        for code, text in translations.items()
-    ])
+    """构建评估提示词（大码女装电商专用）"""
+    # 构建输入 JSON
+    input_data = {
+        "contents": [source_text],
+        "source_lang": source_lang,
+        "translations": {lang: [text] for lang, text in translations.items()}
+    }
+    input_json = json.dumps(input_data, ensure_ascii=False)
 
-    return f"""You are an expert translation quality evaluator. Evaluate the following translations from {source_lang}.
+    return f"""你是大码女装电商翻译质量评估专家。
 
-Source text ({source_lang}):
-{source_text}
+## 任务
+评估翻译结果的质量并打分。
 
-Translations to evaluate:
-{translations_text}
+## 输入格式
+{{"contents":["原文1","原文2"],"source_lang":"en","translations":{{"de":["德语译文1","德语译文2"],"fr":["法语译文1","法语译文2"]}}}}
 
-For each translation, score on these criteria (1-10 scale):
-1. Accuracy: How accurately does it convey the original meaning?
-2. Fluency: How natural and fluent is the translation?
-3. Style: How well does it preserve the tone and style?
+## 输出格式
+只输出JSON对象，每个语言对应一个分数数组（与原文一一对应）：
+{{"de":[95,88],"fr":[90,85]}}
 
-Return ONLY a valid JSON object in this exact format:
-{{
-  "de": {{"accuracy": 9, "fluency": 8, "style": 8, "overall": 8.3, "comments": "brief comment"}},
-  "fr": {{"accuracy": 9, "fluency": 9, "style": 9, "overall": 9.0, "comments": "brief comment"}},
-  ...
-}}
+## 评分标准 (1-100)
+- 95-100: 完美翻译，准确流畅，术语专业
+- 85-94: 优秀翻译，准确自然，极小瑕疵
+- 70-84: 良好翻译，意思正确，表达略有不足
+- 50-69: 合格翻译，有明显问题
+- 30-49: 较差翻译，部分意思偏差
+- 1-29: 严重错误，意思错误或混合语言
 
-Evaluation:"""
+## 扣分项
+- 混合语言（如 "Kleid (dress)"）：-30分
+- 服装术语不准确：-15分
+- 过度展开或漏译：-10分
+- 语法错误：-10分
+
+## 示例
+输入：{{"contents":["Floral Dress","V Neck T-Shirt"],"source_lang":"en","translations":{{"de":["Blumenkleid","V-Ausschnitt T-Shirt"],"fr":["Robe fleurie","T-shirt col en V"]}}}}
+输出：{{"de":[95,92],"fr":[93,90]}}
+
+输入：{{"contents":["连衣裙"],"source_lang":"zh","translations":{{"en":["Dress (连衣裙)"]}}}}
+输出：{{"en":[55]}}
+
+## 评估输入
+{input_json}
+
+## 评估输出"""
 
 
 def _parse_json_response(content: str) -> dict:
@@ -321,16 +340,31 @@ def evaluate_translations(
         )
         scores_data = _parse_json_response(content)
 
+        # 新格式: {"de": [95], "fr": [90]} -> TranslationScore
         scores = {}
-        for lang_code, score_dict in scores_data.items():
-            scores[lang_code] = TranslationScore(
-                lang_code=lang_code,
-                accuracy=score_dict.get("accuracy", 0),
-                fluency=score_dict.get("fluency", 0),
-                style=score_dict.get("style", 0),
-                overall=score_dict.get("overall", 0),
-                comments=score_dict.get("comments", ""),
-            )
+        for lang_code, score_value in scores_data.items():
+            # 支持新格式（数组）和旧格式（字典）
+            if isinstance(score_value, list):
+                # 新格式：取第一个分数，转换为 0-10 分制用于 overall
+                raw_score = score_value[0] if score_value else 0
+                scores[lang_code] = TranslationScore(
+                    lang_code=lang_code,
+                    accuracy=0,
+                    fluency=0,
+                    style=0,
+                    overall=raw_score / 10,  # 100分制转10分制
+                    comments="",
+                )
+            else:
+                # 旧格式兼容
+                scores[lang_code] = TranslationScore(
+                    lang_code=lang_code,
+                    accuracy=score_value.get("accuracy", 0),
+                    fluency=score_value.get("fluency", 0),
+                    style=score_value.get("style", 0),
+                    overall=score_value.get("overall", 0),
+                    comments=score_value.get("comments", ""),
+                )
 
         return EvaluationResult(
             source_text=source_text,

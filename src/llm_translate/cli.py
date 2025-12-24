@@ -74,35 +74,29 @@ def print_evaluation(eval_result, translation_model: str):
         show_header=True,
         header_style="bold magenta"
     )
-    table.add_column("语言", style="bold", width=17)
-    table.add_column("准确性", justify="center", width=6)
-    table.add_column("流畅度", justify="center", width=6)
-    table.add_column("风格", justify="center", width=6)
-    table.add_column("综合分", justify="center", width=6)
-    table.add_column("评语", width=40)
+    table.add_column("语言", style="bold", width=20)
+    table.add_column("分数", justify="center", width=10)
 
     total_overall = 0
     count = 0
 
     def score_color(s):
-        if s >= 9:
+        """根据100分制分数返回颜色"""
+        if s >= 85:
             return "green"
-        elif s >= 7:
+        elif s >= 70:
             return "yellow"
         return "red"
 
     for lang_code in sorted(eval_result.scores.keys()):
         score = eval_result.scores[lang_code]
         lang_name = EU_LANGUAGES.get(lang_code, lang_code)
-        comments = score.comments[:40] + "..." if len(score.comments) > 40 else score.comments
+        # overall 是 10 分制，转换为 100 分制显示
+        score_100 = score.overall * 10
 
         table.add_row(
             lang_name,
-            f"[{score_color(score.accuracy)}]{score.accuracy}[/]",
-            f"[{score_color(score.fluency)}]{score.fluency}[/]",
-            f"[{score_color(score.style)}]{score.style}[/]",
-            f"[bold {score_color(score.overall)}]{score.overall:.1f}[/]",
-            comments
+            f"[bold {score_color(score_100)}]{score_100:.0f}[/]",
         )
         total_overall += score.overall
         count += 1
@@ -111,8 +105,9 @@ def print_evaluation(eval_result, translation_model: str):
 
     if count > 0:
         avg = total_overall / count
-        color = "green" if avg >= 8 else "yellow" if avg >= 6 else "red"
-        console.print(f"\n[bold]平均综合分: [{color}]{avg:.2f}/10[/][/bold]")
+        avg_100 = avg * 10
+        color = "green" if avg_100 >= 85 else "yellow" if avg_100 >= 70 else "red"
+        console.print(f"\n[bold]平均分: [{color}]{avg_100:.1f}/100[/][/bold]")
 
     console.print(f"[dim]评估耗时: {eval_result.latency_ms:.0f}ms | Tokens: {eval_result.total_tokens}[/dim]")
 
@@ -263,15 +258,9 @@ def cmd_benchmark(args):
                     eval_latency_ms = eval_result.latency_ms
                     if eval_result.scores:
                         score = sum(s.overall for s in eval_result.scores.values()) / len(eval_result.scores)
-                        # 保存各语言评估详情
+                        # 保存各语言评估分数（100分制）
                         eval_scores = {
-                            lang: {
-                                "accuracy": s.accuracy,
-                                "fluency": s.fluency,
-                                "style": s.style,
-                                "overall": s.overall,
-                                "comments": s.comments,
-                            }
+                            lang: int(s.overall * 10)
                             for lang, s in eval_result.scores.items()
                         }
 

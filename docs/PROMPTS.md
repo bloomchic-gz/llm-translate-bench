@@ -2,161 +2,149 @@
 
 ## 1. 翻译提示词 (Translation Prompt)
 
-一次 API 调用，同时翻译成多个语言，返回 JSON 格式。
+大码女装电商专用翻译提示词，一次 API 调用同时翻译成多个语言，返回 JSON 格式。
 
 ```
-You are a professional translator. Translate the following text from {source_lang} to multiple languages simultaneously.
+你是大码女装（Plus Size Women's Fashion）电商翻译专家。
 
-Source text ({source_lang}):
-{text}
+## 任务
+将电商内容从英语翻译到指定的目标语言，包括：
+- 商品相关：标题、描述、属性、标签等
+- 运营相关：活动标题、营销文案等
+- 文章相关：博客、穿搭指南、品牌故事等
 
-Target languages: {lang_list}
+## 输入格式
+{"contents":["text1","text2"],"langs":["de","fr","es","it"]}
 
-Requirements:
-1. Provide accurate, natural translations for each target language
-2. Return ONLY a valid JSON object with language codes as keys
-3. Do not include any explanation or additional text
+## 输出格式
+只输出一行有效JSON，格式为：{"de":["..."],"fr":["..."],"es":["..."],"it":["..."]}
+- 每个语言键对应一个数组
+- 数组内元素数量与输入contents数量相同
+- 禁止输出任何解释文字
 
-Return format (JSON only):
-{
-  "de": "German translation here",
-  "fr": "French translation here",
-  ...
-}
+## 示例
+输入：{"contents":["Floral Dress"],"langs":["de","fr","es","it"]}
+输出：{"de":["Blumenkleid"],"fr":["Robe fleurie"],"es":["Vestido floral"],"it":["Vestito floreale"]}
 
-Translations:
+## 翻译规则
+1. 保持原文的简洁风格，不要过度展开
+2. 保留占位符 {{ xxx }} 原样不翻译，xxx 为任意变量名
+3. 翻译结果必须是纯目标语言，禁止混入其他语言（占位符除外）
+4. 服装专业术语必须准确翻译为目标语言的对应术语
+
+## 输入
+{input_json}
+
+## 输出
 ```
 
 ### 变量说明
 
 | 变量 | 说明 | 示例 |
 |-----|------|------|
-| `{source_lang}` | 源语言 | `en` / `English` |
-| `{text}` | 要翻译的文本 | `Hello, how are you?` |
-| `{lang_list}` | 目标语言列表 | `de (German), fr (French), es (Spanish)` |
+| `{input_json}` | 输入 JSON | `{"contents":["Floral Dress"],"langs":["de","fr"]}` |
 
 ### 使用示例
 
-```
-You are a professional translator. Translate the following text from English to multiple languages simultaneously.
-
-Source text (English):
-Ditsy Floral Ruffle Layered Hem Dress - Elegant style with Round Neck, Lantern Sleeve, and Side seam pocket.
-
-Target languages: de (German), fr (French), es (Spanish), it (Italian), pt (Portuguese), nl (Dutch), pl (Polish)
-
-Requirements:
-1. Provide accurate, natural translations for each target language
-2. Return ONLY a valid JSON object with language codes as keys
-3. Do not include any explanation or additional text
-
-Return format (JSON only):
-{
-  "de": "German translation here",
-  "fr": "French translation here",
-  ...
-}
-
-Translations:
-```
-
-### 期望输出
-
+**输入：**
 ```json
-{
-  "de": "Kleid mit Rüschensaum und zartem Blumenmuster – Eleganter Stil mit Rundhalsausschnitt, Laternenärmeln und Seitennähtentasche.",
-  "fr": "Robe à volants et imprimé floral – Style élégant avec col rond, manches lanterne et poche latérale.",
-  "es": "Vestido con dobladillo en capas de volantes y estampado floral – Estilo elegante con cuello redondo, manga farol y bolsillo lateral.",
-  "it": "Vestito con orlo a balze e stampa floreale – Stile elegante con scollo rotondo, maniche a lanterna e tasca laterale.",
-  "pt": "Vestido com bainha em camadas de babados e estampa floral – Estilo elegante com gola redonda, manga lanterna e bolso lateral.",
-  "nl": "Jurk met ruches en bloemenprint – Elegante stijl met ronde hals, lantaarnmouwen en zijnaadzak.",
-  "pl": "Sukienka z falbankami i drobnym kwiatowym wzorem – Elegancki styl z okrągłym dekoltem, rękawami typu latarenka i kieszenią w szwie bocznym."
-}
+{"contents":["Floral Ruffle Hem Dress","V Neck T-Shirt"],"langs":["de","fr","es","it"]}
+```
+
+**输出：**
+```json
+{"de":["Blumenkleid mit Rüschensaum","V-Ausschnitt T-Shirt"],"fr":["Robe fleurie à ourlet volant","T-shirt col en V"],"es":["Vestido floral con dobladillo de volantes","Camiseta cuello en V"],"it":["Vestito floreale con orlo a balze","T-shirt scollo a V"]}
 ```
 
 ---
 
 ## 2. 翻译质量评估提示词 (Evaluation Prompt)
 
-使用强大的 LLM (如 Claude Opus 4.5) 对翻译结果进行质量评分。
+使用 Claude Opus 4.5 对翻译结果进行质量评分，100 分制。
 
 ```
-You are an expert translation quality evaluator. Evaluate the following translations from {source_lang}.
+你是大码女装电商翻译质量评估专家。
 
-Source text ({source_lang}):
-{source_text}
+## 任务
+评估翻译结果的质量并打分。
 
-Translations to evaluate:
-{translations_text}
+## 输入格式
+{"contents":["原文1","原文2"],"source_lang":"en","translations":{"de":["德语译文1","德语译文2"],"fr":["法语译文1","法语译文2"]}}
 
-For each translation, score on these criteria (1-10 scale):
-1. Accuracy: How accurately does it convey the original meaning?
-2. Fluency: How natural and fluent is the translation?
-3. Style: How well does it preserve the tone and style?
+## 输出格式
+只输出JSON对象，每个语言对应一个分数数组（与原文一一对应）：
+{"de":[95,88],"fr":[90,85]}
 
-Return ONLY a valid JSON object in this exact format:
-{
-  "de": {"accuracy": 9, "fluency": 8, "style": 8, "overall": 8.3, "comments": "brief comment"},
-  "fr": {"accuracy": 9, "fluency": 9, "style": 9, "overall": 9.0, "comments": "brief comment"},
-  ...
-}
+## 评分标准 (1-100)
+- 95-100: 完美翻译，准确流畅，术语专业
+- 85-94: 优秀翻译，准确自然，极小瑕疵
+- 70-84: 良好翻译，意思正确，表达略有不足
+- 50-69: 合格翻译，有明显问题
+- 30-49: 较差翻译，部分意思偏差
+- 1-29: 严重错误，意思错误或混合语言
 
-Evaluation:
+## 扣分项
+- 混合语言（如 "Kleid (dress)"）：-30分
+- 服装术语不准确：-15分
+- 过度展开或漏译：-10分
+- 语法错误：-10分
+
+## 示例
+输入：{"contents":["Floral Dress","V Neck T-Shirt"],"source_lang":"en","translations":{"de":["Blumenkleid","V-Ausschnitt T-Shirt"],"fr":["Robe fleurie","T-shirt col en V"]}}
+输出：{"de":[95,92],"fr":[93,90]}
+
+输入：{"contents":["连衣裙"],"source_lang":"zh","translations":{"en":["Dress (连衣裙)"]}}
+输出：{"en":[55]}
+
+## 评估输入
+{input_json}
+
+## 评估输出
 ```
 
 ### 变量说明
 
 | 变量 | 说明 | 示例 |
 |-----|------|------|
-| `{source_lang}` | 源语言 | `English` |
-| `{source_text}` | 原文 | `Hello, how are you?` |
-| `{translations_text}` | 各语言翻译结果 | 见下方格式 |
-
-### translations_text 格式
-
-```
-[de] German (Deutsch):
-Hallo, wie geht es dir?
-
-[fr] French (Français):
-Bonjour, comment allez-vous ?
-
-[es] Spanish (Español):
-Hola, ¿cómo estás?
-```
+| `{input_json}` | 评估输入 JSON | `{"contents":["Floral Dress"],"source_lang":"en","translations":{"de":["Blumenkleid"]}}` |
 
 ### 期望输出
 
 ```json
-{
-  "de": {"accuracy": 10, "fluency": 10, "style": 9, "overall": 9.7, "comments": "Natural German greeting"},
-  "fr": {"accuracy": 10, "fluency": 10, "style": 10, "overall": 10.0, "comments": "Perfect formal French"},
-  "es": {"accuracy": 10, "fluency": 10, "style": 9, "overall": 9.7, "comments": "Natural informal Spanish"}
-}
+{"de":[95],"fr":[93],"es":[91],"it":[90]}
 ```
 
 ---
 
 ## 3. 评分标准说明
 
-| 维度 | 英文 | 评估内容 | 权重 |
-|-----|------|---------|-----|
-| **准确性** | Accuracy | 翻译是否准确传达原文含义 | 高 |
-| **流畅度** | Fluency | 翻译是否自然流畅 | 中 |
-| **风格** | Style | 翻译是否保持原文语气风格 | 中 |
-
-### 评分解读
+### 100 分制评分档位
 
 | 分数 | 等级 | 说明 |
 |-----|------|------|
-| 9-10 | 优秀 | 接近完美，可直接使用 |
-| 8-8.9 | 良好 | 质量高，小瑕疵可接受 |
-| 7-7.9 | 一般 | 基本可用，建议人工审核 |
-| <7 | 较差 | 不建议直接使用 |
+| 95-100 | 完美 | 准确流畅，术语专业，可直接使用 |
+| 85-94 | 优秀 | 准确自然，极小瑕疵，建议使用 |
+| 70-84 | 良好 | 意思正确，表达略有不足，可用 |
+| 50-69 | 合格 | 有明显问题，建议人工审核 |
+| 30-49 | 较差 | 部分意思偏差，需要修改 |
+| 1-29 | 严重错误 | 意思错误或混合语言，不可用 |
+
+### 扣分项详情
+
+| 问题类型 | 扣分 | 示例 |
+|---------|------|------|
+| 混合语言 | -30 | `Kleid (dress)`, `裙子 dress` |
+| 服装术语不准确 | -15 | Ruffle 译为"褶皱"而非"荷叶边" |
+| 过度展开 | -10 | 标题翻译过长，添加不必要修饰 |
+| 漏译关键词 | -10 | 漏掉 V Neck、Floral 等关键词 |
+| 语法错误 | -10 | 目标语言语法不正确 |
+| 风格不符 | -5 | 不符合电商标题简洁风格 |
 
 ---
 
 ## 4. API 调用参数建议
+
+### 翻译调用
 
 ```json
 {
@@ -167,14 +155,25 @@ Hola, ¿cómo estás?
 }
 ```
 
-| 参数 | 推荐值 | 说明 |
-|-----|-------|------|
-| `temperature` | 0.3 | 较低温度保证翻译一致性 |
-| `max_tokens` | 4096 | 多语言输出需要足够空间 |
+### 评估调用
+
+```json
+{
+  "model": "bedrock/us.anthropic.claude-opus-4-5-20251101-v1:0",
+  "messages": [{"role": "user", "content": "{prompt}"}],
+  "temperature": 0.1,
+  "max_tokens": 2048
+}
+```
+
+| 参数 | 翻译推荐值 | 评估推荐值 | 说明 |
+|-----|-----------|-----------|------|
+| `temperature` | 0.3 | 0.1 | 翻译需要一定创造性，评估需要稳定性 |
+| `max_tokens` | 4096 | 2048 | 多语言输出需要足够空间 |
 
 ---
 
-## 5. 支持的欧盟语言代码
+## 5. 默认目标语言
 
 | 代码 | 语言 | 英文名 |
 |-----|------|-------|
@@ -182,6 +181,11 @@ Hola, ¿cómo estás?
 | fr | 法语 | French |
 | es | 西班牙语 | Spanish |
 | it | 意大利语 | Italian |
+
+### 扩展支持语言
+
+| 代码 | 语言 | 英文名 |
+|-----|------|-------|
 | pt | 葡萄牙语 | Portuguese |
 | nl | 荷兰语 | Dutch |
 | pl | 波兰语 | Polish |
@@ -195,10 +199,20 @@ Hola, ¿cómo estás?
 
 ---
 
-## 6. 电商翻译最佳模型推荐
+## 6. 电商翻译模型推荐
 
-| 场景 | 推荐模型 | 评分 | 万次成本 |
-|-----|---------|------|---------|
-| 大批量翻译 | Gemini 2.5 Flash Lite | 8.48 | $1.60 |
-| 质量优先 | Gemini 3 Flash | 9.08 | $11.00 |
-| 极致低成本 | Qwen-Plus | 7.87 | $1.20 |
+基于 100 条商品标题测试结果（2024-12-24）：
+
+| 排名 | 模型 | 评分 | 延迟 | 成功率 | 推荐场景 |
+|-----|------|------|------|--------|---------|
+| 1 | Qwen3-Max | 92.3 | 7.2s | 100% | 质量优先 |
+| 2 | Gemini 2.5 Flash Lite | 90.7 | 2.0s | 100% | 性价比首选 |
+| 3 | Claude Haiku 4.5 | 87.9 | 2.8s | 100% | 稳定可靠 |
+
+### 推荐配置
+
+| 场景 | 推荐模型 | 理由 |
+|-----|---------|------|
+| 大批量翻译 | Gemini 2.5 Flash Lite | 速度快、成本低、质量好 |
+| 质量优先 | Qwen3-Max | 评分最高 |
+| 稳定性优先 | Claude Haiku 4.5 | Bedrock 托管，稳定性好 |
