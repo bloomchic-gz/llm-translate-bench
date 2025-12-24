@@ -64,54 +64,57 @@ def _build_translate_prompt(
     target_langs: List[str],
     glossary: Optional[str] = None,
 ) -> str:
-    """构建翻译提示词
+    """构建翻译提示词（业务一致格式）
 
     Args:
         text: 要翻译的文本
         source_lang: 源语言
         target_langs: 目标语言列表
-        glossary: 术语表ID (fashion_mini, fashion_full, ecommerce, None)
+        glossary: 术语表ID (fashion_hard, fashion_core, fashion_full, ecommerce, None)
     """
-    lang_list = ", ".join([
-        f"{code} ({EU_LANGUAGES.get(code, code)})"
-        for code in target_langs
-    ])
-
     # 术语表部分
     glossary_section = ""
-    domain = "general"
     if glossary:
         glossary_section = f"""
+## 术语表
 {build_glossary_prompt(target_langs, glossary)}
-
-IMPORTANT: Use the terminology from the reference table above.
 """
-        if "fashion" in glossary:
-            domain = "fashion"
-        elif "ecommerce" in glossary:
-            domain = "e-commerce"
 
-    return f"""You are a professional translator specializing in {domain} content. Translate the following text from {source_lang} to multiple languages simultaneously.
+    # 构建输入 JSON
+    langs_json = json.dumps(target_langs)
+    input_json = f'{{"contents":["{text}"],"langs":{langs_json}}}'
+
+    return f"""你是大码女装（Plus Size Women's Fashion）电商翻译专家。
+
+## 任务
+将电商内容从英语翻译到指定的目标语言，包括：
+- 商品相关：标题、描述、属性、标签等
+- 运营相关：活动标题、营销文案等
+- 文章相关：博客、穿搭指南、品牌故事等
+
+## 输入格式
+{{"contents":["text1","text2"],"langs":["de","fr","es","it"]}}
+
+## 输出格式
+只输出一行有效JSON，格式为：{{"de":["..."],"fr":["..."],"es":["..."],"it":["..."]}}
+- 每个语言键对应一个数组
+- 数组内元素数量与输入contents数量相同
+- 禁止输出任何解释文字
+
+## 示例
+输入：{{"contents":["Floral Dress"],"langs":["de","fr","es","it"]}}
+输出：{{"de":["Blumenkleid"],"fr":["Robe fleurie"],"es":["Vestido floral"],"it":["Vestito floreale"]}}
+
+## 翻译规则
+1. 保持原文的简洁风格，不要过度展开
+2. 保留占位符 {{{{ xxx }}}} 原样不翻译，xxx 为任意变量名
+3. 翻译结果必须是纯目标语言，禁止混入其他语言（占位符除外）
+4. 服装专业术语必须准确翻译为目标语言的对应术语
 {glossary_section}
-Source text ({source_lang}):
-{text}
+## 输入
+{input_json}
 
-Target languages: {lang_list}
-
-Requirements:
-1. Provide accurate, natural translations for each target language
-2. Use industry-standard terminology for each target language
-3. Return ONLY a valid JSON object with language codes as keys
-4. Do not include any explanation or additional text
-
-Return format (JSON only):
-{{
-  "de": "German translation here",
-  "fr": "French translation here",
-  ...
-}}
-
-Translations:"""
+## 输出"""
 
 
 def _build_evaluate_prompt(source_text: str, source_lang: str, translations: Dict[str, str]) -> str:
@@ -234,7 +237,15 @@ def multi_translate(
             temperature=temperature,
             max_tokens=max_tokens,
         )
-        translations = _parse_json_response(content)
+        raw_translations = _parse_json_response(content)
+
+        # 新格式: {"de": ["译文1"], "fr": ["译文1"]} -> {"de": "译文1", "fr": "译文1"}
+        translations = {}
+        for lang, trans_list in raw_translations.items():
+            if isinstance(trans_list, list) and len(trans_list) > 0:
+                translations[lang] = trans_list[0]
+            elif isinstance(trans_list, str):
+                translations[lang] = trans_list  # 兼容旧格式
 
         return MultiTranslateResult(
             source_text=text,

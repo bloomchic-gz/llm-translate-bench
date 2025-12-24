@@ -281,6 +281,7 @@ def cmd_benchmark(args):
                     success=result.success,
                     latency_ms=result.latency_ms,
                     score=score,
+                    error=result.error if not result.success else None,
                     translations=result.translations if result.success else None,
                     eval_scores=eval_scores,
                     eval_latency_ms=eval_latency_ms,

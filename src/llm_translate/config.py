@@ -28,7 +28,7 @@ EU_LANGUAGES = {
 }
 
 # 默认目标语言
-DEFAULT_TARGET_LANGS = ["de", "fr", "es", "it", "pt", "nl", "pl"]
+DEFAULT_TARGET_LANGS = ["de", "fr", "es", "it"]
 
 # 可用模型列表
 AVAILABLE_MODELS = [
