@@ -13,7 +13,7 @@
 
 ```bash
 # 克隆项目
-git clone https://github.com/anthropics/llm-translate-bench.git
+git clone https://github.com/bloomchic-gz/llm-translate-bench.git
 cd llm-translate-bench
 
 # 安装（可编辑模式）
