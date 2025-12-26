@@ -249,7 +249,15 @@ class SingleResult:
     eval_scores: Optional[dict] = None   # 各语言评估详情（第一个评估模型）
     eval_latency_ms: Optional[float] = None  # 评估耗时（第一个评估模型）
     # 多评估模型支持
-    multi_eval: Optional[dict] = None  # {evaluator_model: {score, eval_scores, eval_latency_ms}}
+    multi_eval: Optional[dict] = None  # {evaluator_model: {score, eval_scores, eval_latency_ms, tokens}}
+    # 翻译 Token 统计
+    prompt_tokens: Optional[int] = None
+    completion_tokens: Optional[int] = None
+    total_tokens: Optional[int] = None
+    # 评估 Token 统计（第一个评估模型，兼容）
+    eval_prompt_tokens: Optional[int] = None
+    eval_completion_tokens: Optional[int] = None
+    eval_total_tokens: Optional[int] = None
 
     def to_dict(self) -> dict:
         """转换为字典"""
@@ -264,6 +272,12 @@ class SingleResult:
             "eval_scores": self.eval_scores,
             "eval_latency_ms": self.eval_latency_ms,
             "multi_eval": self.multi_eval,
+            "prompt_tokens": self.prompt_tokens,
+            "completion_tokens": self.completion_tokens,
+            "total_tokens": self.total_tokens,
+            "eval_prompt_tokens": self.eval_prompt_tokens,
+            "eval_completion_tokens": self.eval_completion_tokens,
+            "eval_total_tokens": self.eval_total_tokens,
         }
 
 
@@ -331,6 +345,9 @@ def cmd_benchmark(args):
                 score = None
                 eval_scores = None
                 eval_latency_ms = None
+                eval_prompt_tokens = None
+                eval_completion_tokens = None
+                eval_total_tokens = None
                 multi_eval = {}
 
                 if not args.no_eval and result.success:
@@ -354,12 +371,15 @@ def cmd_benchmark(args):
                                     for lang, s in eval_result.scores.items()
                                 }
 
-                                # 存储到多评估结果
+                                # 存储到多评估结果（包含token信息）
                                 eval_model_short = get_model_short_name(eval_model)
                                 multi_eval[eval_model_short] = {
                                     "score": eval_score,
                                     "eval_scores": eval_lang_scores,
                                     "eval_latency_ms": eval_result.latency_ms,
+                                    "prompt_tokens": eval_result.prompt_tokens,
+                                    "completion_tokens": eval_result.completion_tokens,
+                                    "total_tokens": eval_result.total_tokens,
                                 }
 
                                 # 第一个评估模型的结果作为默认（兼容旧格式）
@@ -367,6 +387,9 @@ def cmd_benchmark(args):
                                     score = eval_score
                                     eval_scores = eval_lang_scores
                                     eval_latency_ms = eval_result.latency_ms
+                                    eval_prompt_tokens = eval_result.prompt_tokens
+                                    eval_completion_tokens = eval_result.completion_tokens
+                                    eval_total_tokens = eval_result.total_tokens
                         except Exception as eval_err:
                             eval_model_short = get_model_short_name(eval_model)
                             multi_eval[eval_model_short] = {
@@ -385,6 +408,12 @@ def cmd_benchmark(args):
                     eval_scores=eval_scores,
                     eval_latency_ms=eval_latency_ms,
                     multi_eval=multi_eval if multi_eval else None,
+                    prompt_tokens=result.prompt_tokens,
+                    completion_tokens=result.completion_tokens,
+                    total_tokens=result.total_tokens,
+                    eval_prompt_tokens=eval_prompt_tokens,
+                    eval_completion_tokens=eval_completion_tokens,
+                    eval_total_tokens=eval_total_tokens,
                 )
 
                 with lock:

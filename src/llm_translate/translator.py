@@ -105,6 +105,8 @@ class EvaluationResult:
     scores: Dict[str, TranslationScore]
     latency_ms: float
     total_tokens: int
+    prompt_tokens: int = 0
+    completion_tokens: int = 0
 
     @property
     def source_text(self) -> str:
@@ -427,6 +429,8 @@ def evaluate_translations(
             scores=scores,
             latency_ms=latency_ms,
             total_tokens=usage.get("total_tokens", 0),
+            prompt_tokens=usage.get("prompt_tokens", 0),
+            completion_tokens=usage.get("completion_tokens", 0),
         )
 
     except Exception:
@@ -438,4 +442,6 @@ def evaluate_translations(
             scores={},
             latency_ms=latency_ms,
             total_tokens=0,
+            prompt_tokens=0,
+            completion_tokens=0,
         )
