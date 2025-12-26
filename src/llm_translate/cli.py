@@ -242,12 +242,14 @@ class SingleResult:
     text: str
     success: bool
     latency_ms: float
-    score: Optional[float]
+    score: Optional[float]  # 第一个评估模型的分数（兼容）
     error: Optional[str] = None
     # 详细结果
     translations: Optional[dict] = None  # 各语言翻译结果
-    eval_scores: Optional[dict] = None   # 各语言评估详情
-    eval_latency_ms: Optional[float] = None  # 评估耗时
+    eval_scores: Optional[dict] = None   # 各语言评估详情（第一个评估模型）
+    eval_latency_ms: Optional[float] = None  # 评估耗时（第一个评估模型）
+    # 多评估模型支持
+    multi_eval: Optional[dict] = None  # {evaluator_model: {score, eval_scores, eval_latency_ms}}
 
     def to_dict(self) -> dict:
         """转换为字典"""
@@ -261,6 +263,7 @@ class SingleResult:
             "translations": self.translations,
             "eval_scores": self.eval_scores,
             "eval_latency_ms": self.eval_latency_ms,
+            "multi_eval": self.multi_eval,
         }
 
 
@@ -286,7 +289,9 @@ def cmd_benchmark(args):
     concurrency = getattr(args, 'concurrency', 1)
     translate_prompt = getattr(args, 'translate_prompt', None)
     evaluate_prompt = getattr(args, 'evaluate_prompt', None)
-    evaluator_model = getattr(args, 'evaluator_model', EVALUATOR_MODEL)
+    evaluator_models = getattr(args, 'evaluator_model', [EVALUATOR_MODEL])
+    if isinstance(evaluator_models, str):
+        evaluator_models = [evaluator_models]
 
     console.print(f"\n[bold blue]{'=' * 60}[/bold blue]")
     console.print("[bold blue]电商翻译全模型基准测试[/bold blue]")
@@ -295,6 +300,9 @@ def cmd_benchmark(args):
     console.print(f"测试文本: {len(titles)} 标题 + {len(descriptions)} 描述")
     console.print(f"目标语言: {len(target_langs)} 个")
     console.print(f"并发度: {concurrency} (每模型)")
+    if not args.no_eval:
+        eval_names = [get_model_short_name(m) for m in evaluator_models]
+        console.print(f"评估模型: {', '.join(eval_names)} ({len(evaluator_models)}个)")
     if glossary:
         console.print(f"术语表: {glossary}")
 
@@ -323,23 +331,48 @@ def cmd_benchmark(args):
                 score = None
                 eval_scores = None
                 eval_latency_ms = None
+                multi_eval = {}
 
                 if not args.no_eval and result.success:
-                    eval_result = evaluate_translations(
-                        source_texts=text,
-                        translations=result.get_single_translations(),
-                        source_lang="en",
-                        evaluator_model=evaluator_model,
-                        evaluate_prompt=evaluate_prompt,
-                    )
-                    eval_latency_ms = eval_result.latency_ms
-                    if eval_result.scores:
-                        score = sum(s.overall for s in eval_result.scores.values()) / len(eval_result.scores)
-                        # 保存各语言评估分数（100分制）
-                        eval_scores = {
-                            lang: int(s.overall)
-                            for lang, s in eval_result.scores.items()
-                        }
+                    translations_dict = result.get_single_translations()
+
+                    # 对每个评估模型进行评估
+                    for eval_idx, eval_model in enumerate(evaluator_models):
+                        try:
+                            eval_result = evaluate_translations(
+                                source_texts=text,
+                                translations=translations_dict,
+                                source_lang="en",
+                                evaluator_model=eval_model,
+                                evaluate_prompt=evaluate_prompt,
+                            )
+
+                            if eval_result.scores:
+                                eval_score = sum(s.overall for s in eval_result.scores.values()) / len(eval_result.scores)
+                                eval_lang_scores = {
+                                    lang: int(s.overall)
+                                    for lang, s in eval_result.scores.items()
+                                }
+
+                                # 存储到多评估结果
+                                eval_model_short = get_model_short_name(eval_model)
+                                multi_eval[eval_model_short] = {
+                                    "score": eval_score,
+                                    "eval_scores": eval_lang_scores,
+                                    "eval_latency_ms": eval_result.latency_ms,
+                                }
+
+                                # 第一个评估模型的结果作为默认（兼容旧格式）
+                                if eval_idx == 0:
+                                    score = eval_score
+                                    eval_scores = eval_lang_scores
+                                    eval_latency_ms = eval_result.latency_ms
+                        except Exception as eval_err:
+                            eval_model_short = get_model_short_name(eval_model)
+                            multi_eval[eval_model_short] = {
+                                "score": None,
+                                "error": str(eval_err),
+                            }
 
                 model_results[idx] = SingleResult(
                     text_type=text_type,
@@ -351,6 +384,7 @@ def cmd_benchmark(args):
                     translations=result.get_single_translations() if result.success else None,
                     eval_scores=eval_scores,
                     eval_latency_ms=eval_latency_ms,
+                    multi_eval=multi_eval if multi_eval else None,
                 )
 
                 with lock:
@@ -393,6 +427,18 @@ def cmd_benchmark(args):
         all_scores = [r.score for r in valid_results if r.score]
         latencies = [r.latency_ms for r in valid_results if r.success]
 
+        # 计算各评估模型的平均分
+        multi_eval_scores = {}
+        for eval_model_short in [get_model_short_name(m) for m in evaluator_models]:
+            scores_for_eval = []
+            for r in valid_results:
+                if r.multi_eval and eval_model_short in r.multi_eval:
+                    s = r.multi_eval[eval_model_short].get("score")
+                    if s is not None:
+                        scores_for_eval.append(s)
+            if scores_for_eval:
+                multi_eval_scores[eval_model_short] = sum(scores_for_eval) / len(scores_for_eval)
+
         return {
             "model": model,
             "model_short": model_short,
@@ -402,6 +448,8 @@ def cmd_benchmark(args):
             "avg_latency_ms": sum(latencies) / len(latencies) if latencies else 0,
             "success_rate": f"{success_count}/{len(valid_results)}",
             "total_time_s": total_time,
+            # 多评估模型分数
+            "multi_eval_scores": multi_eval_scores,
             # 详细结果
             "details": [r.to_dict() for r in valid_results],
         }
@@ -428,6 +476,10 @@ def cmd_benchmark(args):
     # 打印结果表格
     results.sort(key=lambda x: x["overall_avg_score"] or 0, reverse=True)
 
+    # 获取评估模型短名称列表
+    eval_model_names = [get_model_short_name(m) for m in evaluator_models]
+    multi_eval_mode = len(evaluator_models) > 1
+
     table = Table(
         title="\n电商翻译全模型测试结果",
         box=box.ROUNDED,
@@ -435,30 +487,50 @@ def cmd_benchmark(args):
         header_style="bold magenta"
     )
     table.add_column("排名", justify="center", width=4)
-    table.add_column("模型", style="bold", width=22)
-    table.add_column("标题评分", justify="center", width=10)
-    table.add_column("描述评分", justify="center", width=10)
-    table.add_column("总评分", justify="center", width=10)
+    table.add_column("模型", style="bold", width=20)
+
+    if multi_eval_mode:
+        # 多评估模型：为每个评估模型添加一列
+        for eval_name in eval_model_names:
+            # 简化名称
+            short_name = eval_name.replace("Gemini ", "G").replace("Claude ", "C").replace(" Flash", "F").replace(" Lite", "L").replace(" Pro", "P")
+            table.add_column(short_name, justify="center", width=10)
+    else:
+        table.add_column("标题评分", justify="center", width=10)
+        table.add_column("描述评分", justify="center", width=10)
+        table.add_column("总评分", justify="center", width=10)
+
     table.add_column("平均延迟", justify="center", width=10)
     table.add_column("成功率", justify="center", width=8)
 
-    for i, r in enumerate(results, 1):
-        def score_fmt(s):
-            if s is None:
-                return "[dim]N/A[/dim]"
-            color = "green" if s >= 90 else "yellow" if s >= 80 else "red"
-            return f"[{color}]{s:.1f}[/]"
+    def score_fmt(s):
+        if s is None:
+            return "[dim]N/A[/dim]"
+        color = "green" if s >= 90 else "yellow" if s >= 80 else "red"
+        return f"[{color}]{s:.1f}[/]"
 
+    for i, r in enumerate(results, 1):
         rank = f"🏆{i}" if i == 1 else f"  {i}"
-        table.add_row(
-            rank,
-            r["model_short"],
-            score_fmt(r["title_avg_score"]),
-            score_fmt(r["desc_avg_score"]),
-            f"[bold]{score_fmt(r['overall_avg_score'])}[/bold]",
-            f"{r['avg_latency_ms']:.0f}ms",
-            r["success_rate"],
-        )
+
+        if multi_eval_mode:
+            # 多评估模型：显示每个评估模型的分数
+            row = [rank, r["model_short"]]
+            for eval_name in eval_model_names:
+                score = r.get("multi_eval_scores", {}).get(eval_name)
+                row.append(score_fmt(score))
+            row.append(f"{r['avg_latency_ms']:.0f}ms")
+            row.append(r["success_rate"])
+            table.add_row(*row)
+        else:
+            table.add_row(
+                rank,
+                r["model_short"],
+                score_fmt(r["title_avg_score"]),
+                score_fmt(r["desc_avg_score"]),
+                f"[bold]{score_fmt(r['overall_avg_score'])}[/bold]",
+                f"{r['avg_latency_ms']:.0f}ms",
+                r["success_rate"],
+            )
 
     console.print(table)
 
@@ -492,6 +564,7 @@ def cmd_benchmark(args):
             "glossary": glossary,
             "concurrency": concurrency,
             "eval_enabled": not args.no_eval,
+            "evaluator_models": evaluator_models if not args.no_eval else None,
         },
         "results": summary_results,
     }
@@ -582,7 +655,7 @@ def main():
     )
     p_benchmark.add_argument("-tp", "--translate-prompt", help="翻译提示词模板 (名称或文件路径)")
     p_benchmark.add_argument("-ep", "--evaluate-prompt", help="评估提示词模板 (名称或文件路径)")
-    p_benchmark.add_argument("-em", "--evaluator-model", default=EVALUATOR_MODEL, help="评估模型 (默认: Opus 4.5)")
+    p_benchmark.add_argument("-em", "--evaluator-model", nargs="+", default=[EVALUATOR_MODEL], help="评估模型，支持多个 (默认: Opus 4.5)")
     p_benchmark.set_defaults(func=cmd_benchmark)
 
     # models 命令
