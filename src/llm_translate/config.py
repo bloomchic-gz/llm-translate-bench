@@ -33,6 +33,7 @@ DEFAULT_TARGET_LANGS = ["de", "fr", "es", "it"]
 # 可用模型列表
 AVAILABLE_MODELS = [
     # Claude 系列
+    "bedrock/us.anthropic.claude-opus-4-5-20251101-v1:0",
     "bedrock/us.anthropic.claude-sonnet-4-5-20250929-v1:0",
     "bedrock/us.anthropic.claude-haiku-4-5-20251001-v1:0",
     # OpenAI GPT 系列
@@ -55,6 +56,7 @@ AVAILABLE_MODELS = [
     "bedrock/us.amazon.nova-pro-v1:0",
     "bedrock/us.amazon.nova-lite-v1:0",
     # Gemini 系列
+    "gemini-3-pro-preview",
     "gemini-3-flash-preview",
     "gemini-2.5-pro",
     "gemini-2.5-flash",
@@ -66,6 +68,7 @@ EVALUATOR_MODEL = "bedrock/us.anthropic.claude-opus-4-5-20251101-v1:0"
 
 # 模型短名称映射
 MODEL_SHORT_NAMES = {
+    "bedrock/us.anthropic.claude-opus-4-5-20251101-v1:0": "Claude Opus 4.5",
     "bedrock/us.anthropic.claude-sonnet-4-5-20250929-v1:0": "Claude Sonnet 4.5",
     "bedrock/us.anthropic.claude-haiku-4-5-20251001-v1:0": "Claude Haiku 4.5",
     "gpt-5-mini": "GPT-5 Mini",
@@ -83,6 +86,7 @@ MODEL_SHORT_NAMES = {
     "bedrock/us.meta.llama3-3-70b-instruct-v1:0": "Llama 3.3 70B",
     "bedrock/us.amazon.nova-pro-v1:0": "Nova Pro",
     "bedrock/us.amazon.nova-lite-v1:0": "Nova Lite",
+    "gemini-3-pro-preview": "Gemini 3 Pro",
     "gemini-3-flash-preview": "Gemini 3 Flash",
     "gemini-2.5-pro": "Gemini 2.5 Pro",
     "gemini-2.5-flash": "Gemini 2.5 Flash",
