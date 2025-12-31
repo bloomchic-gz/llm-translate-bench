@@ -1,0 +1,2018 @@
+{
+  "Ruffles": {
+    "de": "Ruschen",
+    "fr": "Volants",
+    "es": "Volantes",
+    "it": "Volant",
+    "nl": "Ruches"
+  },
+  "Gathered": {
+    "de": "Gerafft",
+    "fr": "Froncé",
+    "es": "Fruncido",
+    "it": "Arricciato",
+    "nl": "Gerimpeld"
+  },
+  "Tiered": {
+    "de": "Gestuft",
+    "fr": "À volants superposés",
+    "es": "Escalonado",
+    "it": "A strati",
+    "nl": "Gelaagd"
+  },
+  "Twist-front": {
+    "de": "Vorne gedreht",
+    "fr": "Nœud devant",
+    "es": "Nudo frontal",
+    "it": "Nodo frontale",
+    "nl": "Geknoopt vooraan"
+  },
+  "One-shoulder": {
+    "de": "Einschultrig",
+    "fr": "Une épaule",
+    "es": "Un hombro",
+    "it": "Monospalla",
+    "nl": "Een schouder"
+  },
+  "Scalloped": {
+    "de": "Wellenkante",
+    "fr": "Festonné",
+    "es": "Festoneado",
+    "it": "Smerlato",
+    "nl": "Geschulpt"
+  },
+  "Broderie anglaise": {
+    "de": "Lochstickerei",
+    "fr": "Broderie anglaise",
+    "es": "Bordado ingles",
+    "it": "Sangallo",
+    "nl": "Broderie anglaise"
+  },
+  "Shirred": {
+    "de": "Gesmokt",
+    "fr": "Smocké",
+    "es": "Fruncido elástico",
+    "it": "Arricciato elastico",
+    "nl": "Gesmockt"
+  },
+  "Split": {
+    "de": "Schlitz",
+    "fr": "Fendu",
+    "es": "Abertura",
+    "it": "Spacco",
+    "nl": "Split"
+  },
+  "Pocket": {
+    "de": "Taschen",
+    "fr": "Poches",
+    "es": "Bolsillos",
+    "it": "Tasche",
+    "nl": "Zakken"
+  },
+  "Asymmetrical": {
+    "de": "Asymmetrisch",
+    "fr": "Asymétrique",
+    "es": "Asimétrico",
+    "it": "Asimmetrico",
+    "nl": "Asymmetrisch"
+  },
+  "Backless": {
+    "de": "Rückenfrei",
+    "fr": "Dos nu",
+    "es": "Espalda descubierta",
+    "it": "Schiena scoperta",
+    "nl": "Rugvrij"
+  },
+  "Bowknot": {
+    "de": "Schleife",
+    "fr": "Nœud",
+    "es": "Lazo",
+    "it": "Fiocco",
+    "nl": "Strik"
+  },
+  "Button": {
+    "de": "Knöpfe",
+    "fr": "Boutonné",
+    "es": "Con botones",
+    "it": "Con bottoni",
+    "nl": "Knopen"
+  },
+  "Drawstring": {
+    "de": "Tunnelzug",
+    "fr": "Cordon de serrage",
+    "es": "Cordon ajustable",
+    "it": "Coulisse",
+    "nl": "Trekkoord"
+  },
+  "Elastic Waist": {
+    "de": "Gummizug",
+    "fr": "Taille élastique",
+    "es": "Cintura elastica",
+    "it": "Vita elasticizzata",
+    "nl": "Elastische taille"
+  },
+  "Embroidered": {
+    "de": "Bestickt",
+    "fr": "Brodé",
+    "es": "Bordado",
+    "it": "Ricamato",
+    "nl": "Geborduurd"
+  },
+  "Cut-Out": {
+    "de": "Cut-Out",
+    "fr": "Ajouré",
+    "es": "Recortado",
+    "it": "Cut-out",
+    "nl": "Cut-out"
+  },
+  "Knotted": {
+    "de": "Geknotet",
+    "fr": "Noué",
+    "es": "Anudado",
+    "it": "Annodato",
+    "nl": "Geknoopt"
+  },
+  "Lace": {
+    "de": "Spitze",
+    "fr": "Dentelle",
+    "es": "Encaje",
+    "it": "Pizzo",
+    "nl": "Kant"
+  },
+  "Patchwork": {
+    "de": "Patchwork",
+    "fr": "Patchwork",
+    "es": "Patchwork",
+    "it": "Patchwork",
+    "nl": "Patchwork"
+  },
+  "Pleated": {
+    "de": "Plissiert",
+    "fr": "Plissé",
+    "es": "Plisado",
+    "it": "Plissettato",
+    "nl": "Geplisseerd"
+  },
+  "Ribbon": {
+    "de": "Band",
+    "fr": "Ruban",
+    "es": "Cinta",
+    "it": "Nastro",
+    "nl": "Lint"
+  },
+  "Distressed": {
+    "de": "Destroyed",
+    "fr": "Déchiré",
+    "es": "Desgastado",
+    "it": "Effetto vissuto",
+    "nl": "Destroyed"
+  },
+  "Tie Dye": {
+    "de": "Tie-Dye",
+    "fr": "Tie and dye",
+    "es": "Tie dye",
+    "it": "Tie dye",
+    "nl": "Tie-dye"
+  },
+  "Zipper": {
+    "de": "Reißverschluss",
+    "fr": "Fermeture éclair",
+    "es": "Cremallera",
+    "it": "Cerniera",
+    "nl": "Rits"
+  },
+  "Fringe Trim": {
+    "de": "Fransenbesatz",
+    "fr": "Bordure à franges",
+    "es": "Ribete con flecos",
+    "it": "Bordo con frange",
+    "nl": "Franjes"
+  },
+  "Dolphin Hem": {
+    "de": "Delphin-Saum",
+    "fr": "Ourlet dauphin",
+    "es": "Bajo delfín",
+    "it": "Orlo a delfino",
+    "nl": "Dolfijnzoom"
+  },
+  "Frill Trim": {
+    "de": "Ruschenbesatz",
+    "fr": "Bordure à volants",
+    "es": "Ribete con volantes",
+    "it": "Bordo con volant",
+    "nl": "Ruche rand"
+  },
+  "Keyhole": {
+    "de": "Schlüsselloch-Ausschnitt",
+    "fr": "Décolleté goutte",
+    "es": "Escote lágrima",
+    "it": "Scollo a goccia",
+    "nl": "Sleutelgat"
+  },
+  "Ruched": {
+    "de": "Gerafft",
+    "fr": "Froncé",
+    "es": "Drapeado",
+    "it": "Drappeggiato",
+    "nl": "Gerimpeld"
+  },
+  "Stitch": {
+    "de": "Ziernähte",
+    "fr": "Surpiqure",
+    "es": "Pespunte",
+    "it": "Impunture",
+    "nl": "Stiksel"
+  },
+  "Arc Hem": {
+    "de": "Gebogener Saum",
+    "fr": "Ourlet arrondi",
+    "es": "Bajo curvo",
+    "it": "Orlo arrotondato",
+    "nl": "Gebogen zoom"
+  },
+  "Roll Hem": {
+    "de": "Rollsaum",
+    "fr": "Ourlet roulé",
+    "es": "Bajo enrollado",
+    "it": "Orlo arrotolato",
+    "nl": "Opgerolde zoom"
+  },
+  "Fishtail": {
+    "de": "Fishtail",
+    "fr": "Queue de poisson",
+    "es": "Cola de pez",
+    "it": "Coda di pesce",
+    "nl": "Vissenstaart"
+  },
+  "Sequin": {
+    "de": "Pailletten",
+    "fr": "Sequins",
+    "es": "Lentejuelas",
+    "it": "Paillettes",
+    "nl": "Pailletten"
+  },
+  "Satin": {
+    "de": "Satin",
+    "fr": "Satin",
+    "es": "Satén",
+    "it": "Raso",
+    "nl": "Satijn"
+  },
+  "Tassels": {
+    "de": "Quasten",
+    "fr": "Glands",
+    "es": "Borlas",
+    "it": "Nappe",
+    "nl": "Kwastjes"
+  },
+  "Velour": {
+    "de": "Velours",
+    "fr": "Velours",
+    "es": "Terciopelo",
+    "it": "Velluto",
+    "nl": "Velours"
+  },
+  "Beaded": {
+    "de": "Perlenbesetzt",
+    "fr": "Perlé",
+    "es": "Con cuentas",
+    "it": "Con perline",
+    "nl": "Kralen"
+  },
+  "Chiffon": {
+    "de": "Chiffon",
+    "fr": "Chiffon",
+    "es": "Gasa",
+    "it": "Chiffon",
+    "nl": "Chiffon"
+  },
+  "Linen": {
+    "de": "Leinen",
+    "fr": "Lin",
+    "es": "Lino",
+    "it": "Lino",
+    "nl": "Linnen"
+  },
+  "Padded Shoulder": {
+    "de": "Schulterpolster",
+    "fr": "Épaules rembourrées",
+    "es": "Hombreras",
+    "it": "Spalline imbottite",
+    "nl": "Schoudervulling"
+  },
+  "Mesh": {
+    "de": "Mesh",
+    "fr": "Maille filet",
+    "es": "Malla",
+    "it": "Rete",
+    "nl": "Mesh"
+  },
+  "Leather": {
+    "de": "Leder",
+    "fr": "Cuir",
+    "es": "Cuero",
+    "it": "Pelle",
+    "nl": "Leer"
+  },
+  "Cable Knit": {
+    "de": "Zopfmuster",
+    "fr": "Tricot torsadé",
+    "es": "Punto trenzado",
+    "it": "Maglia a trecce",
+    "nl": "Kabelgebreid"
+  },
+  "Printing": {
+    "de": "Druck",
+    "fr": "Imprimé",
+    "es": "Estampado",
+    "it": "Stampato",
+    "nl": "Print"
+  },
+  "Ties": {
+    "de": "Bindebänder",
+    "fr": "Liens à nouer",
+    "es": "Lazos",
+    "it": "Lacci",
+    "nl": "Strikbanden"
+  },
+  "Double-Breasted": {
+    "de": "Zweireihig",
+    "fr": "Double boutonnage",
+    "es": "Cruzado",
+    "it": "Doppio petto",
+    "nl": "Dubbele rij knopen"
+  },
+  "Contrast": {
+    "de": "Kontrast",
+    "fr": "Contraste",
+    "es": "Contraste",
+    "it": "A contrasto",
+    "nl": "Contrast"
+  },
+  "Belted": {
+    "de": "Mit Gürtel",
+    "fr": "Ceinture",
+    "es": "Con cinturón",
+    "it": "Con cintura",
+    "nl": "Met riem"
+  },
+  "Heather": {
+    "de": "Meliert",
+    "fr": "Chiné",
+    "es": "Jaspeado",
+    "it": "Melange",
+    "nl": "Gemeleerd"
+  },
+  "Solid": {
+    "de": "Einfarbig",
+    "fr": "Uni",
+    "es": "Sólido",
+    "it": "Tinta unita",
+    "nl": "Effen"
+  },
+  "Quilting": {
+    "de": "Gesteppt",
+    "fr": "Matelassé",
+    "es": "Acolchado",
+    "it": "Trapuntato",
+    "nl": "Gewatteerd"
+  },
+  "Sheer": {
+    "de": "Durchsichtig",
+    "fr": "Transparent",
+    "es": "Transparente",
+    "it": "Trasparente",
+    "nl": "Transparant"
+  },
+  "Decollete": {
+    "de": "Dekolleté",
+    "fr": "Décolleté",
+    "es": "Escotado",
+    "it": "Scollato",
+    "nl": "Decollete"
+  },
+  "Bare Shoulders": {
+    "de": "Schulterfrei",
+    "fr": "Épaules dénudées",
+    "es": "Hombros descubiertos",
+    "it": "Spalle scoperte",
+    "nl": "Schouderloos"
+  },
+  "Bare Thigh": {
+    "de": "Oberschenkelfrei",
+    "fr": "Cuisses découvertes",
+    "es": "Muslos al descubierto",
+    "it": "Cosce scoperte",
+    "nl": "Blote dijen"
+  },
+  "Bare Midriff": {
+    "de": "Taille frei",
+    "fr": "Taille découverte",
+    "es": "Cintura descubierta",
+    "it": "Vita scoperta",
+    "nl": "Blote taille"
+  },
+  "Bodycon": {
+    "de": "Körperbetont",
+    "fr": "Moulant",
+    "es": "Ajustado",
+    "it": "Aderente",
+    "nl": "Bodycon"
+  },
+  "Regular": {
+    "de": "Normal",
+    "fr": "Standard",
+    "es": "Regular",
+    "it": "Regolare",
+    "nl": "Normaal"
+  },
+  "Loose": {
+    "de": "Locker",
+    "fr": "Ample",
+    "es": "Holgado",
+    "it": "Ampio",
+    "nl": "Loose fit"
+  },
+  "Oversized": {
+    "de": "Oversized",
+    "fr": "Oversize",
+    "es": "Oversize",
+    "it": "Oversize",
+    "nl": "Oversized"
+  },
+  "Straight": {
+    "de": "Gerade",
+    "fr": "Droit",
+    "es": "Recto",
+    "it": "Dritto",
+    "nl": "Recht"
+  },
+  "Flare leg": {
+    "de": "Schlag",
+    "fr": "Évasé",
+    "es": "Acampanado",
+    "it": "Svasato",
+    "nl": "Flare"
+  },
+  "Harem": {
+    "de": "Haremshose",
+    "fr": "Sarouel",
+    "es": "Harem",
+    "it": "Harem",
+    "nl": "Harembroek"
+  },
+  "Mini Dress": {
+    "de": "Minikleid",
+    "fr": "Mini robe",
+    "es": "Minivestido",
+    "it": "Mini abito",
+    "nl": "Minijurk"
+  },
+  "Knee Dress": {
+    "de": "Knielanges Kleid",
+    "fr": "Robe au genou",
+    "es": "Vestido a la rodilla",
+    "it": "Abito al ginocchio",
+    "nl": "Knielange jurk"
+  },
+  "Long Dress": {
+    "de": "Langes Kleid",
+    "fr": "Robe longue",
+    "es": "Vestido largo",
+    "it": "Abito lungo",
+    "nl": "Lange jurk"
+  },
+  "Long": {
+    "de": "Lang",
+    "fr": "Long",
+    "es": "Largo",
+    "it": "Lungo",
+    "nl": "Lang"
+  },
+  "Crop": {
+    "de": "Cropped",
+    "fr": "Court",
+    "es": "Corto",
+    "it": "Corto",
+    "nl": "Cropped"
+  },
+  "Mid Long": {
+    "de": "Mittellang",
+    "fr": "Mi-long",
+    "es": "Medio largo",
+    "it": "Medio-lungo",
+    "nl": "Halflang"
+  },
+  "Silk": {
+    "de": "Seide",
+    "fr": "Soie",
+    "es": "Seda",
+    "it": "Seta",
+    "nl": "Zijde"
+  },
+  "Viscose": {
+    "de": "Viskose",
+    "fr": "Viscose",
+    "es": "Viscosa",
+    "it": "Viscosa",
+    "nl": "Viscose"
+  },
+  "Tencel": {
+    "de": "Tencel",
+    "fr": "Tencel",
+    "es": "Tencel",
+    "it": "Tencel",
+    "nl": "Tencel"
+  },
+  "Acrylic": {
+    "de": "Acryl",
+    "fr": "Acrylique",
+    "es": "Acrílico",
+    "it": "Acrilico",
+    "nl": "Acryl"
+  },
+  "Faux Wool": {
+    "de": "Kunstwolle",
+    "fr": "Fausse laine",
+    "es": "Lana sintética",
+    "it": "Lana sintetica",
+    "nl": "Kunstwol"
+  },
+  "Rayon": {
+    "de": "Rayon",
+    "fr": "Rayonne",
+    "es": "Rayón",
+    "it": "Rayon",
+    "nl": "Rayon"
+  },
+  "PU": {
+    "de": "PU-Leder",
+    "fr": "Simili cuir",
+    "es": "Cuero sintético",
+    "it": "Ecopelle",
+    "nl": "PU-leer"
+  },
+  "Modal": {
+    "de": "Modal",
+    "fr": "Modal",
+    "es": "Modal",
+    "it": "Modal",
+    "nl": "Modal"
+  },
+  "Fleece": {
+    "de": "Fleece",
+    "fr": "Polaire",
+    "es": "Forro polar",
+    "it": "Pile",
+    "nl": "Fleece"
+  },
+  "Faux Fur": {
+    "de": "Kunstfell",
+    "fr": "Fausse fourrure",
+    "es": "Pelo sintético",
+    "it": "Pelliccia sintetica",
+    "nl": "Nepbont"
+  },
+  "Denim": {
+    "de": "Denim",
+    "fr": "Denim",
+    "es": "Vaquero",
+    "it": "Denim",
+    "nl": "Denim"
+  },
+  "Spandex": {
+    "de": "Elasthan",
+    "fr": "Élasthanne",
+    "es": "Elastano",
+    "it": "Elastan",
+    "nl": "Elastaan"
+  },
+  "Polyester": {
+    "de": "Polyester",
+    "fr": "Polyester",
+    "es": "Poliéster",
+    "it": "Poliestere",
+    "nl": "Polyester"
+  },
+  "Knit": {
+    "de": "Strick",
+    "fr": "Tricot",
+    "es": "Punto",
+    "it": "Maglia",
+    "nl": "Gebreid"
+  },
+  "Corduroy": {
+    "de": "Cord",
+    "fr": "Velours côtelé",
+    "es": "Pana",
+    "it": "Velluto a coste",
+    "nl": "Ribfluweel"
+  },
+  "Cotton": {
+    "de": "Baumwolle",
+    "fr": "Coton",
+    "es": "Algodón",
+    "it": "Cotone",
+    "nl": "Katoen"
+  },
+  "Cotton Blends": {
+    "de": "Baumwollmischung",
+    "fr": "Mélange coton",
+    "es": "Mezcla de algodón",
+    "it": "Misto cotone",
+    "nl": "Katoenmix"
+  },
+  "Nylon": {
+    "de": "Nylon",
+    "fr": "Nylon",
+    "es": "Nailon",
+    "it": "Nylon",
+    "nl": "Nylon"
+  },
+  "Velvet": {
+    "de": "Samt",
+    "fr": "Velours",
+    "es": "Terciopelo",
+    "it": "Velluto",
+    "nl": "Fluweel"
+  },
+  "Polar Fleece": {
+    "de": "Polarfleece",
+    "fr": "Polaire",
+    "es": "Forro polar",
+    "it": "Pile polare",
+    "nl": "Fleece"
+  },
+  "Shoulderless": {
+    "de": "Schulterlos",
+    "fr": "Sans épaules",
+    "es": "Sin hombros",
+    "it": "Senza spalle",
+    "nl": "Schouderloos"
+  },
+  "Round Neck": {
+    "de": "Rundhals",
+    "fr": "Col rond",
+    "es": "Cuello redondo",
+    "it": "Scollo tondo",
+    "nl": "Ronde hals"
+  },
+  "V Neck": {
+    "de": "V-Ausschnitt",
+    "fr": "Col V",
+    "es": "Cuello V",
+    "it": "Scollo a V",
+    "nl": "V-hals"
+  },
+  "Lapel Collar": {
+    "de": "Reverskragen",
+    "fr": "Col revers",
+    "es": "Cuello de solapa",
+    "it": "Colletto a risvolto",
+    "nl": "Revers"
+  },
+  "Asymmetrical Neck": {
+    "de": "Asymmetrischer Ausschnitt",
+    "fr": "Col asymétrique",
+    "es": "Escote asimétrico",
+    "it": "Scollo asimmetrico",
+    "nl": "Asymmetrische hals"
+  },
+  "Spaghetti Strap": {
+    "de": "Spaghettiträger",
+    "fr": "Fines bretelles",
+    "es": "Tirantes finos",
+    "it": "Spalline sottili",
+    "nl": "Spaghettibandjes"
+  },
+  "Deep V Neck": {
+    "de": "Tiefer V-Ausschnitt",
+    "fr": "Col V profond",
+    "es": "Escote V profundo",
+    "it": "Scollo a V profondo",
+    "nl": "Diepe V-hals"
+  },
+  "Halter": {
+    "de": "Neckholder",
+    "fr": "Col licou",
+    "es": "Halter",
+    "it": "Allacciatura al collo",
+    "nl": "Halter"
+  },
+  "Scoop Neck": {
+    "de": "Weiter Rundhals",
+    "fr": "Col rond plongeant",
+    "es": "Escote redondo bajo",
+    "it": "Scollo tondo ampio",
+    "nl": "Lage ronde hals"
+  },
+  "Stand Collar": {
+    "de": "Stehkragen",
+    "fr": "Col montant",
+    "es": "Cuello alto",
+    "it": "Collo alto",
+    "nl": "Staande kraag"
+  },
+  "Off Shoulder": {
+    "de": "Schulterfrei",
+    "fr": "Épaules dénudées",
+    "es": "Hombros descubiertos",
+    "it": "Spalle scoperte",
+    "nl": "Off-shoulder"
+  },
+  "Square Neck": {
+    "de": "Karree-Ausschnitt",
+    "fr": "Col carré",
+    "es": "Escote cuadrado",
+    "it": "Scollo quadrato",
+    "nl": "Vierkante hals"
+  },
+  "One Shoulder": {
+    "de": "Einschultrig",
+    "fr": "Une épaule",
+    "es": "Un hombro",
+    "it": "Monospalla",
+    "nl": "Een schouder"
+  },
+  "Notched": {
+    "de": "Gekerbter Ausschnitt",
+    "fr": "Encoche",
+    "es": "Escote con muesca",
+    "it": "Scollo a tacca",
+    "nl": "Inkeping"
+  },
+  "Hooded": {
+    "de": "Mit Kapuze",
+    "fr": "À capuche",
+    "es": "Con capucha",
+    "it": "Con cappuccio",
+    "nl": "Met capuchon"
+  },
+  "Tie Neck": {
+    "de": "Schluppe",
+    "fr": "Col lavallière",
+    "es": "Cuello con lazo",
+    "it": "Collo con fiocco",
+    "nl": "Strikkraag"
+  },
+  "Cold Shoulder": {
+    "de": "Cold Shoulder",
+    "fr": "Épaules ajourées",
+    "es": "Hombros descubiertos",
+    "it": "Spalle scoperte",
+    "nl": "Cold shoulder"
+  },
+  "Keyhole Cut-Out": {
+    "de": "Schlüsselloch-Ausschnitt",
+    "fr": "Découpe goutte d'eau",
+    "es": "Escote lagrima",
+    "it": "Scollo a goccia",
+    "nl": "Sleutelgat uitsnijding"
+  },
+  "Peter Pan Collar": {
+    "de": "Bubikragen",
+    "fr": "Col Claudine",
+    "es": "Cuello Peter Pan",
+    "it": "Colletto Peter Pan",
+    "nl": "Peter Pan kraag"
+  },
+  "Boat Neck": {
+    "de": "U-Boot-Ausschnitt",
+    "fr": "Col bateau",
+    "es": "Escote barco",
+    "it": "Scollo a barca",
+    "nl": "Boothals"
+  },
+  "Shawl Collar": {
+    "de": "Schalkragen",
+    "fr": "Col châle",
+    "es": "Cuello chal",
+    "it": "Collo a scialle",
+    "nl": "Sjaalkraag"
+  },
+  "Polo": {
+    "de": "Polokragen",
+    "fr": "Col polo",
+    "es": "Cuello polo",
+    "it": "Colletto polo",
+    "nl": "Polokraag"
+  },
+  "Cowl Neck": {
+    "de": "Wasserfallausschnitt",
+    "fr": "Col bénitier",
+    "es": "Cuello drapeado",
+    "it": "Scollo a cascata",
+    "nl": "Watervalhals"
+  },
+  "Waterfall": {
+    "de": "Wasserfall",
+    "fr": "Cascade",
+    "es": "Cascada",
+    "it": "A cascata",
+    "nl": "Waterval"
+  },
+  "Baseball Collar": {
+    "de": "Baseball-Kragen",
+    "fr": "Col baseball",
+    "es": "Cuello baseball",
+    "it": "Colletto baseball",
+    "nl": "Baseballkraag"
+  },
+  "Sailor Collar": {
+    "de": "Matrosenkragen",
+    "fr": "Col marin",
+    "es": "Cuello marinero",
+    "it": "Colletto alla marinara",
+    "nl": "Matrozenkraag"
+  },
+  "Funnel Neck": {
+    "de": "Trichterkragen",
+    "fr": "Col cheminée",
+    "es": "Cuello embudo",
+    "it": "Collo a imbuto",
+    "nl": "Trechterhals"
+  },
+  "Mandarin Collar": {
+    "de": "Stehkragen",
+    "fr": "Col mao",
+    "es": "Cuello mao",
+    "it": "Colletto alla cinese",
+    "nl": "Maokraag"
+  },
+  "Overlap Collar": {
+    "de": "Überlappender Kragen",
+    "fr": "Col croisé",
+    "es": "Cuello cruzado",
+    "it": "Colletto sovrapposto",
+    "nl": "Overlapkraag"
+  },
+  "Sweetheart Neckline": {
+    "de": "Herzausschnitt",
+    "fr": "Décolleté en cœur",
+    "es": "Escote corazón",
+    "it": "Scollo a cuore",
+    "nl": "Sweetheart halslijn"
+  },
+  "Mock Neck": {
+    "de": "Stehkragen",
+    "fr": "Col montant",
+    "es": "Cuello alto corto",
+    "it": "Collo alto corto",
+    "nl": "Opstaande kraag"
+  },
+  "Shirt Collar": {
+    "de": "Hemdkragen",
+    "fr": "Col chemise",
+    "es": "Cuello de camisa",
+    "it": "Colletto da camicia",
+    "nl": "Overhemdkraag"
+  },
+  "Suit Collar": {
+    "de": "Blazerkragen",
+    "fr": "Col tailleur",
+    "es": "Cuello de traje",
+    "it": "Colletto da giacca",
+    "nl": "Kostuum revers"
+  },
+  "Business": {
+    "de": "Business",
+    "fr": "Bureau",
+    "es": "Oficina",
+    "it": "Ufficio",
+    "nl": "Business"
+  },
+  "Casual": {
+    "de": "Casual",
+    "fr": "Décontracté",
+    "es": "Casual",
+    "it": "Casual",
+    "nl": "Casual"
+  },
+  "Gym": {
+    "de": "Fitness",
+    "fr": "Gym",
+    "es": "Gimnasio",
+    "it": "Palestra",
+    "nl": "Fitness"
+  },
+  "Holiday": {
+    "de": "Urlaub",
+    "fr": "Vacances",
+    "es": "Vacaciones",
+    "it": "Vacanza",
+    "nl": "Vakantie"
+  },
+  "Loungewear": {
+    "de": "Lounge-Kleidung",
+    "fr": "Vêtements d'intérieur",
+    "es": "Loungewear",
+    "it": "Abbigliamento da casa",
+    "nl": "Loungewear"
+  },
+  "Outdoor": {
+    "de": "Outdoor",
+    "fr": "Plein air",
+    "es": "Exterior",
+    "it": "Outdoor",
+    "nl": "Outdoor"
+  },
+  "Party": {
+    "de": "Party",
+    "fr": "Soirée",
+    "es": "Fiesta",
+    "it": "Festa",
+    "nl": "Feest"
+  },
+  "Running": {
+    "de": "Laufen",
+    "fr": "Course",
+    "es": "Running",
+    "it": "Corsa",
+    "nl": "Hardlopen"
+  },
+  "School": {
+    "de": "Schule",
+    "fr": "École",
+    "es": "Colegio",
+    "it": "Scuola",
+    "nl": "School"
+  },
+  "Activewear": {
+    "de": "Activewear",
+    "fr": "Vêtements de sport",
+    "es": "Ropa deportiva",
+    "it": "Abbigliamento sportivo",
+    "nl": "Activewear"
+  },
+  "Wedding": {
+    "de": "Hochzeit",
+    "fr": "Mariage",
+    "es": "Boda",
+    "it": "Matrimonio",
+    "nl": "Bruiloft"
+  },
+  "Yoga": {
+    "de": "Yoga",
+    "fr": "Yoga",
+    "es": "Yoga",
+    "it": "Yoga",
+    "nl": "Yoga"
+  },
+  "Beach": {
+    "de": "Strand",
+    "fr": "Plage",
+    "es": "Playa",
+    "it": "Spiaggia",
+    "nl": "Strand"
+  },
+  "Christmas": {
+    "de": "Weihnachten",
+    "fr": "Noël",
+    "es": "Navidad",
+    "it": "Natale",
+    "nl": "Kerst"
+  },
+  "Halloween": {
+    "de": "Halloween",
+    "fr": "Halloween",
+    "es": "Halloween",
+    "it": "Halloween",
+    "nl": "Halloween"
+  },
+  "Dating": {
+    "de": "Date",
+    "fr": "Rendez-vous",
+    "es": "Cita",
+    "it": "Appuntamento",
+    "nl": "Date"
+  },
+  "Water Ripple": {
+    "de": "Wellenmuster",
+    "fr": "Ondulation",
+    "es": "Ondas de agua",
+    "it": "Onde d'acqua",
+    "nl": "Watergolfprint"
+  },
+  "Sketch": {
+    "de": "Skizze",
+    "fr": "Croquis",
+    "es": "Boceto",
+    "it": "Schizzo",
+    "nl": "Schets"
+  },
+  "Tropical": {
+    "de": "Tropisch",
+    "fr": "Tropical",
+    "es": "Tropical",
+    "it": "Tropicale",
+    "nl": "Tropisch"
+  },
+  "Plain": {
+    "de": "Unifarben",
+    "fr": "Uni",
+    "es": "Liso",
+    "it": "Tinta unita",
+    "nl": "Effen"
+  },
+  "Polka Dot": {
+    "de": "Punkte",
+    "fr": "Pois",
+    "es": "Lunares",
+    "it": "Pois",
+    "nl": "Stippen"
+  },
+  "Ombre": {
+    "de": "Ombre",
+    "fr": "Ombre",
+    "es": "Degradado",
+    "it": "Sfumato",
+    "nl": "Ombre"
+  },
+  "Figure": {
+    "de": "Figurenmuster",
+    "fr": "Motif figuratif",
+    "es": "Estampado de figuras",
+    "it": "Stampa figure",
+    "nl": "Figuurprint"
+  },
+  "Letter": {
+    "de": "Buchstabendruck",
+    "fr": "Imprimé lettres",
+    "es": "Estampado de letras",
+    "it": "Stampa lettere",
+    "nl": "Letterprint"
+  },
+  "Animal": {
+    "de": "Tiermuster",
+    "fr": "Motif animal",
+    "es": "Estampado animal",
+    "it": "Animalier",
+    "nl": "Dierenprint"
+  },
+  "Plants": {
+    "de": "Pflanzenmuster",
+    "fr": "Motif végétal",
+    "es": "Estampado botánico",
+    "it": "Stampa botanica",
+    "nl": "Plantenprint"
+  },
+  "Striped": {
+    "de": "Gestreift",
+    "fr": "Rayé",
+    "es": "Rayas",
+    "it": "Righe",
+    "nl": "Gestreept"
+  },
+  "All Over Print": {
+    "de": "Allover-Druck",
+    "fr": "Imprimé intégral",
+    "es": "Estampado integral",
+    "it": "Stampa all-over",
+    "nl": "Allover print"
+  },
+  "Leopard": {
+    "de": "Leopardenmuster",
+    "fr": "Leopard",
+    "es": "Leopardo",
+    "it": "Leopardato",
+    "nl": "Luipaardprint"
+  },
+  "Colorblock": {
+    "de": "Colorblocking",
+    "fr": "Color block",
+    "es": "Bloques de color",
+    "it": "Color block",
+    "nl": "Colorblock"
+  },
+  "Ditsy Floral": {
+    "de": "Kleinblumig",
+    "fr": "Petites fleurs",
+    "es": "Flores pequeñas",
+    "it": "Fiorellini",
+    "nl": "Kleine bloemenprint"
+  },
+  "Graphic": {
+    "de": "Grafisch",
+    "fr": "Graphique",
+    "es": "Gráfico",
+    "it": "Grafico",
+    "nl": "Grafisch"
+  },
+  "Plaid": {
+    "de": "Karo",
+    "fr": "Carreaux",
+    "es": "Cuadros",
+    "it": "Quadri",
+    "nl": "Ruiten"
+  },
+  "Geometric": {
+    "de": "Geometrisch",
+    "fr": "Géométrique",
+    "es": "Geométrico",
+    "it": "Geometrico",
+    "nl": "Geometrisch"
+  },
+  "Chain Print": {
+    "de": "Kettendruck",
+    "fr": "Imprimé chaîne",
+    "es": "Estampado de cadenas",
+    "it": "Stampa catene",
+    "nl": "Kettingprint"
+  },
+  "Cartoon": {
+    "de": "Cartoon",
+    "fr": "Cartoon",
+    "es": "Cartoon",
+    "it": "Cartoon",
+    "nl": "Cartoon"
+  },
+  "Galaxy": {
+    "de": "Galaxy",
+    "fr": "Galaxie",
+    "es": "Galaxia",
+    "it": "Galassia",
+    "nl": "Galaxy"
+  },
+  "Slogan": {
+    "de": "Slogan",
+    "fr": "Slogan",
+    "es": "Eslogan",
+    "it": "Slogan",
+    "nl": "Slogan"
+  },
+  "Heart Print": {
+    "de": "Herzdruck",
+    "fr": "Imprimé coeurs",
+    "es": "Estampado de corazones",
+    "it": "Stampa cuori",
+    "nl": "Hartjesprint"
+  },
+  "Gingham": {
+    "de": "Vichy-Karo",
+    "fr": "Vichy",
+    "es": "Cuadros Vichy",
+    "it": "Vichy",
+    "nl": "Vichy"
+  },
+  "Marble": {
+    "de": "Marmor",
+    "fr": "Marbre",
+    "es": "Mármol",
+    "it": "Marmorizzato",
+    "nl": "Marmer"
+  },
+  "Fruit&Vegetable": {
+    "de": "Obst und Gemüse",
+    "fr": "Fruits et légumes",
+    "es": "Frutas y verduras",
+    "it": "Frutta e verdura",
+    "nl": "Fruit en groenten"
+  },
+  "Zebra Print": {
+    "de": "Zebramuster",
+    "fr": "Zèbre",
+    "es": "Cebra",
+    "it": "Zebrato",
+    "nl": "Zebraprint"
+  },
+  "Tribal": {
+    "de": "Tribal",
+    "fr": "Tribal",
+    "es": "Tribal",
+    "it": "Tribale",
+    "nl": "Tribaal"
+  },
+  "Pop Art": {
+    "de": "Pop Art",
+    "fr": "Pop Art",
+    "es": "Pop Art",
+    "it": "Pop Art",
+    "nl": "Pop Art"
+  },
+  "Baroque": {
+    "de": "Barock",
+    "fr": "Baroque",
+    "es": "Barroco",
+    "it": "Barocco",
+    "nl": "Barok"
+  },
+  "Flag Print": {
+    "de": "Flaggendruck",
+    "fr": "Imprimé drapeau",
+    "es": "Estampado de banderas",
+    "it": "Stampa bandiere",
+    "nl": "Vlaggenprint"
+  },
+  "Paisley": {
+    "de": "Paisley",
+    "fr": "Paisley",
+    "es": "Paisley",
+    "it": "Paisley",
+    "nl": "Paisley"
+  },
+  "Tartan": {
+    "de": "Tartan",
+    "fr": "Tartan",
+    "es": "Tartan",
+    "it": "Tartan",
+    "nl": "Tartan"
+  },
+  "Flamingo Print": {
+    "de": "Flamingodruck",
+    "fr": "Imprimé flamant rose",
+    "es": "Estampado de flamencos",
+    "it": "Stampa fenicotteri",
+    "nl": "Flamingoprint"
+  },
+  "Scarf Print": {
+    "de": "Tuchprint",
+    "fr": "Imprimé foulard",
+    "es": "Estampado pañuelo",
+    "it": "Stampa foulard",
+    "nl": "Sjaaltjesprint"
+  },
+  "Camo": {
+    "de": "Camouflage",
+    "fr": "Camouflage",
+    "es": "Camuflaje",
+    "it": "Camouflage",
+    "nl": "Camouflage"
+  },
+  "Snakeskin": {
+    "de": "Schlangenmuster",
+    "fr": "Serpent",
+    "es": "Serpiente",
+    "it": "Pitone",
+    "nl": "Slangenprint"
+  },
+  "Rainbow Print": {
+    "de": "Regenbogendruck",
+    "fr": "Imprimé arc-en-ciel",
+    "es": "Estampado arcoíris",
+    "it": "Stampa arcobaleno",
+    "nl": "Regenboogprint"
+  },
+  "Houndstooth": {
+    "de": "Hahnentritt",
+    "fr": "Pied-de-poule",
+    "es": "Pata de gallo",
+    "it": "Pied de poule",
+    "nl": "Pied-de-poule"
+  },
+  "Fire Print": {
+    "de": "Flammendruck",
+    "fr": "Imprimé flammes",
+    "es": "Estampado de llamas",
+    "it": "Stampa fiamme",
+    "nl": "Vlammenprint"
+  },
+  "Map print": {
+    "de": "Kartendruck",
+    "fr": "Imprimé carte",
+    "es": "Estampado de mapas",
+    "it": "Stampa mappe",
+    "nl": "Landkaartprint"
+  },
+  "Chevron": {
+    "de": "Chevron",
+    "fr": "Chevron",
+    "es": "Chevron",
+    "it": "Chevron",
+    "nl": "Chevron"
+  },
+  "Crocodile": {
+    "de": "Krokoprint",
+    "fr": "Imprimé crocodile",
+    "es": "Estampado cocodrilo",
+    "it": "Stampa coccodrillo",
+    "nl": "Krokodillenprint"
+  },
+  "Landscape": {
+    "de": "Landschaftsdruck",
+    "fr": "Imprimé paysage",
+    "es": "Estampado paisaje",
+    "it": "Stampa paesaggio",
+    "nl": "Landschapsprint"
+  },
+  "Scale Print": {
+    "de": "Schuppendruck",
+    "fr": "Imprimé écailles",
+    "es": "Estampado de escamas",
+    "it": "Stampa squame",
+    "nl": "Schubbenprint"
+  },
+  "Moon and Star": {
+    "de": "Mond und Sterne",
+    "fr": "Lune et étoiles",
+    "es": "Luna y estrellas",
+    "it": "Luna e stelle",
+    "nl": "Maan en sterren"
+  },
+  "Skull Print": {
+    "de": "Totenkopfdruck",
+    "fr": "Imprimé tête de mort",
+    "es": "Estampado de calaveras",
+    "it": "Stampa teschi",
+    "nl": "Doodshoofdprint"
+  },
+  "Basics": {
+    "de": "Basics",
+    "fr": "Basique",
+    "es": "Básico",
+    "it": "Basic",
+    "nl": "Basis"
+  },
+  "Elegance": {
+    "de": "Elegant",
+    "fr": "Élégant",
+    "es": "Elegante",
+    "it": "Elegante",
+    "nl": "Elegant"
+  },
+  "Sexy": {
+    "de": "Sexy",
+    "fr": "Sexy",
+    "es": "Sexy",
+    "it": "Sexy",
+    "nl": "Sexy"
+  },
+  "Sleeveless": {
+    "de": "Ärmellos",
+    "fr": "Sans manches",
+    "es": "Sin mangas",
+    "it": "Senza maniche",
+    "nl": "Mouwloos"
+  },
+  "Half Sleeve": {
+    "de": "Halbarm",
+    "fr": "Manche mi-longue",
+    "es": "Media manga",
+    "it": "Mezza manica",
+    "nl": "Halve mouw"
+  },
+  "Short Sleeve": {
+    "de": "Kurzarm",
+    "fr": "Mancheron",
+    "es": "Manga corta",
+    "it": "Manica corta",
+    "nl": "Korte mouw"
+  },
+  "Cap Sleeve": {
+    "de": "Kappenärmel",
+    "fr": "Mancheron",
+    "es": "Manga casquillo",
+    "it": "Manica ad aletta",
+    "nl": "Kapmouw"
+  },
+  "Long Sleeve": {
+    "de": "Langarm",
+    "fr": "Manche longue",
+    "es": "Manga larga",
+    "it": "Manica lunga",
+    "nl": "Lange mouw"
+  },
+  "Three Quarter Length Sleeve": {
+    "de": "Dreiviertelarm",
+    "fr": "Manche trois-quarts",
+    "es": "Manga tres cuartos",
+    "it": "Manica tre quarti",
+    "nl": "Driekwart mouw"
+  },
+  "Extra Long Sleeve": {
+    "de": "Extralange Ärmel",
+    "fr": "Manche extra longue",
+    "es": "Manga extra larga",
+    "it": "Manica extra lunga",
+    "nl": "Extra lange mouw"
+  },
+  "Puff Sleeve": {
+    "de": "Puffärmel",
+    "fr": "Manche bouffante",
+    "es": "Manga abullonada",
+    "it": "Manica a sbuffo",
+    "nl": "Pofmouw"
+  },
+  "Bell Sleeve": {
+    "de": "Trompetenärmel",
+    "fr": "Manche évasée",
+    "es": "Manga acampanada",
+    "it": "Manica a campana",
+    "nl": "Klokmouw"
+  },
+  "Regular Sleeve": {
+    "de": "Normaler Ärmel",
+    "fr": "Manche classique",
+    "es": "Manga regular",
+    "it": "Manica classica",
+    "nl": "Normale mouw"
+  },
+  "Ruffle Sleeve": {
+    "de": "Rüschenärmel",
+    "fr": "Manche à volants",
+    "es": "Manga con volante",
+    "it": "Manica con volant",
+    "nl": "Ruchesmouw"
+  },
+  "Raglan Sleeve": {
+    "de": "Raglanärmel",
+    "fr": "Manche raglan",
+    "es": "Manga raglan",
+    "it": "Manica raglan",
+    "nl": "Raglanmouw"
+  },
+  "Lantern Sleeve": {
+    "de": "Laternenärmel",
+    "fr": "Manche lanterne",
+    "es": "Manga farol",
+    "it": "Manica a lanterna",
+    "nl": "Lantaarnmouw"
+  },
+  "Dolman Sleeve": {
+    "de": "Fledermausärmel",
+    "fr": "Manche chauve-souris",
+    "es": "Manga murciélago",
+    "it": "Manica a pipistrello",
+    "nl": "Vleermuismouw"
+  },
+  "Youth": {
+    "de": "Jung",
+    "fr": "Jeune",
+    "es": "Juvenil",
+    "it": "Giovane",
+    "nl": "Jong"
+  },
+  "Matured": {
+    "de": "Elegant",
+    "fr": "Sophistiqué",
+    "es": "Sofisticado",
+    "it": "Sofisticato",
+    "nl": "Verfijnd"
+  },
+  "Low Rise": {
+    "de": "Niedrige Taille",
+    "fr": "Taille basse",
+    "es": "Tiro bajo",
+    "it": "Vita bassa",
+    "nl": "Lage taille"
+  },
+  "Mid Rise": {
+    "de": "Mittlere Taille",
+    "fr": "Taille moyenne",
+    "es": "Tiro medio",
+    "it": "Vita media",
+    "nl": "Middelhoge taille"
+  },
+  "High Rise": {
+    "de": "Hohe Taille",
+    "fr": "Taille haute",
+    "es": "Tiro alto",
+    "it": "Vita alta",
+    "nl": "Hoge taille"
+  },
+  "Shorts": {
+    "de": "Shorts",
+    "fr": "Shorts",
+    "es": "Shorts",
+    "it": "Shorts",
+    "nl": "Shorts"
+  },
+  "Leggings": {
+    "de": "Leggings",
+    "fr": "Leggings",
+    "es": "Leggings",
+    "it": "Leggings",
+    "nl": "Leggings"
+  },
+  "Pants": {
+    "de": "Hosen",
+    "fr": "Pantalons",
+    "es": "Pantalones",
+    "it": "Pantaloni",
+    "nl": "Broeken"
+  },
+  "Skirts": {
+    "de": "Röcke",
+    "fr": "Jupes",
+    "es": "Faldas",
+    "it": "Gonne",
+    "nl": "Rokken"
+  },
+  "Sweatpants": {
+    "de": "Jogginghosen",
+    "fr": "Pantalons de jogging",
+    "es": "Pantalones deportivos",
+    "it": "Pantaloni della tuta",
+    "nl": "Joggingbroeken"
+  },
+  "Knit Pants": {
+    "de": "Strickhosen",
+    "fr": "Pantalons en maille",
+    "es": "Pantalones de punto",
+    "it": "Pantaloni in maglia",
+    "nl": "Gebreide broeken"
+  },
+  "Knit Skirts": {
+    "de": "Strickröcke",
+    "fr": "Jupes en maille",
+    "es": "Faldas de punto",
+    "it": "Gonne in maglia",
+    "nl": "Gebreide rokken"
+  },
+  "Cardigans": {
+    "de": "Strickjacken",
+    "fr": "Cardigans",
+    "es": "Chaquetas de punto",
+    "it": "Cardigan",
+    "nl": "Vesten"
+  },
+  "Knit Matching Sets": {
+    "de": "Strick-Sets",
+    "fr": "Ensembles en maille",
+    "es": "Conjuntos de punto",
+    "it": "Completi in maglia",
+    "nl": "Gebreide sets"
+  },
+  "Pullovers": {
+    "de": "Pullover",
+    "fr": "Pulls",
+    "es": "Jerséis",
+    "it": "Maglioni",
+    "nl": "Pullovers"
+  },
+  "Poncho/Cape": {
+    "de": "Ponchos/Capes",
+    "fr": "Ponchos/Capes",
+    "es": "Ponchos/Capas",
+    "it": "Poncho/Mantelle",
+    "nl": "Poncho's/Capes"
+  },
+  "Sweaters": {
+    "de": "Pullover",
+    "fr": "Chandails",
+    "es": "Suéteres",
+    "it": "Maglioni",
+    "nl": "Truien"
+  },
+  "Sweater T-shirts": {
+    "de": "Strick-T-Shirts",
+    "fr": "T-shirts en maille",
+    "es": "Camisetas de punto",
+    "it": "T-shirt in maglia",
+    "nl": "Gebreide T-shirts"
+  },
+  "Sweater Vests": {
+    "de": "Strickwesten",
+    "fr": "Gilets en maille",
+    "es": "Chalecos de punto",
+    "it": "Gilet in maglia",
+    "nl": "Gebreide gilets"
+  },
+  "Swim Tops": {
+    "de": "Badeoberteil",
+    "fr": "Hauts de maillot",
+    "es": "Tops de baño",
+    "it": "Top da bagno",
+    "nl": "Zwemtops"
+  },
+  "Swim Cover Ups": {
+    "de": "Strandkleider",
+    "fr": "Paréos",
+    "es": "Pareos",
+    "it": "Copricostumi",
+    "nl": "Strandkledij"
+  },
+  "Swim Dresses": {
+    "de": "Badekleider",
+    "fr": "Robes de bain",
+    "es": "Vestidos de baño",
+    "it": "Costumi interi con gonna",
+    "nl": "Zwemjurken"
+  },
+  "One Pieces": {
+    "de": "Badeanzüge",
+    "fr": "Maillots une pièce",
+    "es": "Bañadores enteros",
+    "it": "Costumi interi",
+    "nl": "Badpakken"
+  },
+  "Swim Sets": {
+    "de": "Bademode-Sets",
+    "fr": "Ensembles de bain",
+    "es": "Conjuntos de baño",
+    "it": "Set da bagno",
+    "nl": "Zwemsets"
+  },
+  "Swim Bottoms": {
+    "de": "Badeunterteil",
+    "fr": "Bas de maillot",
+    "es": "Braguitas de baño",
+    "it": "Slip da bagno",
+    "nl": "Zwembroekjes"
+  },
+  "Denim Jackets": {
+    "de": "Jeansjacken",
+    "fr": "Vestes en jean",
+    "es": "Chaquetas vaqueras",
+    "it": "Giacche di jeans",
+    "nl": "Spijkerjassen"
+  },
+  "Denim Skirts": {
+    "de": "Jeansröcke",
+    "fr": "Jupes en jean",
+    "es": "Faldas vaqueras",
+    "it": "Gonne di jeans",
+    "nl": "Spijkerrokken"
+  },
+  "Jeans": {
+    "de": "Jeans",
+    "fr": "Jeans",
+    "es": "Vaqueros",
+    "it": "Jeans",
+    "nl": "Jeans"
+  },
+  "Denim Sets": {
+    "de": "Jeans-Sets",
+    "fr": "Ensembles en jean",
+    "es": "Conjuntos vaqueros",
+    "it": "Completi di jeans",
+    "nl": "Spijkersets"
+  },
+  "Denim Shorts": {
+    "de": "Jeansshorts",
+    "fr": "Shorts en jean",
+    "es": "Shorts vaqueros",
+    "it": "Shorts di jeans",
+    "nl": "Spijkershorts"
+  },
+  "Denim Tops": {
+    "de": "Jeansoberteile",
+    "fr": "Hauts en jean",
+    "es": "Tops vaqueros",
+    "it": "Top di jeans",
+    "nl": "Spijkertops"
+  },
+  "Coats": {
+    "de": "Mäntel",
+    "fr": "Manteaux",
+    "es": "Abrigos",
+    "it": "Cappotti",
+    "nl": "Jassen"
+  },
+  "Jackets": {
+    "de": "Jacken",
+    "fr": "Vestes",
+    "es": "Chaquetas",
+    "it": "Giacche",
+    "nl": "Jasjes"
+  },
+  "Cover Ups": {
+    "de": "Leichte Jacken",
+    "fr": "Cache-cœurs",
+    "es": "Chaquetas ligeras",
+    "it": "Copricostume",
+    "nl": "Omslagdoeken"
+  },
+  "Quilted Jackets": {
+    "de": "Steppjacken",
+    "fr": "Vestes matelassées",
+    "es": "Chaquetas acolchadas",
+    "it": "Giacche imbottite",
+    "nl": "Gewatteerde jassen"
+  },
+  "Puffers Parkas": {
+    "de": "Daunenjacken und Parkas",
+    "fr": "Doudounes et parkas",
+    "es": "Plumíferos y parkas",
+    "it": "Piumini e parka",
+    "nl": "Puffers en parka's"
+  },
+  "Trench Coats": {
+    "de": "Trenchcoats",
+    "fr": "Trenchs",
+    "es": "Gabardinas",
+    "it": "Trench",
+    "nl": "Trenchcoats"
+  },
+  "Vests": {
+    "de": "Westen",
+    "fr": "Gilets sans manches",
+    "es": "Chalecos",
+    "it": "Gilet",
+    "nl": "Bodywarmers"
+  },
+  "Zipper Hoodies": {
+    "de": "Kapuzenjacken",
+    "fr": "Sweats à capuche zippés",
+    "es": "Sudaderas con cremallera",
+    "it": "Felpe con zip",
+    "nl": "Hoodies met rits"
+  },
+  "Blazers": {
+    "de": "Blazer",
+    "fr": "Blazers",
+    "es": "Blazers",
+    "it": "Blazer",
+    "nl": "Blazers"
+  },
+  "Kimonos": {
+    "de": "Kimonos",
+    "fr": "Kimonos",
+    "es": "Kimonos",
+    "it": "Kimono",
+    "nl": "Kimono's"
+  },
+  "Bras": {
+    "de": "BHs",
+    "fr": "Soutiens-gorge",
+    "es": "Sujetadores",
+    "it": "Reggiseni",
+    "nl": "Beha's"
+  },
+  "Corsets Shapewear": {
+    "de": "Korsetts und Shapewear",
+    "fr": "Corsets et gaines",
+    "es": "Corsés y fajas",
+    "it": "Corsetti e intimo modellante",
+    "nl": "Korsetten en shapewear"
+  },
+  "Lingerie Sets": {
+    "de": "Dessous-Sets",
+    "fr": "Ensembles de lingerie",
+    "es": "Conjuntos de lencería",
+    "it": "Completi intimi",
+    "nl": "Lingeriesets"
+  },
+  "Panties": {
+    "de": "Slips",
+    "fr": "Culottes",
+    "es": "Bragas",
+    "it": "Mutandine",
+    "nl": "Slipjes"
+  },
+  "Sexy Lingerie": {
+    "de": "Sexy Dessous",
+    "fr": "Lingerie sexy",
+    "es": "Lencería sexy",
+    "it": "Lingerie sexy",
+    "nl": "Sexy lingerie"
+  },
+  "Sport Bras": {
+    "de": "Sport-BHs",
+    "fr": "Brassières de sport",
+    "es": "Sujetadores deportivos",
+    "it": "Reggiseni sportivi",
+    "nl": "Sportbeha's"
+  },
+  "Sport Bottoms": {
+    "de": "Sporthosen",
+    "fr": "Bas de sport",
+    "es": "Pantalones deportivos",
+    "it": "Pantaloni sportivi",
+    "nl": "Sportbroeken"
+  },
+  "Sport Sets": {
+    "de": "Sport-Sets",
+    "fr": "Ensembles de sport",
+    "es": "Conjuntos deportivos",
+    "it": "Completi sportivi",
+    "nl": "Sportsets"
+  },
+  "Active Tops": {
+    "de": "Sportoberteile",
+    "fr": "Hauts de sport",
+    "es": "Tops deportivos",
+    "it": "Top sportivi",
+    "nl": "Sporttops"
+  },
+  "Daily Dresses": {
+    "de": "Alltagskleider",
+    "fr": "Robes quotidiennes",
+    "es": "Vestidos diarios",
+    "it": "Abiti da giorno",
+    "nl": "Dagelijkse jurken"
+  },
+  "Occasion Dresses": {
+    "de": "Anlasskleider",
+    "fr": "Robes de soirée",
+    "es": "Vestidos de fiesta",
+    "it": "Abiti da cerimonia",
+    "nl": "Gelegenheidsjurken"
+  },
+  "Knit Dresses": {
+    "de": "Strickkleider",
+    "fr": "Robes en maille",
+    "es": "Vestidos de punto",
+    "it": "Abiti in maglia",
+    "nl": "Gebreide jurken"
+  },
+  "Sweater Dresses": {
+    "de": "Pulloverkleider",
+    "fr": "Robes pull",
+    "es": "Vestidos de punto",
+    "it": "Abiti maglione",
+    "nl": "Trui-jurken"
+  },
+  "Denim Dresses": {
+    "de": "Jeanskleider",
+    "fr": "Robes en jean",
+    "es": "Vestidos vaqueros",
+    "it": "Abiti di jeans",
+    "nl": "Spijkerjurken"
+  },
+  "Denim Jumpsuits": {
+    "de": "Jeans-Jumpsuits",
+    "fr": "Combinaisons en jean",
+    "es": "Monos vaqueros",
+    "it": "Tute di jeans",
+    "nl": "Spijker jumpsuits"
+  },
+  "Jumpsuits": {
+    "de": "Jumpsuits",
+    "fr": "Combinaisons",
+    "es": "Monos",
+    "it": "Tute",
+    "nl": "Jumpsuits"
+  },
+  "Rompers": {
+    "de": "Kurze Jumpsuits",
+    "fr": "Combishorts",
+    "es": "Petos cortos",
+    "it": "Tutine corte",
+    "nl": "Playsuits"
+  },
+  "Two-Piece Knit Bottoms": {
+    "de": "Zweiteilige Strick-Unterteile",
+    "fr": "Bas d'ensemble en maille",
+    "es": "Conjuntos de punto para abajo",
+    "it": "Completi in maglia inferiori",
+    "nl": "Twee-delige gebreide onderkledij"
+  },
+  "Two-Piece sets": {
+    "de": "Zweiteilige Sets",
+    "fr": "Ensembles deux pièces",
+    "es": "Conjuntos de dos piezas",
+    "it": "Completi due pezzi",
+    "nl": "Twee-delige sets"
+  },
+  "Two-Piece Woven Bottoms": {
+    "de": "Zweiteilige gewebte Unterteile",
+    "fr": "Bas d'ensemble tissés",
+    "es": "Conjuntos tejidos para abajo",
+    "it": "Completi tessuti inferiori",
+    "nl": "Twee-delige geweven onderkledij"
+  },
+  "Two-Piece Knit Tops": {
+    "de": "Zweiteilige Strick-Oberteile",
+    "fr": "Hauts d'ensemble en maille",
+    "es": "Conjuntos de punto para arriba",
+    "it": "Completi in maglia superiori",
+    "nl": "Twee-delige gebreide bovenkledij"
+  },
+  "Two-Piece Woven Tops": {
+    "de": "Zweiteilige gewebte Oberteile",
+    "fr": "Hauts d'ensemble tissés",
+    "es": "Conjuntos tejidos para arriba",
+    "it": "Completi tessuti superiori",
+    "nl": "Twee-delige geweven bovenkledij"
+  },
+  "Lounge Bottoms": {
+    "de": "Lounge-Hosen",
+    "fr": "Bas de détente",
+    "es": "Pantalones loungewear",
+    "it": "Pantaloni da casa",
+    "nl": "Lounge broeken"
+  },
+  "Sleep Bottoms": {
+    "de": "Schlafhosen",
+    "fr": "Bas de pyjama",
+    "es": "Pantalones de pijama",
+    "it": "Pantaloni da notte",
+    "nl": "Pyjama broeken"
+  },
+  "Lounge Dresses": {
+    "de": "Lounge-Kleider",
+    "fr": "Robes d'intérieur",
+    "es": "Vestidos loungewear",
+    "it": "Abiti da casa",
+    "nl": "Lounge jurken"
+  },
+  "Sleep Dresses": {
+    "de": "Nachthemden",
+    "fr": "Chemises de nuit",
+    "es": "Camisones",
+    "it": "Camicie da notte",
+    "nl": "Nachthemden"
+  },
+  "Lounge Jumpsuits": {
+    "de": "Lounge-Overalls",
+    "fr": "Combinaisons d'intérieur",
+    "es": "Monos loungewear",
+    "it": "Tute da casa",
+    "nl": "Lounge jumpsuits"
+  },
+  "Sleep Jumpsuits/Rompers": {
+    "de": "Schlafanzug-Overalls",
+    "fr": "Combinaisons de nuit",
+    "es": "Monos de pijama",
+    "it": "Tutone pigiama",
+    "nl": "Pyjama jumpsuits"
+  },
+  "Pajama Sets": {
+    "de": "Schlafanzug-Sets",
+    "fr": "Ensembles de pyjama",
+    "es": "Conjuntos de pijama",
+    "it": "Pigiami",
+    "nl": "Pyjama sets"
+  },
+  "Robes/Robes Sets": {
+    "de": "Bademäntel/Bademantel-Sets",
+    "fr": "Peignoirs/Ensembles de peignoirs",
+    "es": "Batas/Conjuntos de bata",
+    "it": "Vestaglie/Set vestaglia",
+    "nl": "Badjassen/Badjas sets"
+  },
+  "Loungewear Sets": {
+    "de": "Lounge-Sets",
+    "fr": "Ensembles d'intérieur",
+    "es": "Conjuntos loungewear",
+    "it": "Completi da casa",
+    "nl": "Loungewear sets"
+  },
+  "Sleep Tops": {
+    "de": "Schlaf-Oberteile",
+    "fr": "Hauts de pyjama",
+    "es": "Tops de pijama",
+    "it": "Top da notte",
+    "nl": "Pyjama tops"
+  },
+  "Lounge Tops": {
+    "de": "Lounge-Oberteile",
+    "fr": "Hauts d'intérieur",
+    "es": "Tops loungewear",
+    "it": "Top da casa",
+    "nl": "Lounge tops"
+  },
+  "Intimates": {
+    "de": "Unterwäsche",
+    "fr": "Sous-vêtements",
+    "es": "Ropa interior",
+    "it": "Intimo",
+    "nl": "Ondergoed"
+  },
+  "Bodysuits": {
+    "de": "Bodys",
+    "fr": "Bodies",
+    "es": "Bodis",
+    "it": "Body",
+    "nl": "Bodysuits"
+  },
+  "Blouses": {
+    "de": "Blusen",
+    "fr": "Chemisiers",
+    "es": "Blusas",
+    "it": "Camicette",
+    "nl": "Blouses"
+  },
+  "Tank Tops Camis": {
+    "de": "Tanktops und Trägertops",
+    "fr": "Débardeurs et caracos",
+    "es": "Camisetas sin mangas",
+    "it": "Canotte",
+    "nl": "Tanktops en hemdjes"
+  },
+  "Jersey Tops": {
+    "de": "Jersey-Oberteile",
+    "fr": "Hauts en jersey",
+    "es": "Tops de jersey",
+    "it": "Top in jersey",
+    "nl": "Jersey tops"
+  },
+  "Shirts": {
+    "de": "Hemden",
+    "fr": "Chemises",
+    "es": "Camisas",
+    "it": "Camicie",
+    "nl": "Overhemden"
+  },
+  "T-shirts": {
+    "de": "T-Shirts",
+    "fr": "T-shirts",
+    "es": "Camisetas",
+    "it": "T-shirt",
+    "nl": "T-shirts"
+  },
+  "Knit Tops": {
+    "de": "Strickoberteile",
+    "fr": "Hauts en maille",
+    "es": "Tops de punto",
+    "it": "Top in maglia",
+    "nl": "Gebreide tops"
+  },
+  "Sweatshirts": {
+    "de": "Sweatshirts",
+    "fr": "Sweat-shirts",
+    "es": "Sudaderas",
+    "it": "Felpe",
+    "nl": "Sweatshirts"
+  }
+}

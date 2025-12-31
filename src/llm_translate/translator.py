@@ -16,7 +16,7 @@ from llm_translate.config import (
     EU_LANGUAGES,
     EVALUATOR_MODEL,
 )
-from llm_translate.glossary import build_glossary_prompt
+from llm_translate.glossary import build_glossary_prompt, build_matched_glossary_prompt
 
 
 # 提示词模板缓存
@@ -120,23 +120,38 @@ def _build_translate_prompt(
     target_langs: List[str],
     glossary: Optional[str] = None,
     prompt_template: Optional[str] = None,
-) -> Tuple[str, str]:
+) -> Tuple[str, str, int]:
     """构建翻译提示词（业务一致格式）
 
     Args:
         texts: 要翻译的文本列表
         source_lang: 源语言
         target_langs: 目标语言列表
-        glossary: 术语表ID (fashion_hard, fashion_core, fashion_full, ecommerce, None)
+        glossary: 术语表ID (fashion_hard, fashion_core, fashion_full, fashion_v4, ecommerce, None)
+                  fashion_v4 使用智能匹配，只发送匹配到的术语
         prompt_template: 提示词模板名称或路径，None 表示使用默认
 
     Returns:
-        (system_prompt, user_prompt) 元组
+        (system_prompt, user_prompt, matched_terms_count) 元组
     """
     # 术语表部分
     glossary_section = ""
+    matched_terms_count = 0
+
     if glossary:
-        glossary_section = f"""
+        if glossary == "fashion_v4":
+            # 使用智能匹配：只发送文本中出现的术语
+            glossary_content = build_matched_glossary_prompt(texts, target_langs, glossary)
+            if glossary_content:
+                glossary_section = f"\n## 术语表\n{glossary_content}"
+                # 从内容中提取匹配数量
+                import re
+                match = re.search(r'\((\d+) terms matched\)', glossary_content)
+                if match:
+                    matched_terms_count = int(match.group(1))
+        else:
+            # 传统方式：发送完整术语表
+            glossary_section = f"""
 ## 术语表
 {build_glossary_prompt(target_langs, glossary)}
 """
@@ -151,7 +166,7 @@ def _build_translate_prompt(
     system_prompt = template.format(glossary_section=glossary_section)
 
     # input_json 作为 user prompt
-    return system_prompt, input_json
+    return system_prompt, input_json, matched_terms_count
 
 
 def _build_evaluate_prompt(
@@ -285,12 +300,15 @@ def multi_translate(
     if target_langs is None:
         target_langs = ["de", "fr", "es", "it", "pt", "nl", "pl"]
 
-    system_prompt, user_prompt = _build_translate_prompt(
+    system_prompt, user_prompt, matched_terms = _build_translate_prompt(
         texts, source_lang, target_langs,
         glossary=glossary,
         prompt_template=translate_prompt,
     )
     start_time = time.perf_counter()
+    # 可选：记录匹配到的术语数量（用于调试）
+    # if matched_terms > 0:
+    #     print(f"[Glossary] Matched {matched_terms} terms")
 
     try:
         content, usage, latency_ms = _call_llm(

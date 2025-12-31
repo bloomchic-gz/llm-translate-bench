@@ -9,10 +9,14 @@
 - fashion_hard: 难翻译术语表 (13条，约+400 tokens) - 基于数据科学筛选
 - fashion_core: 服装核心版 (80条高频术语，约+2200 tokens)
 - fashion_full: 服装完整版 (180+条术语，约+5000 tokens)
+- fashion_v4: 完整运营术语表 (210条，支持智能匹配)
 - ecommerce: 电商通用术语
 """
 
-from typing import Optional
+import json
+import re
+from pathlib import Path
+from typing import Optional, List, Set, Dict
 
 # ============================================================
 # 服装术语表 - 难翻译精简版 (13条)
@@ -410,3 +414,183 @@ DATABASE_STATS = {
         "Ditsy Floral": 653, "Button Up": 639, "Swim Dress": 612,
     },
 }
+
+
+# ============================================================
+# V4 术语表 - 完整运营术语表 (210条)
+# 数据来源: glossary_complete.csv
+# 支持智能匹配：只发送文本中出现的术语
+# ============================================================
+
+# 缓存 V4 术语表
+_GLOSSARY_V4_CACHE: Optional[Dict] = None
+
+
+def _load_glossary_v4() -> Dict:
+    """加载 V4 术语表（带缓存）"""
+    global _GLOSSARY_V4_CACHE
+    if _GLOSSARY_V4_CACHE is not None:
+        return _GLOSSARY_V4_CACHE
+
+    # 从 JSON 文件加载
+    json_path = Path(__file__).parent.parent.parent / "data" / "glossary_multilang.json"
+    if json_path.exists():
+        with open(json_path, "r", encoding="utf-8") as f:
+            _GLOSSARY_V4_CACHE = json.load(f)
+    else:
+        _GLOSSARY_V4_CACHE = {}
+
+    return _GLOSSARY_V4_CACHE
+
+
+def _build_term_patterns(glossary: Dict) -> List[tuple]:
+    """
+    构建术语匹配模式（按长度降序排列，优先匹配长术语）
+
+    匹配策略：
+    - 含连字符的术语（如 "T-shirts"）：使用标准词边界 \\b
+    - 不含连字符的术语（如 "Shirts"）：使用更严格的边界检查，
+      确保前后不是字母或连字符，避免匹配到复合词的一部分
+      （例如 "Shirts" 不应匹配 "T-shirts" 中的 "shirts"）
+
+    Returns:
+        List of (term, pattern) tuples
+    """
+    patterns = []
+    for term in glossary.keys():
+        # 转义特殊字符
+        escaped = re.escape(term)
+
+        if '-' in term:
+            # 含连字符的术语，使用标准词边界
+            pattern = re.compile(r'\b' + escaped + r'\b', re.IGNORECASE)
+        else:
+            # 不含连字符的术语，使用更严格的边界检查
+            # (?<![a-zA-Z\-]) 前面不能是字母或连字符
+            # (?![a-zA-Z\-]) 后面不能是字母或连字符
+            pattern = re.compile(
+                r'(?<![a-zA-Z\-])' + escaped + r'(?![a-zA-Z\-])',
+                re.IGNORECASE
+            )
+        patterns.append((term, pattern))
+
+    # 按术语长度降序排列，优先匹配长术语（如 "V Neck" 优先于 "V"）
+    patterns.sort(key=lambda x: len(x[0]), reverse=True)
+    return patterns
+
+
+# 缓存匹配模式
+_TERM_PATTERNS_CACHE: Optional[List[tuple]] = None
+
+
+def match_glossary_terms(texts: List[str], glossary_id: str = "fashion_v4") -> Dict:
+    """
+    从文本中匹配术语表中的术语（短语优先，排除冗余单词）
+
+    匹配策略：
+    1. 按术语长度降序匹配，优先匹配长术语（短语）
+    2. 当短语被匹配后，其包含的单词不再单独匹配
+       例如：匹配到 "V Neck" 后，不会再单独匹配 "Neck"
+
+    Args:
+        texts: 待匹配的文本列表
+        glossary_id: 术语表ID
+
+    Returns:
+        匹配到的术语子集 {term: translations}
+    """
+    global _TERM_PATTERNS_CACHE
+
+    # 获取术语表
+    if glossary_id == "fashion_v4":
+        glossary = _load_glossary_v4()
+    else:
+        glossary = get_glossary(glossary_id)
+
+    if not glossary:
+        return {}
+
+    # 构建或获取匹配模式
+    if glossary_id == "fashion_v4" and _TERM_PATTERNS_CACHE is not None:
+        patterns = _TERM_PATTERNS_CACHE
+    else:
+        patterns = _build_term_patterns(glossary)
+        if glossary_id == "fashion_v4":
+            _TERM_PATTERNS_CACHE = patterns
+
+    # 合并所有文本进行匹配
+    combined_text = " ".join(texts)
+
+    # 匹配术语（短语优先策略）
+    matched_terms: Set[str] = set()
+    covered_words: Set[str] = set()  # 已被短语覆盖的单词
+
+    # patterns 已按长度降序排列，先匹配长术语
+    for term, pattern in patterns:
+        if pattern.search(combined_text):
+            # 检查此术语是否已被更长的短语覆盖
+            term_words = set(term.lower().split())
+            if not term_words.issubset(covered_words):
+                matched_terms.add(term)
+                # 将此术语的所有单词标记为已覆盖
+                covered_words.update(term_words)
+
+    # 返回匹配到的术语及其翻译
+    return {term: glossary[term] for term in matched_terms if term in glossary}
+
+
+def build_matched_glossary_prompt(
+    texts: List[str],
+    target_langs: List[str],
+    glossary_id: str = "fashion_v4"
+) -> str:
+    """
+    构建只包含匹配术语的提示词片段
+
+    Args:
+        texts: 待翻译的文本列表
+        target_langs: 目标语言代码列表
+        glossary_id: 术语表ID
+
+    Returns:
+        格式化的术语表字符串（只包含匹配到的术语）
+    """
+    # 匹配术语
+    matched = match_glossary_terms(texts, glossary_id)
+
+    if not matched:
+        return ""
+
+    # 构建表头
+    header = "| English | " + " | ".join([lang.upper() for lang in target_langs]) + " |"
+    separator = "|" + "|".join(["---"] * (len(target_langs) + 1)) + "|"
+
+    rows = []
+    for term, translations in sorted(matched.items()):
+        row_values = [term]
+        for lang in target_langs:
+            row_values.append(translations.get(lang, term))
+        rows.append("| " + " | ".join(row_values) + " |")
+
+    table = "\n".join([header, separator] + rows)
+
+    return f"""## Terminology Reference ({len(matched)} terms matched)
+{table}
+"""
+
+
+# 注册 V4 术语表
+def _register_v4_glossary():
+    """延迟注册 V4 术语表"""
+    v4_glossary = _load_glossary_v4()
+    if v4_glossary and "fashion_v4" not in GLOSSARY_REGISTRY:
+        GLOSSARY_REGISTRY["fashion_v4"] = {
+            "name": "Fashion V4 (Smart Match)",
+            "description": "完整运营术语表，210条术语，支持智能匹配",
+            "terms": v4_glossary,
+            "token_estimate": 6000,  # 完整时的估计
+        }
+
+
+# 自动注册
+_register_v4_glossary()

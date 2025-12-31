@@ -640,7 +640,7 @@ def main():
     )
     p_translate.add_argument("-s", "--source", default="en", help="源语言代码")
     p_translate.add_argument("-m", "--model", default="gemini-2.5-flash-lite", help="使用的模型")
-    p_translate.add_argument("-g", "--glossary", help="术语表 (fashion_hard, fashion_core, fashion_full, ecommerce)")
+    p_translate.add_argument("-g", "--glossary", help="术语表 (fashion_v4, fashion_hard, fashion_core, fashion_full, ecommerce)")
     p_translate.add_argument("-o", "--output", help="保存结果到 JSON 文件")
     p_translate.add_argument("-e", "--eval", action="store_true", help="使用 Opus 4.5 评估质量")
     p_translate.add_argument("-tp", "--translate-prompt", help="翻译提示词模板 (名称或文件路径)")
@@ -675,7 +675,7 @@ def main():
     )
     p_benchmark.add_argument(
         "-g", "--glossary",
-        help="术语表 (fashion_hard, fashion_core, fashion_full, ecommerce)"
+        help="术语表 (fashion_v4, fashion_hard, fashion_core, fashion_full, ecommerce)，fashion_v4 支持智能匹配"
     )
     p_benchmark.add_argument(
         "-o", "--output",
